@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, limit, getDocs } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { UserProfile } from '../types';
 
@@ -28,7 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
             setCurrentUser(user);
 
             if (user) {
@@ -38,9 +38,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     if (userDoc.exists()) {
                         setUserProfile(userDoc.data() as UserProfile);
                     } else {
-                        // Handle case where user exists in Auth but not Firestore (shouldn't happen with proper flow)
-                        console.warn('User profile not found in Firestore');
-                        setUserProfile(null);
+                        // User exists in Auth but not Firestore.
+                        // Auto-create profile. First user becomes Admin.
+                        console.log('User profile missing. Creating...');
+
+                        const usersRef = collection(db, 'users');
+                        const q = query(usersRef, limit(1));
+                        const snapshot = await getDocs(q);
+                        const isFirstUser = snapshot.empty;
+
+                        const newProfile: UserProfile = {
+                            uid: user.uid,
+                            email: user.email!,
+                            role: isFirstUser ? 'admin' : 'user',
+                            createdAt: new Date().toISOString()
+                        };
+
+                        await setDoc(doc(db, 'users', user.uid), newProfile);
+                        setUserProfile(newProfile);
+                        console.log(`Created new profile for ${user.email} as ${newProfile.role}`);
                     }
                 } catch (error) {
                     console.error('Error fetching user profile:', error);
