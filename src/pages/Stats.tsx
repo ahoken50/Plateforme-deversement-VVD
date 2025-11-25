@@ -25,8 +25,8 @@ const Stats: React.FC = () => {
 
     // Calculate Stats
     const totalReports = reports.length;
-    const openReports = reports.filter((r: Report) => r.status === 'Open').length;
-    const closedReports = reports.filter((r: Report) => r.status === 'Closed').length;
+    const openReports = reports.filter((r: Report) => ['Nouvelle demande', 'Pris en charge', 'En attente de retour du ministère', 'Intervention requise'].includes(r.status)).length;
+    const closedReports = reports.filter((r: Report) => ['Traité', 'Complété', 'Annulé'].includes(r.status)).length;
 
     // Reports by Cause
     const causeCounts: Record<string, number> = {};
