@@ -1,6 +1,5 @@
-```
 import React, { useState, useEffect } from 'react';
-import { Search, Phone, Mail, Building } from 'lucide-react';
+import { Search, Phone, Building } from 'lucide-react';
 import { Intervenant } from '../types';
 
 // Mock data based on typical spill response stakeholders
@@ -88,4 +87,3 @@ const Intervenants: React.FC = () => {
 };
 
 export default Intervenants;
-```
