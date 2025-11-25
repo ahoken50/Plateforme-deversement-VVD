@@ -363,4 +363,3 @@ const NewReport: React.FC = () => {
 };
 
 export default NewReport;
-```
