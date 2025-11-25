@@ -435,6 +435,138 @@ const NewReport: React.FC = () => {
           </div>
         </div>
 
+        {/* Section 5: Réservé au département environnement (Admin Only) */}
+        {
+          isAdmin && (
+            <div className="bg-blue-50 border border-blue-200 shadow rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-blue-800 mb-4 border-b border-blue-200 pb-2">
+                Réservé au département environnement
+              </h3>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Numéro séquentiel</label>
+                <input type="text" name="envSequentialNumber" value={formData.envSequentialNumber || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+              </div>
+
+              <div className="space-y-6">
+                {/* MELCC */}
+                <div className="bg-white p-4 rounded-md border border-blue-100">
+                  <h4 className="font-semibold text-blue-700 mb-3">Urgence Environnement (MELCC) - 1-866-694-5454</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center mb-2">
+                      <span className="mr-3 text-sm font-medium text-gray-700">Contactée ?</span>
+                      <label className="inline-flex items-center mr-4">
+                        <input type="radio" name="envUrgenceEnvContacted" checked={formData.envUrgenceEnvContacted === true} onChange={() => setFormData(prev => ({ ...prev, envUrgenceEnvContacted: true }))} className="form-radio text-blue-600" />
+                        <span className="ml-2">OUI</span>
+                      </label>
+                      <label className="inline-flex items-center">
+                        <input type="radio" name="envUrgenceEnvContacted" checked={formData.envUrgenceEnvContacted === false} onChange={() => setFormData(prev => ({ ...prev, envUrgenceEnvContacted: false }))} className="form-radio text-blue-600" />
+                        <span className="ml-2">NON</span>
+                      </label>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Date de déclaration</label>
+                      <input type="date" name="envUrgenceEnvDate" value={formData.envUrgenceEnvDate || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Personne contactée</label>
+                      <input type="text" name="envUrgenceEnvContactedName" value={formData.envUrgenceEnvContactedName || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Par (personne env.)</label>
+                      <input type="text" name="envUrgenceEnvBy" value={formData.envUrgenceEnvBy || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Suivi ministère (nom)</label>
+                      <input type="text" name="envMinistryFollowUp" value={formData.envMinistryFollowUp || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Courriel</label>
+                      <input type="email" name="envMinistryEmail" value={formData.envMinistryEmail || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* ECCC */}
+                <div className="bg-white p-4 rounded-md border border-blue-100">
+                  <h4 className="font-semibold text-blue-700 mb-3">Urgence Environnement (ECCC) - 1-866-283-2333</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center mb-2">
+                      <span className="mr-3 text-sm font-medium text-gray-700">Contactée ?</span>
+                      <label className="inline-flex items-center mr-4">
+                        <input type="radio" name="envEcccContacted" checked={formData.envEcccContacted === true} onChange={() => setFormData(prev => ({ ...prev, envEcccContacted: true }))} className="form-radio text-blue-600" />
+                        <span className="ml-2">OUI</span>
+                      </label>
+                      <label className="inline-flex items-center">
+                        <input type="radio" name="envEcccContacted" checked={formData.envEcccContacted === false} onChange={() => setFormData(prev => ({ ...prev, envEcccContacted: false }))} className="form-radio text-blue-600" />
+                        <span className="ml-2">NON</span>
+                      </label>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Date de déclaration</label>
+                      <input type="date" name="envEcccDate" value={formData.envEcccDate || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Personne contactée</label>
+                      <input type="text" name="envEcccContactedName" value={formData.envEcccContactedName || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Par (personne env.)</label>
+                      <input type="text" name="envEcccBy" value={formData.envEcccBy || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Suivi ministère (nom)</label>
+                      <input type="text" name="envEcccFollowUp" value={formData.envEcccFollowUp || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Courriel</label>
+                      <input type="email" name="envEcccEmail" value={formData.envEcccEmail || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* RBQ */}
+                <div className="bg-white p-4 rounded-md border border-blue-100">
+                  <h4 className="font-semibold text-blue-700 mb-3">Régie du Bâtiment (RBQ) - 1-800-267-1420</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center mb-2">
+                      <span className="mr-3 text-sm font-medium text-gray-700">Contactée ?</span>
+                      <label className="inline-flex items-center mr-4">
+                        <input type="radio" name="envRbqContacted" checked={formData.envRbqContacted === true} onChange={() => setFormData(prev => ({ ...prev, envRbqContacted: true }))} className="form-radio text-blue-600" />
+                        <span className="ml-2">OUI</span>
+                      </label>
+                      <label className="inline-flex items-center">
+                        <input type="radio" name="envRbqContacted" checked={formData.envRbqContacted === false} onChange={() => setFormData(prev => ({ ...prev, envRbqContacted: false }))} className="form-radio text-blue-600" />
+                        <span className="ml-2">NON</span>
+                      </label>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Date de déclaration</label>
+                      <input type="date" name="envRbqDate" value={formData.envRbqDate || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Personne contactée</label>
+                      <input type="text" name="envRbqContactedName" value={formData.envRbqContactedName || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Par (personne env.)</label>
+                      <input type="text" name="envRbqBy" value={formData.envRbqBy || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Suivi ministère (nom)</label>
+                      <input type="text" name="envRbqFollowUp" value={formData.envRbqFollowUp || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Courriel</label>
+                      <input type="email" name="envRbqEmail" value={formData.envRbqEmail || ''} onChange={handleChange} className="w-full border rounded-md p-2" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        }
+
         {/* Section 5: Signature */}
         <div className="bg-white shadow rounded-lg p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -449,8 +581,8 @@ const NewReport: React.FC = () => {
           </div>
         </div>
 
-      </form>
-    </div>
+      </form >
+    </div >
   );
 };
 
