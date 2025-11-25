@@ -12,9 +12,11 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
-    // Users collection: Users can read/write their own profile, Admins can read/write all
+    // Users collection: Authenticated users can read all profiles (needed for "isFirstUser" check),
+    // but can only write their own profile (or Admins can write all).
     match /users/{userId} {
-      allow read, write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
     }
 
     // Reports collection: Authenticated users can read/write

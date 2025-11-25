@@ -2,8 +2,8 @@ import React from 'react';
 import { FileText, Download, ExternalLink, AlertTriangle } from 'lucide-react';
 
 const Procedure: React.FC = () => {
-    // In a real app, this URL would come from Firebase Storage or be a static asset
-    const PROCEDURE_URL = "https://firebasestorage.googleapis.com/v0/b/plateforme-deversement-vvd.appspot.com/o/VALDOR_PROCEDURE_ENV_001_V4-Intervention%20en%20cas%20de%20d%C3%A9versement-2024.pdf?alt=media";
+    // Using a relative path to the public folder. The user must place the file there.
+    const PROCEDURE_URL = "/VALDOR_PROCEDURE_ENV_001_V4.pdf";
 
     return (
         <div className="max-w-4xl mx-auto space-y-8">

@@ -53,6 +53,9 @@ const NewReport: React.FC = () => {
     status: 'Open'
   });
 
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (isEditing && id) {
       const fetchReport = async () => {
@@ -91,17 +94,41 @@ const NewReport: React.FC = () => {
     setFormData(prev => ({ ...prev, sensitiveEnv: options }));
   };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedFiles(Array.from(e.target.files));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
+      let reportId = id;
+      let currentPhotoUrls = formData.photoUrls || [];
+
+      // 1. Create or Update basic report data first
       if (isEditing && id) {
         await reportService.updateReport(id, formData);
       } else {
-        await reportService.createReport(formData as Report);
+        reportId = await reportService.createReport(formData as Report);
       }
+
+      // 2. Upload photos if any
+      if (selectedFiles.length > 0 && reportId) {
+        const newPhotoUrls = await Promise.all(
+          selectedFiles.map(file => reportService.uploadPhoto(file, reportId!))
+        );
+
+        // Combine old and new URLs
+        const updatedPhotoUrls = [...currentPhotoUrls, ...newPhotoUrls];
+
+        // Update report with new photo URLs
+        await reportService.updateReport(reportId, { photoUrls: updatedPhotoUrls });
+      }
+
       navigate('/');
     } catch (err) {
       setError('Erreur lors de l\'enregistrement du rapport. Veuillez réessayer.');
@@ -335,11 +362,47 @@ const NewReport: React.FC = () => {
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50">
               <Upload className="h-10 w-10 mx-auto text-gray-400 mb-2" />
               <p className="text-sm text-gray-500">Glissez-déposez des photos ici ou cliquez pour sélectionner</p>
-              <input type="file" className="hidden" multiple accept="image/*" />
-              <button type="button" className="mt-2 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                multiple
+                accept="image/*"
+                onChange={handleFileSelect}
+              />
+
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="mt-2 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
                 Sélectionner des fichiers
               </button>
             </div>
+
+            {/* Preview of selected files to upload */}
+            {selectedFiles.length > 0 && (
+              <div className="mt-4">
+                <h4 className="text-sm font-medium text-gray-700 mb-2">Photos à télécharger ({selectedFiles.length}) :</h4>
+                <ul className="list-disc pl-5 text-sm text-gray-600">
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>{file.name} ({Math.round(file.size / 1024)} KB)</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Display existing photo URLs */}
+            {formData.photoUrls && formData.photoUrls.length > 0 && (
+              <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                {formData.photoUrls.map((url, index) => (
+                  <div key={index} className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                    <img src={url} alt={`Preuve ${index + 1}`} className="object-cover w-full h-full" />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
