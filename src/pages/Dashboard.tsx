@@ -31,7 +31,16 @@ const Dashboard: React.FC = () => {
     );
 
     const getStatusColor = (status: string) => {
-        return status === 'Open' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+        switch (status) {
+            case 'Nouvelle demande': return 'bg-blue-100 text-blue-800';
+            case 'Pris en charge': return 'bg-yellow-100 text-yellow-800';
+            case 'Traité': return 'bg-green-100 text-green-800';
+            case 'En attente de retour du ministère': return 'bg-orange-100 text-orange-800';
+            case 'Intervention requise': return 'bg-red-100 text-red-800';
+            case 'Complété': return 'bg-green-100 text-green-800';
+            case 'Annulé': return 'bg-gray-100 text-gray-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
     };
 
     return (
@@ -76,7 +85,7 @@ const Dashboard: React.FC = () => {
                                                 {report.date} {report.time}
                                             </div>
                                             <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(report.status)}`}>
-                                                {report.status === 'Open' ? 'Ouvert' : 'Fermé'}
+                                                {report.status}
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-start">

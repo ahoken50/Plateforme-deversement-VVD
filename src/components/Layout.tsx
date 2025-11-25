@@ -22,9 +22,9 @@ const Layout: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
-                            <div className="flex-shrink-0 flex items-center">
-                                <img className="h-10 w-auto" src="/logo.png" alt="Ville de Val-d'Or" />
-                                <span className="ml-3 text-xl font-bold text-gray-800 hidden md:block">
+                            <div className="flex-shrink-0 flex items-center py-2">
+                                <img className="h-12 w-auto" src="/logo.png" alt="Ville de Val-d'Or" />
+                                <span className="ml-3 text-xl font-bold text-gray-800 hidden lg:block">
                                     Gestion des Déversements
                                 </span>
                             </div>
@@ -72,8 +72,8 @@ const Layout: React.FC = () => {
                                 <Link
                                     to="/stats"
                                     className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/stats'
-                                            ? 'border-blue-500 text-gray-900'
-                                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                        ? 'border-blue-500 text-gray-900'
+                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                                         }`}
                                 >
                                     <BarChart2 className="h-4 w-4 mr-2" />

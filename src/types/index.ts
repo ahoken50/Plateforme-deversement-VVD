@@ -68,7 +68,14 @@ export interface Report {
     envRbqFollowUp?: string;
     envRbqEmail?: string;
 
-    status: 'Open' | 'Closed';
+    documents?: {
+        name: string;
+        url: string;
+        type: string;
+        date: string;
+    }[];
+
+    status: 'Nouvelle demande' | 'Pris en charge' | 'Traité' | 'En attente de retour du ministère' | 'Intervention requise' | 'Complété' | 'Annulé';
     createdAt?: any; // Firestore Timestamp
     updatedAt?: any;
 }
