@@ -37,16 +37,37 @@ export interface Report {
     photosTakenDuring: boolean;
     photosTakenAfter: boolean;
     photoUrls: string[];
+
     completedBy: string;
     completionDate: string;
 
-    // Environment Dept Reserved
-    sequentialNumber?: string;
-    melcc?: { contacted: boolean; date: string; contactPerson: string; byWhom: string; followUpPerson: string; email: string };
-    eccc?: { contacted: boolean; date: string; contactPerson: string; byWhom: string; followUpPerson: string; email: string };
-    rbq?: { contacted: boolean; date: string; contactPerson: string; byWhom: string; followUpPerson: string; email: string };
+    // Section réservée au département environnement
+    envSequentialNumber?: string;
 
-    // Metadata
+    // MELCC
+    envUrgenceEnvContacted?: boolean;
+    envUrgenceEnvDate?: string;
+    envUrgenceEnvContactedName?: string;
+    envUrgenceEnvBy?: string;
+    envMinistryFollowUp?: string;
+    envMinistryEmail?: string;
+
+    // ECCC
+    envEcccContacted?: boolean;
+    envEcccDate?: string;
+    envEcccContactedName?: string;
+    envEcccBy?: string;
+    envEcccFollowUp?: string;
+    envEcccEmail?: string;
+
+    // RBQ
+    envRbqContacted?: boolean;
+    envRbqDate?: string;
+    envRbqContactedName?: string;
+    envRbqBy?: string;
+    envRbqFollowUp?: string;
+    envRbqEmail?: string;
+
     status: 'Open' | 'Closed';
     createdAt?: any; // Firestore Timestamp
     updatedAt?: any;

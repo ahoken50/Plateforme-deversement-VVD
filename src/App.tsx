@@ -9,6 +9,7 @@ import NewReport from './pages/NewReport';
 import Intervenants from './pages/Intervenants';
 import Procedure from './pages/Procedure';
 import AdminUsers from './pages/AdminUsers';
+import Stats from './pages/Stats';
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                         <Route path="report/:id" element={<NewReport />} />
                         <Route path="intervenants" element={<Intervenants />} />
                         <Route path="procedure" element={<Procedure />} />
+                        <Route path="stats" element={<Stats />} />
                         <Route path="admin/users" element={
                             <PrivateRoute requireAdmin>
                                 <AdminUsers />

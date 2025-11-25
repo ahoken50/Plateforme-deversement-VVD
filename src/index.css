@@ -1,3 +1,63 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background-color: white;
+    }
+
+    /* Hide header, footer, and buttons */
+    header,
+    footer,
+    button,
+    nav {
+        display: none !important;
+    }
+
+    /* Ensure form elements look like text */
+    input,
+    textarea,
+    select {
+        border: none !important;
+        background: transparent !important;
+        resize: none;
+        padding: 0 !important;
+        margin: 0 !important;
+        appearance: none;
+        -webkit-appearance: none;
+        box-shadow: none !important;
+    }
+
+    /* Expand textareas */
+    textarea {
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* Ensure layout is full width */
+    .max-w-5xl {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Show logo in print if hidden by header rule, but we want a specific print header */
+    .print-header {
+        display: block !important;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .print-only {
+        display: block !important;
+    }
+}
+
+.print-only {
+    display: none;
+}

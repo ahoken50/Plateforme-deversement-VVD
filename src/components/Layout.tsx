@@ -1,15 +1,11 @@
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FileText, Users, History, BookOpen, PlusCircle, LogOut, Shield } from 'lucide-react';
+import { Users, History, BookOpen, PlusCircle, LogOut, Shield, BarChart2 } from 'lucide-react';
 
 const Layout: React.FC = () => {
     const location = useLocation();
     const { currentUser, logout, isAdmin } = useAuth();
-
-    const isActive = (path: string) => {
-        return location.pathname === path ? 'bg-blue-700' : '';
-    };
 
     const handleLogout = async () => {
         try {
@@ -22,63 +18,92 @@ const Layout: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             {/* Header */}
-            <header className="bg-blue-600 text-white shadow-md">
-                <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div className="flex items-center space-x-2">
-                        <FileText className="h-8 w-8" />
-                        <h1 className="text-xl font-bold">Plateforme Déversement VVD</h1>
-                    </div>
-                    <nav className="flex flex-wrap justify-center gap-2">
-                        <Link
-                            to="/"
-                            className={`px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-1 ${isActive('/')}`}
-                        >
-                            <History className="h-4 w-4" />
-                            <span>Historique</span>
-                        </Link>
-                        <Link
-                            to="/report/new"
-                            className={`px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-1 ${isActive('/report/new')}`}
-                        >
-                            <PlusCircle className="h-4 w-4" />
-                            <span>Nouveau</span>
-                        </Link>
-                        <Link
-                            to="/intervenants"
-                            className={`px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-1 ${isActive('/intervenants')}`}
-                        >
-                            <Users className="h-4 w-4" />
-                            <span>Intervenants</span>
-                        </Link>
-                        <Link
-                            to="/procedure"
-                            className={`px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-1 ${isActive('/procedure')}`}
-                        >
-                            <BookOpen className="h-4 w-4" />
-                            <span>Procédure</span>
-                        </Link>
-
-                        {isAdmin && (
-                            <Link
-                                to="/admin/users"
-                                className={`px-3 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center space-x-1 ${isActive('/admin/users')}`}
-                            >
-                                <Shield className="h-4 w-4" />
-                                <span>Admin</span>
-                            </Link>
-                        )}
-
-                        <div className="border-l border-blue-500 mx-2 pl-2 flex items-center">
-                            <span className="text-sm mr-3 hidden lg:inline">{currentUser?.email}</span>
+            <header className="bg-white shadow-sm border-b border-gray-200">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between h-16">
+                        <div className="flex">
+                            <div className="flex-shrink-0 flex items-center">
+                                <img className="h-10 w-auto" src="/logo.png" alt="Ville de Val-d'Or" />
+                                <span className="ml-3 text-xl font-bold text-gray-800 hidden md:block">
+                                    Gestion des Déversements
+                                </span>
+                            </div>
+                            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                                <Link
+                                    to="/"
+                                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/'
+                                        ? 'border-blue-500 text-gray-900'
+                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                        }`}
+                                >
+                                    <History className="h-4 w-4 mr-2" />
+                                    Historique
+                                </Link>
+                                <Link
+                                    to="/report/new"
+                                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname.startsWith('/report/new')
+                                        ? 'border-blue-500 text-gray-900'
+                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                        }`}
+                                >
+                                    <PlusCircle className="h-4 w-4 mr-2" />
+                                    Nouveau
+                                </Link>
+                                <Link
+                                    to="/intervenants"
+                                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/intervenants'
+                                        ? 'border-blue-500 text-gray-900'
+                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                        }`}
+                                >
+                                    <Users className="h-4 w-4 mr-2" />
+                                    Intervenants
+                                </Link>
+                                <Link
+                                    to="/procedure"
+                                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/procedure'
+                                        ? 'border-blue-500 text-gray-900'
+                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                        }`}
+                                >
+                                    <BookOpen className="h-4 w-4 mr-2" />
+                                    Procédure
+                                </Link>
+                                <Link
+                                    to="/stats"
+                                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/stats'
+                                            ? 'border-blue-500 text-gray-900'
+                                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                        }`}
+                                >
+                                    <BarChart2 className="h-4 w-4 mr-2" />
+                                    Statistiques
+                                </Link>
+                                {isAdmin && (
+                                    <Link
+                                        to="/admin/users"
+                                        className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/admin/users'
+                                            ? 'border-blue-500 text-gray-900'
+                                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                                            }`}
+                                    >
+                                        <Shield className="h-4 w-4 mr-2" />
+                                        Admin
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                        <div className="flex items-center">
+                            <span className="text-sm text-gray-500 mr-4 hidden md:block">{currentUser?.email}</span>
                             <button
                                 onClick={handleLogout}
-                                className="p-2 rounded-md hover:bg-blue-700 transition-colors"
+                                className="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                 title="Déconnexion"
                             >
-                                <LogOut className="h-4 w-4" />
+                                <LogOut className="h-5 w-5" />
                             </button>
                         </div>
-                    </nav>
+                    </div>
                 </div>
             </header>
 
@@ -88,9 +113,11 @@ const Layout: React.FC = () => {
             </main>
 
             {/* Footer */}
-            <footer className="bg-gray-800 text-gray-400 py-6">
-                <div className="container mx-auto px-4 text-center">
-                    <p>&copy; {new Date().getFullYear()} Ville de Val-d'Or - Environnement</p>
+            <footer className="bg-white border-t border-gray-200 mt-auto">
+                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <p className="text-center text-sm text-gray-500">
+                        &copy; {new Date().getFullYear()} Ville de Val-d'Or - Environnement
+                    </p>
                 </div>
             </footer>
         </div>

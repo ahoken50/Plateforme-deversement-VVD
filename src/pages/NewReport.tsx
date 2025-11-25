@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Save, Upload, AlertTriangle } from 'lucide-react';
 import { reportService } from '../services/reportService';
+import { useAuth } from '../contexts/AuthContext';
 import { Report } from '../types';
 
 const NewReport: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { isAdmin } = useAuth();
   const isEditing = !!id;
 
   const [loading, setLoading] = useState(false);
@@ -140,18 +142,45 @@ const NewReport: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto pb-12">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 no-print">
         <h2 className="text-3xl font-bold text-gray-800">
           {isEditing ? 'Modifier le Rapport' : 'Nouveau Rapport de Déversement'}
         </h2>
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400"
-        >
-          <Save className="h-5 w-5 mr-2" />
-          {loading ? 'Enregistrement...' : 'Enregistrer le Rapport'}
-        </button>
+        <div className="flex space-x-4">
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Imprimer
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400"
+          >
+            <Save className="h-5 w-5 mr-2" />
+            {loading ? 'Enregistrement...' : 'Enregistrer le Rapport'}
+          </button>
+        </div>
+      </div>
+
+      {/* Print Header */}
+      <div className="print-only mb-8 text-center border-b pb-4">
+        <div className="flex items-center justify-center mb-4">
+          <img src="/logo.png" alt="Ville de Val-d'Or" className="h-16 w-auto mr-4" />
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Rapport de Déversement</h1>
+            <p className="text-gray-600">Service de l'Environnement</p>
+          </div>
+        </div>
+        <div className="text-left text-sm text-gray-500 mt-4 flex justify-between">
+          <p>Rapport ID: {id || 'Nouveau'}</p>
+          <p>Date d'impression: {new Date().toLocaleDateString()}</p>
+        </div>
       </div>
 
       {error && (
