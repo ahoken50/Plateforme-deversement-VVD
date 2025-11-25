@@ -8,7 +8,7 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, requireAdmin = false }) => {
-    const { currentUser, userProfile, loading, isAdmin } = useAuth();
+    const { currentUser, loading, isAdmin } = useAuth();
     const location = useLocation();
 
     if (loading) {
