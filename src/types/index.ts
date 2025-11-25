@@ -58,4 +58,12 @@ export interface Intervenant {
     role: string;
     contact: string;
     organization: string;
+    email?: string;
+}
+
+export interface UserProfile {
+    uid: string;
+    email: string;
+    role: 'admin' | 'user';
+    createdAt: any;
 }

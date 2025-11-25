@@ -1,62 +1,64 @@
 import React from 'react';
-import { FileText, Download, ExternalLink } from 'lucide-react';
+import { FileText, Download, ExternalLink, AlertTriangle } from 'lucide-react';
 
 const Procedure: React.FC = () => {
-    // In a real app, this URL would point to the file in Firebase Storage or a public URL
-    // For now, we'll assume it's in the public folder or accessible via a relative path if copied there
-    const procedureUrl = "/VALDOR_PROCEDURE_ENV_001_V4-Intervention en cas de déversement-2024.pdf";
+    // In a real app, this URL would come from Firebase Storage or be a static asset
+    const PROCEDURE_URL = "https://firebasestorage.googleapis.com/v0/b/plateforme-deversement-vvd.appspot.com/o/VALDOR_PROCEDURE_ENV_001_V4-Intervention%20en%20cas%20de%20d%C3%A9versement-2024.pdf?alt=media";
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-800">Procédure de Déversement</h2>
-                <a
-                    href={procedureUrl}
-                    download
-                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                    <Download className="h-4 w-4 mr-2" />
-                    Télécharger le PDF
-                </a>
+        <div className="max-w-4xl mx-auto space-y-8">
+            <div className="text-center space-y-4">
+                <h2 className="text-3xl font-bold text-gray-800">Procédure d'intervention</h2>
+                <p className="text-lg text-gray-600">
+                    En cas de déversement, suivez immédiatement les étapes décrites dans le document officiel.
+                </p>
             </div>
 
-            <div className="bg-white shadow rounded-lg p-6">
-                <div className="flex items-center justify-center p-12 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
-                    <div className="text-center">
-                        <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">Document de Procédure</h3>
-                        <p className="text-gray-500 mb-6 max-w-md mx-auto">
-                            Consultez la procédure officielle d'intervention en cas de déversement (VALDOR_PROCEDURE_ENV_001_V4).
-                        </p>
-                        <div className="flex justify-center space-x-4">
-                            <a
-                                href={procedureUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center text-blue-600 hover:text-blue-800 font-medium"
-                            >
-                                <ExternalLink className="h-4 w-4 mr-1" />
-                                Ouvrir dans un nouvel onglet
-                            </a>
-                        </div>
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-blue-100">
+                <div className="bg-blue-600 p-6 text-white flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                        <FileText className="h-8 w-8" />
+                        <h3 className="text-xl font-semibold">VALDOR_PROCEDURE_ENV_001_V4</h3>
                     </div>
+                    <span className="bg-blue-500 px-3 py-1 rounded-full text-sm">PDF</span>
                 </div>
 
-                <div className="mt-8">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Points Clés de la Procédure</h3>
-                    <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                        <li>Assurer la sécurité des lieux et des personnes.</li>
-                        <li>Identifier le produit déversé et la source.</li>
-                        <li>Arrêter la fuite si possible sans danger.</li>
-                        <li>Contenir le déversement avec les matériaux absorbants.</li>
-                        <li>Aviser le département Environnement immédiatement.</li>
-                        <li>Nettoyer et disposer des matériaux souillés dans les contenants appropriés.</li>
-                        <li>Remplir le rapport de déversement.</li>
-                    </ul>
+                <div className="p-8 flex flex-col items-center space-y-6">
+                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start max-w-2xl">
+                        <AlertTriangle className="h-6 w-6 text-yellow-600 mr-3 flex-shrink-0 mt-1" />
+                        <div>
+                            <h4 className="font-semibold text-yellow-800">Points clés à retenir :</h4>
+                            <ul className="list-disc list-inside text-yellow-700 mt-2 space-y-1">
+                                <li>Assurer la sécurité des lieux et des personnes.</li>
+                                <li>Contenir le déversement si possible sans danger.</li>
+                                <li>Aviser immédiatement les responsables (voir onglet Intervenants).</li>
+                                <li>Documenter l'incident (photos, rapport).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                        <a
+                            href={PROCEDURE_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
+                        >
+                            <ExternalLink className="h-5 w-5 mr-2" />
+                            Ouvrir le document
+                        </a>
+                        <a
+                            href={PROCEDURE_URL}
+                            download
+                            className="flex items-center justify-center px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                        >
+                            <Download className="h-5 w-5 mr-2" />
+                            Télécharger le PDF
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
-
 export default Procedure;
