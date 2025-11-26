@@ -227,10 +227,32 @@ const NewReport: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-center mb-6 print:hidden">
-          <h1 className="text-2xl font-bold text-gray-900">
-            {isEditing ? 'Modifier le rapport' : 'Nouveau rapport de déversement'}
-          </h1>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 print:mb-2 gap-4 print:hidden">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {isEditing ? 'Modifier le rapport' : 'Nouveau rapport de déversement'}
+            </h1>
+            {isEditing && (
+              <div className="mt-2 flex items-center">
+                <label className="mr-2 text-sm font-semibold text-gray-700">Statut actuel:</label>
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  className="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white py-1 px-3 text-sm font-medium"
+                >
+                  <option value="Nouvelle demande">Nouvelle demande</option>
+                  <option value="En cours">En cours</option>
+                  <option value="Pris en charge">Pris en charge</option>
+                  <option value="Traité">Traité</option>
+                  <option value="En attente de retour du ministère">En attente de retour du ministère</option>
+                  <option value="Intervention requise">Intervention requise</option>
+                  <option value="Complété">Complété</option>
+                  <option value="Annulé">Annulé</option>
+                </select>
+              </div>
+            )}
+          </div>
           <button
             onClick={handlePrint}
             className="flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
@@ -255,9 +277,9 @@ const NewReport: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Section 1: Informations générales */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
-            <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Informations générales</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white shadow-md rounded-lg p-6 print:p-2 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid print:shadow-none print:border-gray-300">
+            <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Informations générales</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-3 gap-6 print:gap-2">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Date de l'incident</label>
                 <input
@@ -315,9 +337,9 @@ const NewReport: React.FC = () => {
           </div>
 
           {/* Section 2: Détails du déversement */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
-            <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Détails du déversement</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white shadow-md rounded-lg p-6 print:p-2 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid print:shadow-none print:border-gray-300">
+            <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Détails du déversement</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-3 gap-6 print:gap-2">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Nature du contaminant</label>
                 <input
@@ -398,9 +420,9 @@ const NewReport: React.FC = () => {
           </div>
 
           {/* Section 3: Environnement sensible */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
-            <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Environnement sensible à proximité</h2>
-            <div className="space-y-4">
+          <div className="bg-white shadow-md rounded-lg p-6 print:p-2 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid print:shadow-none print:border-gray-300">
+            <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Environnement sensible à proximité</h2>
+            <div className="space-y-4 print:space-y-2">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Sélectionner les éléments à proximité (Maintenir Ctrl pour plusieurs)
@@ -436,9 +458,9 @@ const NewReport: React.FC = () => {
           </div>
 
           {/* Section 4: Actions et Cause */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
-            <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Intervention et Cause</h2>
-            <div className="space-y-6">
+          <div className="bg-white shadow-md rounded-lg p-6 print:p-2 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid print:shadow-none print:border-gray-300">
+            <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Intervention et Cause</h2>
+            <div className="space-y-6 print:space-y-2">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Description de l'incident</label>
                 <textarea
@@ -541,8 +563,8 @@ const NewReport: React.FC = () => {
           </div>
 
           {/* Section 5: Photos et Documents */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
-            <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Photos et Documents</h2>
+          <div className="bg-white shadow-md rounded-lg p-6 print:p-2 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid print:shadow-none print:border-gray-300">
+            <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Photos et Documents</h2>
 
             <div className="space-y-4 mb-6">
               <label className="block text-sm font-semibold text-gray-700 mb-1">Photos prises</label>
@@ -587,7 +609,7 @@ const NewReport: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    className="flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors print:hidden"
                   >
                     <Upload className="h-4 w-4 mr-2" />
                     Sélectionner photos
@@ -621,7 +643,7 @@ const NewReport: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => docInputRef.current?.click()}
-                    className="flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    className="flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors print:hidden"
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Sélectionner documents
@@ -653,9 +675,9 @@ const NewReport: React.FC = () => {
           </div>
 
           {/* Section 6: Suivi et Fermeture */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600">
-            <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Suivi et Fermeture</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white shadow-md rounded-lg p-6 print:p-2 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid print:shadow-none print:border-gray-300">
+            <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Suivi et Fermeture</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-3 gap-6 print:gap-2">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Responsable du suivi</label>
                 <input
@@ -698,7 +720,12 @@ const NewReport: React.FC = () => {
                 >
                   <option value="Nouvelle demande">Nouvelle demande</option>
                   <option value="En cours">En cours</option>
-                  <option value="Terminé">Terminé</option>
+                  <option value="Pris en charge">Pris en charge</option>
+                  <option value="Traité">Traité</option>
+                  <option value="En attente de retour du ministère">En attente de retour du ministère</option>
+                  <option value="Intervention requise">Intervention requise</option>
+                  <option value="Complété">Complété</option>
+                  <option value="Annulé">Annulé</option>
                 </select>
               </div>
             </div>
@@ -706,8 +733,8 @@ const NewReport: React.FC = () => {
 
           {/* Section 7: Département Environnement (Visible seulement en édition) */}
           {isEditing && (
-            <div className="bg-blue-50 shadow-md rounded-lg p-6 border border-blue-200 border-t-4 border-t-blue-800">
-              <h2 className="text-lg font-medium text-blue-900 mb-4 border-b border-blue-200 pb-2">
+            <div className="bg-blue-50 shadow-md rounded-lg p-6 print:p-2 border border-blue-200 border-t-4 border-t-blue-800 break-inside-avoid print:shadow-none print:border-gray-300 print:bg-white">
+              <h2 className="text-lg font-medium text-blue-900 mb-4 print:mb-2 border-b border-blue-200 pb-2 print:text-base print:font-bold">
                 Réservé au département de l'environnement
               </h2>
 
