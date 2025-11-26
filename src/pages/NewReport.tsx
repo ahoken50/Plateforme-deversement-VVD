@@ -5,6 +5,46 @@ import { reportService } from '../services/reportService';
 import { useAuth } from '../contexts/AuthContext';
 import { Report } from '../types';
 
+const INITIAL_FORM_STATE: Partial<Report> = {
+  date: new Date().toISOString().split('T')[0],
+  time: new Date().toTimeString().split(' ')[0].slice(0, 5),
+  location: '',
+  witnessedBy: '',
+  supervisor: '',
+  envContactedName: '',
+  envContactedDate: '',
+  envContactedTime: '',
+
+  contaminant: '',
+  extent: '',
+  surfaceType: '',
+  surfaceTypeOther: '',
+  equipmentType: '',
+  containerQuantity: '',
+  duration: '',
+  sensitiveEnv: [],
+  sensitiveEnvOther: '',
+  disposalLocation: '',
+
+  description: '',
+  actionsTaken: '',
+  emergencyKitUsed: false,
+  emergencyKitRefilled: false,
+  cause: '',
+  causeOther: '',
+  contaminantCollectedBy: '',
+  followUpBy: '',
+
+  photosTakenBefore: false,
+  photosTakenDuring: false,
+  photosTakenAfter: false,
+  photoUrls: [],
+  completedBy: '',
+  completionDate: new Date().toISOString().split('T')[0],
+
+  status: 'Nouvelle demande'
+};
+
 const NewReport: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -15,45 +55,7 @@ const NewReport: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Initial state matching the Report interface
-  const [formData, setFormData] = useState<Partial<Report>>({
-    date: new Date().toISOString().split('T')[0],
-    time: new Date().toTimeString().split(' ')[0].slice(0, 5),
-    location: '',
-    witnessedBy: '',
-    supervisor: '',
-    envContactedName: '',
-    envContactedDate: '',
-    envContactedTime: '',
-
-    contaminant: '',
-    extent: '',
-    surfaceType: '',
-    surfaceTypeOther: '',
-    equipmentType: '',
-    containerQuantity: '',
-    duration: '',
-    sensitiveEnv: [],
-    sensitiveEnvOther: '',
-    disposalLocation: '',
-
-    description: '',
-    actionsTaken: '',
-    emergencyKitUsed: false,
-    emergencyKitRefilled: false,
-    cause: '',
-    causeOther: '',
-    contaminantCollectedBy: '',
-    followUpBy: '',
-
-    photosTakenBefore: false,
-    photosTakenDuring: false,
-    photosTakenAfter: false,
-    photoUrls: [],
-    completedBy: '',
-    completionDate: new Date().toISOString().split('T')[0],
-
-    status: 'Nouvelle demande'
-  });
+  const [formData, setFormData] = useState<Partial<Report>>(INITIAL_FORM_STATE);
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<File[]>([]);
@@ -79,6 +81,11 @@ const NewReport: React.FC = () => {
         }
       };
       fetchReport();
+    } else {
+      // Reset form when not editing (i.e., New Report mode)
+      setFormData(INITIAL_FORM_STATE);
+      setSelectedFiles([]);
+      setSelectedDocuments([]);
     }
   }, [isEditing, id]);
 
@@ -213,6 +220,30 @@ const NewReport: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-8">
+
+        {/* Status Selector (Edit Mode Only - Top) */}
+        {isEditing && (
+          <div className="bg-blue-50 border border-blue-200 shadow rounded-lg p-6 flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-blue-800">Statut du dossier</h3>
+              <p className="text-sm text-blue-600">Modifier l'état d'avancement du rapport</p>
+            </div>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="block w-64 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+            >
+              <option value="Nouvelle demande">Nouvelle demande</option>
+              <option value="Pris en charge">Pris en charge</option>
+              <option value="Traité">Traité</option>
+              <option value="En attente de retour du ministère">En attente de retour du ministère</option>
+              <option value="Intervention requise">Intervention requise</option>
+              <option value="Complété">Complété</option>
+              <option value="Annulé">Annulé</option>
+            </select>
+          </div>
+        )}
 
         {/* Section 1: Information Générale */}
         <div className="bg-white shadow rounded-lg p-6">
@@ -657,16 +688,9 @@ const NewReport: React.FC = () => {
               <input type="date" name="completionDate" value={formData.completionDate} onChange={handleChange} className="w-full border rounded-md p-2" required />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Statut du dossier</label>
-              <select name="status" value={formData.status} onChange={handleChange} className="w-full border rounded-md p-2 bg-gray-50 font-medium">
-                <option value="Nouvelle demande">Nouvelle demande</option>
-                <option value="Pris en charge">Pris en charge</option>
-                <option value="Traité">Traité</option>
-                <option value="En attente de retour du ministère">En attente de retour du ministère</option>
-                <option value="Intervention requise">Intervention requise</option>
-                <option value="Complété">Complété</option>
-                <option value="Annulé">Annulé</option>
-              </select>
+              {/* Status is now at the top for edit mode, but we keep a hidden input or read-only view here if needed, or just remove it. 
+                  For new reports, it defaults to 'Nouvelle demande' and is not shown. 
+                  Let's remove the selector from here to avoid duplication. */}
             </div>
           </div>
         </div>
