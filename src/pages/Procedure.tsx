@@ -41,12 +41,26 @@ const Procedure: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex-grow bg-gray-100">
-                    <iframe
-                        src={PROCEDURE_URL}
+                <div className="flex-grow bg-gray-100 relative">
+                    <object
+                        data={PROCEDURE_URL}
+                        type="application/pdf"
                         className="w-full h-full"
-                        title="Procédure d'intervention"
-                    />
+                    >
+                        <div className="flex flex-col items-center justify-center h-full space-y-4 p-8 text-center">
+                            <p className="text-gray-600 text-lg">
+                                Votre navigateur ne peut pas afficher ce PDF directement.
+                            </p>
+                            <a
+                                href={PROCEDURE_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
+                            >
+                                Ouvrir le document
+                            </a>
+                        </div>
+                    </object>
                 </div>
             </div>
         </div>

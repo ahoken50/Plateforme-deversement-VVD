@@ -244,56 +244,56 @@ const NewReport: React.FC = () => {
           <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Informations générales</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Date de l'incident</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Date de l'incident</label>
               <input
                 type="date"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Heure</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Heure</label>
               <input
                 type="time"
                 name="time"
                 value={formData.time}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Lieu exact</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Lieu exact</label>
               <input
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Témoin(s)</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Témoin(s)</label>
               <input
                 type="text"
                 name="witnessedBy"
                 value={formData.witnessedBy}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Contremaître avisé</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Contremaître avisé</label>
               <input
                 type="text"
                 name="supervisor"
                 value={formData.supervisor}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
           </div>
@@ -304,7 +304,7 @@ const NewReport: React.FC = () => {
           <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Détails du déversement</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Nature du contaminant</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Nature du contaminant</label>
               <input
                 type="text"
                 name="contaminant"
@@ -312,11 +312,11 @@ const NewReport: React.FC = () => {
                 onChange={handleChange}
                 required
                 placeholder="Ex: Huile hydraulique, Diesel..."
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Quantité estimée</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Quantité estimée</label>
               <input
                 type="text"
                 name="extent"
@@ -324,16 +324,16 @@ const NewReport: React.FC = () => {
                 onChange={handleChange}
                 required
                 placeholder="Ex: 5 litres"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Type de surface</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Type de surface</label>
               <select
                 name="surfaceType"
                 value={formData.surfaceType}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               >
                 <option value="">Sélectionner...</option>
                 <option value="Asphalte">Asphalte</option>
@@ -347,36 +347,36 @@ const NewReport: React.FC = () => {
             </div>
             {formData.surfaceType === 'Autre' && (
               <div>
-                <label className="block text-sm font-medium text-gray-700">Préciser la surface</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Préciser la surface</label>
                 <input
                   type="text"
                   name="surfaceTypeOther"
                   value={formData.surfaceTypeOther}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />
               </div>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Type d'équipement impliqué</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Type d'équipement impliqué</label>
               <input
                 type="text"
                 name="equipmentType"
                 value={formData.equipmentType}
                 onChange={handleChange}
                 placeholder="Ex: Camion #123, Chargeuse..."
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Durée du déversement</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Durée du déversement</label>
               <input
                 type="text"
                 name="duration"
                 value={formData.duration}
                 onChange={handleChange}
                 placeholder="Ex: 5 minutes, Instantané..."
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
           </div>
@@ -395,7 +395,7 @@ const NewReport: React.FC = () => {
                 name="sensitiveEnv"
                 value={formData.sensitiveEnv}
                 onChange={handleMultiSelectChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 h-32"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 h-32 bg-gray-50 hover:bg-white transition-colors"
               >
                 <option value="Cours d'eau">Cours d'eau / Fossé</option>
                 <option value="Égout pluvial">Égout pluvial (Puisard)</option>
@@ -407,13 +407,13 @@ const NewReport: React.FC = () => {
             </div>
             {formData.sensitiveEnv?.includes('Autre') && (
               <div>
-                <label className="block text-sm font-medium text-gray-700">Préciser autre</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Préciser autre</label>
                 <input
                   type="text"
                   name="sensitiveEnvOther"
                   value={formData.sensitiveEnvOther}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />
               </div>
             )}
@@ -425,24 +425,24 @@ const NewReport: React.FC = () => {
           <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Intervention et Cause</h2>
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Description de l'incident</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Description de l'incident</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
                 rows={3}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Mesures prises</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Mesures prises</label>
               <textarea
                 name="actionsTaken"
                 value={formData.actionsTaken}
                 onChange={handleChange}
                 rows={3}
                 placeholder="Ex: Utilisation d'absorbant, installation de boudins..."
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
 
@@ -471,12 +471,12 @@ const NewReport: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Cause du déversement</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Cause du déversement</label>
                 <select
                   name="cause"
                   value={formData.cause}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 >
                   <option value="">Sélectionner...</option>
                   <option value="Bris mécanique">Bris mécanique</option>
@@ -488,13 +488,13 @@ const NewReport: React.FC = () => {
               </div>
               {formData.cause === 'Autre' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Préciser la cause</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Préciser la cause</label>
                   <input
                     type="text"
                     name="causeOther"
                     value={formData.causeOther}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
               )}
@@ -502,23 +502,23 @@ const NewReport: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Contaminants récupérés par</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Contaminants récupérés par</label>
                 <input
                   type="text"
                   name="contaminantCollectedBy"
                   value={formData.contaminantCollectedBy}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Lieu d'élimination des résidus</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Lieu d'élimination des résidus</label>
                 <input
                   type="text"
                   name="disposalLocation"
                   value={formData.disposalLocation}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />
               </div>
             </div>
@@ -530,7 +530,7 @@ const NewReport: React.FC = () => {
           <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Photos et Documents</h2>
 
           <div className="space-y-4 mb-6">
-            <label className="block text-sm font-medium text-gray-700">Photos prises</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Photos prises</label>
             <div className="flex space-x-6">
               <label className="inline-flex items-center">
                 <input
@@ -572,7 +572,7 @@ const NewReport: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                  className="flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                 >
                   <Upload className="h-4 w-4 mr-2" />
                   Sélectionner photos
@@ -606,7 +606,7 @@ const NewReport: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => docInputRef.current?.click()}
-                  className="flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                  className="flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   Sélectionner documents
@@ -642,44 +642,44 @@ const NewReport: React.FC = () => {
           <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Suivi et Fermeture</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Responsable du suivi</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Responsable du suivi</label>
               <input
                 type="text"
                 name="followUpBy"
                 value={formData.followUpBy}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Complété par</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Complété par</label>
               <input
                 type="text"
                 name="completedBy"
                 value={formData.completedBy}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Date de complétion</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Date de complétion</label>
               <input
                 type="date"
                 name="completionDate"
                 value={formData.completionDate}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Statut</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Statut</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               >
                 <option value="Nouvelle demande">Nouvelle demande</option>
                 <option value="En cours">En cours</option>
@@ -711,65 +711,56 @@ const NewReport: React.FC = () => {
                   <label className="ml-2 text-sm text-gray-700">Contacté</label>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Date/Heure</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Date/Heure</label>
                   <input
                     type="datetime-local"
                     name="envUrgenceEnvDate"
                     value={formData.envUrgenceEnvDate}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Interlocuteur</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Interlocuteur</label>
                   <input
                     type="text"
                     name="envUrgenceEnvContactedName"
                     value={formData.envUrgenceEnvContactedName}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Par (employé VVD)</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Par (employé VVD)</label>
                   <input
                     type="text"
                     name="envUrgenceEnvBy"
                     value={formData.envUrgenceEnvBy}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Numéro de suivi ministère</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Numéro de suivi ministère</label>
                   <input
                     type="text"
                     name="envMinistryFollowUp"
                     value={formData.envMinistryFollowUp}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Courriel de confirmation</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Courriel de confirmation</label>
                   <input
                     type="email"
                     name="envMinistryEmail"
                     value={formData.envMinistryEmail}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Heure de déclaration</label>
-                  <input
-                    type="time"
-                    name="ministryDeclarationTime"
-                    value={formData.ministryDeclarationTime || ''}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
+
               </div>
             </div>
 
@@ -788,53 +779,53 @@ const NewReport: React.FC = () => {
                   <label className="ml-2 text-sm text-gray-700">Contacté</label>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Date/Heure</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Date/Heure</label>
                   <input
                     type="datetime-local"
                     name="envEcccDate"
                     value={formData.envEcccDate}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Interlocuteur</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Interlocuteur</label>
                   <input
                     type="text"
                     name="envEcccContactedName"
                     value={formData.envEcccContactedName}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Par (employé VVD)</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Par (employé VVD)</label>
                   <input
                     type="text"
                     name="envEcccBy"
                     value={formData.envEcccBy}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Numéro de dossier</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Numéro de dossier</label>
                   <input
                     type="text"
                     name="envEcccFollowUp"
                     value={formData.envEcccFollowUp}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Courriel</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Courriel</label>
                   <input
                     type="email"
                     name="envEcccEmail"
                     value={formData.envEcccEmail}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
               </div>
@@ -855,67 +846,67 @@ const NewReport: React.FC = () => {
                   <label className="ml-2 text-sm text-gray-700">Contacté</label>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Date/Heure</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Date/Heure</label>
                   <input
                     type="datetime-local"
                     name="envRbqDate"
                     value={formData.envRbqDate}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Interlocuteur</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Interlocuteur</label>
                   <input
                     type="text"
                     name="envRbqContactedName"
                     value={formData.envRbqContactedName}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Par (employé VVD)</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Par (employé VVD)</label>
                   <input
                     type="text"
                     name="envRbqBy"
                     value={formData.envRbqBy}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Numéro de dossier</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Numéro de dossier</label>
                   <input
                     type="text"
                     name="envRbqFollowUp"
                     value={formData.envRbqFollowUp}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Courriel</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Courriel</label>
                   <input
                     type="email"
                     name="envRbqEmail"
                     value={formData.envRbqEmail}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                   />
                 </div>
               </div>
             </div>
 
             <div className="border-t border-blue-200 pt-4">
-              <label className="block text-sm font-medium text-gray-700">Numéro séquentiel (Interne)</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Numéro séquentiel (Interne)</label>
               <input
                 type="text"
                 name="envSequentialNumber"
                 value={formData.envSequentialNumber}
                 onChange={handleChange}
                 placeholder="Généré automatiquement si vide"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
               />
             </div>
           </div>
