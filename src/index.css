@@ -56,6 +56,18 @@
     .print-only {
         display: block !important;
     }
+
+    /* Prevent page breaks inside important elements */
+    .break-inside-avoid {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* Force Letter size */
+    @page {
+        size: letter;
+        margin: 0.5in;
+    }
 }
 
 .print-only {
