@@ -50,43 +50,31 @@ const Procedure: React.FC = () => {
 
                 {/* PDF Viewer Area */}
                 <div className="flex-grow bg-gray-100 relative">
-                    <object
-                        data={PROCEDURE_URL}
-                        type="application/pdf"
-                        className="w-full h-full block"
+                    <iframe
+                        src={PROCEDURE_URL}
+                        className="w-full h-full block border-none"
+                        title="Procédure d'intervention"
                     >
-                        {/* Fallback Content */}
-                        <div className="flex flex-col items-center justify-center h-full space-y-6 p-8 text-center bg-gray-50">
-                            <div className="bg-white p-6 rounded-full shadow-md">
-                                <AlertCircle className="h-12 w-12 text-blue-500" />
-                            </div>
-                            <div className="space-y-2 max-w-md">
-                                <h4 className="text-xl font-bold text-gray-900">Impossible d'afficher le PDF directement</h4>
-                                <p className="text-gray-600">
-                                    Votre navigateur ne supporte pas l'affichage direct des PDF ou le fichier est inaccessible.
-                                </p>
-                            </div>
-                            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
-                                <a
-                                    href={PROCEDURE_URL}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg font-semibold"
-                                >
-                                    <ExternalLink className="h-5 w-5 mr-2" />
-                                    Ouvrir le document
-                                </a>
-                                <a
-                                    href={PROCEDURE_URL}
-                                    download
-                                    className="flex-1 flex items-center justify-center px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors shadow-sm font-semibold"
-                                >
-                                    <Download className="h-5 w-5 mr-2" />
-                                    Télécharger
-                                </a>
-                            </div>
+                        {/* Fallback Content (iframe content is only shown if iframe is not supported, but most modern browsers support it. 
+                            However, if the PDF fails to load inside the iframe, the browser usually handles it. 
+                            We keep the external buttons as the primary fallback.) 
+                        */}
+                    </iframe>
+
+                    {/* Overlay for fallback if needed (Optional: could be a separate component if we could detect failure easily) 
+                        For now, we rely on the header buttons and a message below if iframe is empty.
+                    */}
+                    <div className="absolute inset-0 -z-10 flex flex-col items-center justify-center h-full space-y-6 p-8 text-center bg-gray-50">
+                        <div className="bg-white p-6 rounded-full shadow-md">
+                            <AlertCircle className="h-12 w-12 text-blue-500" />
                         </div>
-                    </object>
+                        <div className="space-y-2 max-w-md">
+                            <h4 className="text-xl font-bold text-gray-900">Chargement du document...</h4>
+                            <p className="text-gray-600">
+                                Si le document ne s'affiche pas, utilisez les boutons ci-dessus pour l'ouvrir ou le télécharger.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -133,6 +133,9 @@ const Dashboard: React.FC = () => {
                                                     </div>
                                                 </div>
                                                 <h3 className="text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                                                    {report.envSequentialNumber && (
+                                                        <span className="font-mono text-sm text-gray-500 mr-2">[{report.envSequentialNumber}]</span>
+                                                    )}
                                                     {report.contaminant}
                                                     {report.containerQuantity && <span className="text-gray-500 font-normal"> - {report.containerQuantity}</span>}
                                                 </h3>

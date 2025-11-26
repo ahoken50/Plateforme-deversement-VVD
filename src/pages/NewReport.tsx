@@ -255,7 +255,7 @@ const NewReport: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Section 1: Informations générales */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600">
+          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
             <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Informations générales</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -315,7 +315,7 @@ const NewReport: React.FC = () => {
           </div>
 
           {/* Section 2: Détails du déversement */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600">
+          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
             <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Détails du déversement</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -398,7 +398,7 @@ const NewReport: React.FC = () => {
           </div>
 
           {/* Section 3: Environnement sensible */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600">
+          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
             <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Environnement sensible à proximité</h2>
             <div className="space-y-4">
               <div>
@@ -436,7 +436,7 @@ const NewReport: React.FC = () => {
           </div>
 
           {/* Section 4: Actions et Cause */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600">
+          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
             <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Intervention et Cause</h2>
             <div className="space-y-6">
               <div>
@@ -541,7 +541,7 @@ const NewReport: React.FC = () => {
           </div>
 
           {/* Section 5: Photos et Documents */}
-          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600">
+          <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid">
             <h2 className="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Photos et Documents</h2>
 
             <div className="space-y-4 mb-6">
