@@ -34,6 +34,14 @@ const Dashboard: React.FC = () => {
     const totalReports = reports.length;
     const activeReports = reports.filter(r => r.status === 'Nouvelle demande' || r.status === 'En cours').length;
     const urgentReports = reports.filter(r => r.status === 'Intervention requise').length;
+    const waitingForMinistryCount = reports.filter(r => r.status === 'En attente de retour du ministère').length;
+
+    const currentMonthReportsCount = reports.filter(r => {
+        if (!r.createdAt) return false;
+        const reportDate = r.createdAt.toDate();
+        const now = new Date();
+        return reportDate.getMonth() === now.getMonth() && reportDate.getFullYear() === now.getFullYear();
+    }).length;
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -58,7 +66,7 @@ const Dashboard: React.FC = () => {
                     <p className="text-gray-500 mt-1">Vue d'ensemble des déversements et incidents</p>
                 </div>
                 <Link
-                    to="/report/new"
+                    to="/nouveau-rapport"
                     className="flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg"
                 >
                     <Plus className="h-5 w-5 mr-2" />
@@ -67,7 +75,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* Statistics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
                     <div className="p-3 bg-blue-50 rounded-lg">
                         <BarChart3 className="h-8 w-8 text-blue-600" />
@@ -77,6 +85,7 @@ const Dashboard: React.FC = () => {
                         <p className="text-2xl font-bold text-gray-900">{totalReports}</p>
                     </div>
                 </div>
+
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
                     <div className="p-3 bg-yellow-50 rounded-lg">
                         <Clock className="h-8 w-8 text-yellow-600" />
@@ -86,13 +95,24 @@ const Dashboard: React.FC = () => {
                         <p className="text-2xl font-bold text-gray-900">{activeReports}</p>
                     </div>
                 </div>
+
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
-                    <div className="p-3 bg-red-50 rounded-lg">
-                        <AlertTriangle className="h-8 w-8 text-red-600" />
+                    <div className="p-3 bg-orange-50 rounded-lg">
+                        <AlertTriangle className="h-8 w-8 text-orange-600" />
                     </div>
                     <div>
-                        <p className="text-sm font-medium text-gray-500">Intervention Requise</p>
-                        <p className="text-2xl font-bold text-gray-900">{urgentReports}</p>
+                        <p className="text-sm font-medium text-gray-500">En attente (Ministère)</p>
+                        <p className="text-2xl font-bold text-gray-900">{waitingForMinistryCount}</p>
+                    </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                        <Calendar className="h-8 w-8 text-purple-600" />
+                    </div>
+                    <div>
+                        <p className="text-sm font-medium text-gray-500">Rapports ce mois</p>
+                        <p className="text-2xl font-bold text-gray-900">{currentMonthReportsCount}</p>
                     </div>
                 </div>
             </div>
