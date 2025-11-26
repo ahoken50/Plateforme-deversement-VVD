@@ -78,11 +78,13 @@ const Layout: React.FC = () => {
                                 <BarChart2 className="h-4 w-4 mr-2" />
                                 Statistiques
                             </Link>
-                            {isAdmin && (
-                                <Link
-                                >
-                                    <LogOut className="h-5 w-5" />
-                                </button>
+                            <button
+                                onClick={handleLogout}
+                                className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                            >
+                                <LogOut className="h-4 w-4 mr-2" />
+                                Déconnexion
+                            </button>
                         </div>
                     </div>
                 </div>
