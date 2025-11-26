@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Users, History, BookOpen, PlusCircle, LogOut, Shield, BarChart2 } from 'lucide-react';
+import { Users, History, BookOpen, PlusCircle, LogOut, BarChart2 } from 'lucide-react';
 
 const Layout: React.FC = () => {
     const location = useLocation();
-    const { currentUser, logout, isAdmin } = useAuth();
+    const { logout } = useAuth();
 
     const handleLogout = async () => {
         try {

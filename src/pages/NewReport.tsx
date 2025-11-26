@@ -93,7 +93,7 @@ const NewReport: React.FC = () => {
     if (id) {
       const fetchReport = async () => {
         try {
-          const report = await reportService.getReport(id);
+          const report = await reportService.getReportById(id);
           if (report) {
             setFormData(report);
           } else {
@@ -143,34 +143,44 @@ const NewReport: React.FC = () => {
     setError('');
 
     try {
-      let photoUrls = formData.photoUrls || [];
-      let documents = formData.documents || [];
+      let currentId = id;
 
+      // If new report, create it first to get an ID
+      if (!currentId) {
+        // Create with initial data (excluding files for now)
+        const initialData = {
+          ...formData,
+          photoUrls: [],
+          documents: [],
+          completedBy: currentUser?.email || formData.completedBy,
+          completionDate: new Date().toISOString().split('T')[0]
+        };
+        currentId = await reportService.createReport(initialData);
+      }
+
+      // Now we have currentId, upload files
+      let uploadedPhotoUrls: string[] = [];
       if (selectedFiles.length > 0) {
-        const uploadPromises = selectedFiles.map(file => reportService.uploadPhoto(file));
-        const newPhotoUrls = await Promise.all(uploadPromises);
-        photoUrls = [...photoUrls, ...newPhotoUrls];
+        uploadedPhotoUrls = await Promise.all(selectedFiles.map(file => reportService.uploadPhoto(file, currentId!)));
       }
 
+      let uploadedDocuments: any[] = [];
       if (selectedDocuments.length > 0) {
-        const uploadPromises = selectedDocuments.map(file => reportService.uploadDocument(file));
-        const newDocuments = await Promise.all(uploadPromises);
-        documents = [...documents, ...newDocuments];
+        uploadedDocuments = await Promise.all(selectedDocuments.map(file => reportService.uploadDocument(file, currentId!)));
       }
 
-      const reportData = {
+      // Prepare final data
+      const finalData = {
         ...formData,
-        photoUrls,
-        documents,
+        photoUrls: [...(formData.photoUrls || []), ...uploadedPhotoUrls],
+        documents: [...(formData.documents || []), ...uploadedDocuments],
         completedBy: currentUser?.email || formData.completedBy,
         completionDate: new Date().toISOString().split('T')[0]
       };
 
-      if (isEditing && id) {
-        await reportService.updateReport(id, reportData);
-      } else {
-        await reportService.createReport(reportData);
-      }
+      // Update the report (whether it was just created or existing)
+      await reportService.updateReport(currentId!, finalData);
+
       navigate('/');
     } catch (err) {
       setError('Erreur lors de la sauvegarde du rapport');
