@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Download, ExternalLink, AlertTriangle } from 'lucide-react';
+import { FileText, Download, ExternalLink } from 'lucide-react';
 
 const Procedure: React.FC = () => {
     // Using an absolute path to the public folder.
