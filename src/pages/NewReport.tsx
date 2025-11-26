@@ -222,7 +222,7 @@ const NewReport: React.FC = () => {
             </div>
           </div>
           <div className="flex justify-between mt-4 text-sm text-gray-600">
-            <p>Rapport ID: {id || 'Nouveau'}</p>
+            <p>Rapport #: {formData.envSequentialNumber ? `[${formData.envSequentialNumber}]` : (id || 'Nouveau')}</p>
             <p>Date d'impression: {new Date().toLocaleDateString()}</p>
           </div>
         </div>
