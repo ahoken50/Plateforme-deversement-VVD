@@ -19,12 +19,16 @@ const INITIAL_FORM_STATE: Report = {
   envContactedDate: '',
   envContactedTime: '',
 
+  envDeptContactedName: '',
+  envDeptContactedTime: '',
+
   contaminant: '',
   extent: '',
   surfaceType: '',
   surfaceTypeOther: '',
   equipmentType: '',
   containerQuantity: '',
+  containerCapacity: '',
   duration: '',
   sensitiveEnv: [],
   sensitiveEnvOther: '',
@@ -36,6 +40,7 @@ const INITIAL_FORM_STATE: Report = {
   emergencyKitRefilled: false,
   cause: '',
   causeOther: '',
+  causeDetail: '',
   contaminantCollectedBy: '',
   followUpBy: '',
 
@@ -44,7 +49,7 @@ const INITIAL_FORM_STATE: Report = {
   photosTakenAfter: false,
   photoUrls: [],
 
-  // MELCC
+  // MELCCFP
   envUrgenceEnvContacted: false,
   envUrgenceEnvDate: '',
   envUrgenceEnvContactedName: '',
@@ -52,6 +57,9 @@ const INITIAL_FORM_STATE: Report = {
   envMinistryFollowUp: '',
   envMinistryEmail: '',
   ministryDeclarationTime: '',
+  envMinistryFileResponsible: '',
+  envMinistryReferenceNumber: '',
+  envMinistryFileResponsibleEmail: '',
 
   // ECCC
   envEcccContacted: false,
@@ -73,7 +81,7 @@ const INITIAL_FORM_STATE: Report = {
 
   documents: [],
   completedBy: '',
-  completionDate: new Date().toISOString().split('T')[0],
+  completionDate: '', // Default empty
   status: 'Nouvelle demande'
 };
 
@@ -354,6 +362,28 @@ const NewReport: React.FC = () => {
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />
               </div>
+              <div>
+                <label htmlFor="envDeptContactedName" className="block text-sm font-semibold text-gray-700 mb-1">Personne(s) du département environnement contacté(es)</label>
+                <input
+                  id="envDeptContactedName"
+                  type="text"
+                  name="envDeptContactedName"
+                  value={formData.envDeptContactedName || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                />
+              </div>
+              <div>
+                <label htmlFor="envDeptContactedTime" className="block text-sm font-semibold text-gray-700 mb-1">Date et heure que la personne a été contactée</label>
+                <input
+                  id="envDeptContactedTime"
+                  type="datetime-local"
+                  name="envDeptContactedTime"
+                  value={formatDateTimeForInput(formData.envDeptContactedTime)}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                />
+              </div>
             </div>
           </div>
 
@@ -375,7 +405,7 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label htmlFor="extent" className="block text-sm font-semibold text-gray-700 mb-1">Quantité estimée</label>
+                <label htmlFor="extent" className="block text-sm font-semibold text-gray-700 mb-1">Quantité estimée ou étendu en m2</label>
                 <input
                   id="extent"
                   type="text"
@@ -383,7 +413,19 @@ const NewReport: React.FC = () => {
                   value={formData.extent}
                   onChange={handleChange}
                   required
-                  placeholder="Ex: 5 litres"
+                  placeholder="Ex: 5 litres, 10 m2..."
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                />
+              </div>
+              <div>
+                <label htmlFor="containerCapacity" className="block text-sm font-semibold text-gray-700 mb-1">Capacité du contenant ou réservoir</label>
+                <input
+                  id="containerCapacity"
+                  type="text"
+                  name="containerCapacity"
+                  value={formData.containerCapacity || ''}
+                  onChange={handleChange}
+                  placeholder="Ex: 200 litres, 1000 gallons..."
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />
               </div>
@@ -459,11 +501,13 @@ const NewReport: React.FC = () => {
                   onChange={handleMultiSelectChange}
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 h-32 bg-gray-50 hover:bg-white transition-colors"
                 >
-                  <option value="Cours d'eau">Cours d'eau / Fossé</option>
-                  <option value="Égout pluvial">Égout pluvial (Puisard)</option>
-                  <option value="Égout sanitaire">Égout sanitaire</option>
-                  <option value="Sol perméable">Sol perméable</option>
-                  <option value="Zone résidentielle">Zone résidentielle</option>
+                  <option value="Aucun">Aucun</option>
+                  <option value="Zones de protection de la faune et la flore">Zones de protection de la faune et la flore</option>
+                  <option value="Cours et de plan d’eau sensible">Cours et de plan d’eau sensible</option>
+                  <option value="Zone agricoles sensibles">Zone agricoles sensibles</option>
+                  <option value="Zones humides">Zones humides</option>
+                  <option value="Fossé">Fossé</option>
+                  <option value="Bordure de route numéroté">Bordure de route numéroté (ex. 111, 117)</option>
                   <option value="Autre">Autre</option>
                 </select>
               </div>
@@ -498,7 +542,7 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label htmlFor="actionsTaken" className="block text-sm font-semibold text-gray-700 mb-1">Mesures prises</label>
+                <label htmlFor="actionsTaken" className="block text-sm font-semibold text-gray-700 mb-1">Mesures prises afin de récupérer les contaminants</label>
                 <textarea
                   id="actionsTaken"
                   name="actionsTaken"
@@ -566,6 +610,18 @@ const NewReport: React.FC = () => {
                     />
                   </div>
                 )}
+                <div>
+                  <label htmlFor="causeDetail" className="block text-sm font-semibold text-gray-700 mb-1">Précision sur la cause</label>
+                  <input
+                    id="causeDetail"
+                    type="text"
+                    name="causeDetail"
+                    value={formData.causeDetail || ''}
+                    onChange={handleChange}
+                    placeholder="Détails supplémentaires..."
+                    className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -742,7 +798,6 @@ const NewReport: React.FC = () => {
                   name="completionDate"
                   value={formData.completionDate}
                   onChange={handleChange}
-                  required
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />
               </div>
@@ -775,26 +830,70 @@ const NewReport: React.FC = () => {
                 Réservé au département de l'environnement
               </h2>
 
-              {/* MELCC */}
+              {/* MELCCFP */}
               <div className="mb-6">
                 <h3 className="text-md font-semibold text-blue-800 mb-3">Urgence-Environnement (MELCCFP)</h3>
+                <p className="text-sm text-blue-700 mb-4 font-medium">Déclaration de tout déversement affectant l’environnement.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="envUrgenceEnvContacted"
-                      checked={formData.envUrgenceEnvContacted}
-                      onChange={handleChange}
-                      className="h-4 w-4 text-blue-600 rounded border-gray-300"
-                    />
-                    <label className="ml-2 text-sm text-gray-700">Contacté</label>
+                  <div className="flex flex-col">
+                    <div className="flex items-center mb-2">
+                      <input
+                        type="checkbox"
+                        name="envUrgenceEnvContacted"
+                        checked={formData.envUrgenceEnvContacted}
+                        onChange={handleChange}
+                        className="h-4 w-4 text-blue-600 rounded border-gray-300"
+                      />
+                      <label className="ml-2 text-sm text-gray-700 font-semibold">Urgence Environnement contactée (MELCC)</label>
+                    </div>
+                    <p className="text-sm text-gray-600 ml-6">1-866-694-5454</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Date/Heure</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Date et heure de la déclaration au MELCCFP</label>
                     <input
                       type="datetime-local"
                       name="envUrgenceEnvDate"
                       value={formatDateTimeForInput(formData.envUrgenceEnvDate)}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Interlocuteur au MELCCFP (À la centrale d'appel)</label>
+                    <input
+                      type="text"
+                      name="envUrgenceEnvContactedName"
+                      value={formData.envUrgenceEnvContactedName}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Nom de la personne responsable du dossier au ministère</label>
+                    <input
+                      type="text"
+                      name="envMinistryFileResponsible"
+                      value={formData.envMinistryFileResponsible || ''}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Numéro de la demande attribué par le ministère</label>
+                    <input
+                      type="text"
+                      name="envMinistryReferenceNumber"
+                      value={formData.envMinistryReferenceNumber || ''}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Courriel de la personne responsable du dossier au ministère</label>
+                    <input
+                      type="email"
+                      name="envMinistryFileResponsibleEmail"
+                      value={formData.envMinistryFileResponsibleEmail || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />

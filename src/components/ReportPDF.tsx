@@ -150,6 +150,16 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                             <Text style={styles.value}>{data.witnesses || '-'}</Text>
                         </View>
                     </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Personne(s) environnement contacté(es)</Text>
+                            <Text style={styles.value}>{data.envDeptContactedName || '-'}</Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Date/Heure contact</Text>
+                            <Text style={styles.value}>{data.envDeptContactedTime ? new Date(data.envDeptContactedTime).toLocaleString('fr-CA') : '-'}</Text>
+                        </View>
+                    </View>
                 </View>
 
                 {/* Section 2: Détails du déversement */}
@@ -161,14 +171,24 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                             <Text style={styles.value}>{data.contaminant}</Text>
                         </View>
                         <View style={styles.column}>
-                            <Text style={styles.label}>Quantité estimée</Text>
+                            <Text style={styles.label}>Quantité estimée ou étendu en m2</Text>
                             <Text style={styles.value}>{data.quantity} {data.quantityUnit}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Capacité du contenant</Text>
+                            <Text style={styles.value}>{data.containerCapacity || '-'}</Text>
                         </View>
                     </View>
                     <View style={styles.row}>
                         <View style={styles.column}>
                             <Text style={styles.label}>Cause du déversement</Text>
                             <Text style={styles.value}>{data.cause}</Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Précision sur la cause</Text>
+                            <Text style={styles.value}>{data.causeDetail || '-'}</Text>
                         </View>
                     </View>
                     <View style={styles.row}>
@@ -184,12 +204,32 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                     <Text style={styles.sectionTitle}>Département Environnement</Text>
                     <View style={styles.row}>
                         <View style={styles.column}>
-                            <Text style={styles.label}>Urgence Environnement prévenu</Text>
+                            <Text style={styles.label}>Urgence Environnement prévenu (MELCCFP)</Text>
                             <Text style={styles.value}>{data.urgencyEnvironmentNotified ? 'Oui' : 'Non'}</Text>
                         </View>
                         <View style={styles.column}>
+                            <Text style={styles.label}>Date et heure de la déclaration</Text>
+                            <Text style={styles.value}>{data.envUrgenceEnvDate ? new Date(data.envUrgenceEnvDate).toLocaleString('fr-CA') : '-'}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Interlocuteur au MELCCFP</Text>
+                            <Text style={styles.value}>{data.envUrgenceEnvContactedName || '-'}</Text>
+                        </View>
+                        <View style={styles.column}>
                             <Text style={styles.label}>Numéro de référence</Text>
-                            <Text style={styles.value}>{data.referenceNumber || '-'}</Text>
+                            <Text style={styles.value}>{data.envMinistryReferenceNumber || '-'}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Responsable du dossier (Ministère)</Text>
+                            <Text style={styles.value}>{data.envMinistryFileResponsible || '-'}</Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Courriel responsable</Text>
+                            <Text style={styles.value}>{data.envMinistryFileResponsibleEmail || '-'}</Text>
                         </View>
                     </View>
                     <View style={styles.row}>
@@ -205,7 +245,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                     <Text style={styles.sectionTitle}>Suivi et Fermeture</Text>
                     <View style={styles.row}>
                         <View style={styles.column}>
-                            <Text style={styles.label}>Actions prises</Text>
+                            <Text style={styles.label}>Mesures prises afin de récupérer les contaminants</Text>
                             <Text style={styles.value}>{data.actionsTaken || '-'}</Text>
                         </View>
                     </View>

@@ -9,14 +9,17 @@ export interface Report {
     envContactedName: string;
     envContactedDate: string;
     envContactedTime: string;
+    envDeptContactedName?: string; // New: Personne du département environnement contactée
+    envDeptContactedTime?: string; // New: Heure contactée
 
     // Spill Description
     contaminant: string;
-    extent: string;
+    extent: string; // Label update: "Quantité estimée ou étendu en m2"
     surfaceType: string;
     surfaceTypeOther?: string;
     equipmentType: string;
     containerQuantity: string;
+    containerCapacity?: string; // New: Capacité du contenant
     duration: string;
     sensitiveEnv: string[];
     sensitiveEnvOther?: string;
@@ -24,11 +27,12 @@ export interface Report {
 
     // Incident Details
     description: string;
-    actionsTaken: string;
+    actionsTaken: string; // Label update: "Mesures prises afin de récupérer les contaminants"
     emergencyKitUsed: boolean;
     emergencyKitRefilled: boolean;
     cause: string;
     causeOther?: string;
+    causeDetail?: string; // New: Précision pour la cause
     contaminantCollectedBy: string;
     followUpBy: string;
 
@@ -44,14 +48,17 @@ export interface Report {
     // Section réservée au département environnement
     envSequentialNumber?: string;
 
-    // MELCC
+    // MELCCFP (Updated from MELCC)
     envUrgenceEnvContacted?: boolean;
-    envUrgenceEnvDate?: string;
-    envUrgenceEnvContactedName?: string;
+    envUrgenceEnvDate?: string; // Label: Date et heure de la déclaration au MELCCFP
+    envUrgenceEnvContactedName?: string; // Label: Interlocuteur au MELCCFP
     envUrgenceEnvBy?: string;
     envMinistryFollowUp?: string;
     envMinistryEmail?: string;
     ministryDeclarationTime?: string;
+    envMinistryFileResponsible?: string; // New: Nom de la personne responsable du dossier
+    envMinistryReferenceNumber?: string; // New: Numéro de la demande attribué
+    envMinistryFileResponsibleEmail?: string; // New: Courriel de la personne responsable
 
     // ECCC
     envEcccContacted?: boolean;
