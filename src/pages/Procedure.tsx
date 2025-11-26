@@ -1,9 +1,10 @@
 import React from 'react';
 import { FileText, Download, ExternalLink } from 'lucide-react';
+import procedurePdf from '../assets/VALDOR_PROCEDURE_ENV_001_V4.pdf';
 
 const Procedure: React.FC = () => {
-    // Using an absolute path to the public folder.
-    const PROCEDURE_URL = "/VALDOR_PROCEDURE_ENV_001_V4.pdf";
+    // Using imported asset for reliable path resolution
+    const PROCEDURE_URL = procedurePdf;
 
     return (
         <div className="max-w-5xl mx-auto space-y-8 pb-12">
