@@ -78,7 +78,7 @@ const INITIAL_FORM_STATE: Report = {
 const NewReport: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentUser, isAdmin } = useAuth();
+  const { currentUser } = useAuth();
   const isEditing = !!id;
 
   const [formData, setFormData] = useState<Report>(INITIAL_FORM_STATE);
