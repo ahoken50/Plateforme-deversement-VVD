@@ -75,7 +75,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* Statistics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
                     <div className="p-3 bg-blue-50 rounded-lg">
                         <BarChart3 className="h-8 w-8 text-blue-600" />
@@ -93,6 +93,16 @@ const Dashboard: React.FC = () => {
                     <div>
                         <p className="text-sm font-medium text-gray-500">En cours / Nouveaux</p>
                         <p className="text-2xl font-bold text-gray-900">{activeReports}</p>
+                    </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
+                    <div className="p-3 bg-red-50 rounded-lg">
+                        <AlertTriangle className="h-8 w-8 text-red-600" />
+                    </div>
+                    <div>
+                        <p className="text-sm font-medium text-gray-500">Intervention Requise</p>
+                        <p className="text-2xl font-bold text-gray-900">{urgentReports}</p>
                     </div>
                 </div>
 
