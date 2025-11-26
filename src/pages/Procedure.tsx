@@ -3,7 +3,7 @@ import { FileText, Download, ExternalLink, AlertTriangle } from 'lucide-react';
 
 const Procedure: React.FC = () => {
     // Using a relative path to the public folder. The user must place the file there.
-    const PROCEDURE_URL = "/VALDOR_PROCEDURE_ENV_001_V4.pdf";
+    const PROCEDURE_URL = `${import.meta.env.BASE_URL}VALDOR_PROCEDURE_ENV_001_V4.pdf`;
 
     return (
         <div className="max-w-4xl mx-auto space-y-8">

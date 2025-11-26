@@ -48,22 +48,8 @@ export interface Report {
     envUrgenceEnvContacted?: boolean;
     envUrgenceEnvDate?: string;
     envUrgenceEnvContactedName?: string;
-    envUrgenceEnvBy?: string;
-    envMinistryFollowUp?: string;
-    envMinistryEmail?: string;
-
-    // ECCC
-    envEcccContacted?: boolean;
-    envEcccDate?: string;
-    envEcccContactedName?: string;
-    envEcccBy?: string;
-    envEcccFollowUp?: string;
-    envEcccEmail?: string;
-
-    // RBQ
-    envRbqContacted?: boolean;
-    envRbqDate?: string;
     envRbqContactedName?: string;
+    ministryDeclarationTime?: string;
     envRbqBy?: string;
     envRbqFollowUp?: string;
     envRbqEmail?: string;

@@ -80,26 +80,9 @@ const Layout: React.FC = () => {
                             </Link>
                             {isAdmin && (
                                 <Link
-                                    to="/admin/users"
-                                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/admin/users'
-                                        ? 'border-blue-500 text-gray-900'
-                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                                        }`}
                                 >
-                                    <Shield className="h-4 w-4 mr-2" />
-                                    Admin
-                                </Link>
-                            )}
-                        </div>
-                        <div className="flex items-center">
-                            <span className="text-sm text-gray-500 mr-4 hidden md:block">{currentUser?.email}</span>
-                            <button
-                                onClick={handleLogout}
-                                className="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                title="Déconnexion"
-                            >
-                                <LogOut className="h-5 w-5" />
-                            </button>
+                                    <LogOut className="h-5 w-5" />
+                                </button>
                         </div>
                     </div>
                 </div>
