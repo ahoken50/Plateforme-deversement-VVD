@@ -91,35 +91,34 @@ const Layout: React.FC = () => {
                                 </Link>
                             )}
                         </div>
-                    </div>
-                    <div className="flex items-center">
-                        <span className="text-sm text-gray-500 mr-4 hidden md:block">{currentUser?.email}</span>
-                        <button
-                            onClick={handleLogout}
-                            className="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                            title="Déconnexion"
-                        >
-                            <LogOut className="h-5 w-5" />
-                        </button>
+                        <div className="flex items-center">
+                            <span className="text-sm text-gray-500 mr-4 hidden md:block">{currentUser?.email}</span>
+                            <button
+                                onClick={handleLogout}
+                                className="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                title="Déconnexion"
+                            >
+                                <LogOut className="h-5 w-5" />
+                            </button>
+                        </div>
                     </div>
                 </div>
-        </div>
-            </header >
+            </header>
 
-    {/* Main Content */ }
-    < main className = "flex-grow container mx-auto px-4 py-8" >
-        <Outlet />
-            </main >
+            {/* Main Content */}
+            <main className="flex-grow container mx-auto px-4 py-8">
+                <Outlet />
+            </main>
 
-    {/* Footer */ }
-    < footer className = "bg-white border-t border-gray-200 mt-auto" >
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <p className="text-center text-sm text-gray-500">
-                &copy; {new Date().getFullYear()} Ville de Val-d'Or - Environnement
-            </p>
+            {/* Footer */}
+            <footer className="bg-white border-t border-gray-200 mt-auto">
+                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <p className="text-center text-sm text-gray-500">
+                        &copy; {new Date().getFullYear()} Ville de Val-d'Or - Environnement
+                    </p>
+                </div>
+            </footer>
         </div>
-            </footer >
-        </div >
     );
 };
 
