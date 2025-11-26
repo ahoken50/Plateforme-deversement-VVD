@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Users, History, BookOpen, PlusCircle, LogOut, BarChart2 } from 'lucide-react';
+import logo from '../assets/logo.png';
 
 const Layout: React.FC = () => {
     const location = useLocation();
@@ -22,7 +23,7 @@ const Layout: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex-shrink-0 flex items-center">
-                            <img className="h-14 w-auto object-contain" src="/logo.png" alt="Ville de Val-d'Or" />
+                            <img className="h-14 w-auto object-contain" src={logo} alt="Ville de Val-d'Or" />
                             <span className="ml-3 text-xl font-bold text-gray-800 hidden lg:block self-center">
                                 Gestion des Déversements
                             </span>
