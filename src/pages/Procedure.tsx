@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Download, ExternalLink, AlertCircle } from 'lucide-react';
+import { FileText, Download, ExternalLink } from 'lucide-react';
 
 const Procedure: React.FC = () => {
     // Using an absolute path to the public folder.
@@ -50,29 +50,33 @@ const Procedure: React.FC = () => {
 
                 {/* PDF Viewer Area */}
                 <div className="flex-grow bg-gray-100 relative">
+                    {/* Google Docs Viewer (Works best for public URLs, might fail on localhost) */}
                     <iframe
-                        src={PROCEDURE_URL}
-                        className="w-full h-full block border-none"
+                        src={`https://docs.google.com/gview?url=${window.location.origin}${PROCEDURE_URL}&embedded=true`}
+                        className="w-full h-full block border-none relative z-10"
                         title="Procédure d'intervention"
                     >
-                        {/* Fallback Content (iframe content is only shown if iframe is not supported, but most modern browsers support it. 
-                            However, if the PDF fails to load inside the iframe, the browser usually handles it. 
-                            We keep the external buttons as the primary fallback.) 
-                        */}
                     </iframe>
 
-                    {/* Overlay for fallback if needed (Optional: could be a separate component if we could detect failure easily) 
-                        For now, we rely on the header buttons and a message below if iframe is empty.
-                    */}
-                    <div className="absolute inset-0 -z-10 flex flex-col items-center justify-center h-full space-y-6 p-8 text-center bg-gray-50">
+                    {/* Robust Fallback / Background */}
+                    <div className="absolute inset-0 z-0 flex flex-col items-center justify-center h-full space-y-6 p-8 text-center bg-gray-50">
                         <div className="bg-white p-6 rounded-full shadow-md">
-                            <AlertCircle className="h-12 w-12 text-blue-500" />
+                            <FileText className="h-12 w-12 text-blue-500" />
                         </div>
-                        <div className="space-y-2 max-w-md">
-                            <h4 className="text-xl font-bold text-gray-900">Chargement du document...</h4>
+                        <div className="space-y-4 max-w-md">
+                            <h4 className="text-xl font-bold text-gray-900">Visualisation du document</h4>
                             <p className="text-gray-600">
-                                Si le document ne s'affiche pas, utilisez les boutons ci-dessus pour l'ouvrir ou le télécharger.
+                                Si le document ne s'affiche pas automatiquement ci-dessus, veuillez l'ouvrir directement.
                             </p>
+                            <a
+                                href={PROCEDURE_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg font-semibold"
+                            >
+                                <ExternalLink className="h-5 w-5 mr-2" />
+                                Ouvrir le PDF
+                            </a>
                         </div>
                     </div>
                 </div>

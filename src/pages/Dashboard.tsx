@@ -38,6 +38,7 @@ const Dashboard: React.FC = () => {
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'Nouvelle demande': return 'bg-blue-100 text-blue-800';
+            case 'En cours': return 'bg-blue-100 text-blue-800';
             case 'Pris en charge': return 'bg-yellow-100 text-yellow-800';
             case 'Traité': return 'bg-green-100 text-green-800';
             case 'En attente de retour du ministère': return 'bg-orange-100 text-orange-800';

@@ -234,8 +234,9 @@ const NewReport: React.FC = () => {
             </h1>
             {isEditing && (
               <div className="mt-2 flex items-center">
-                <label className="mr-2 text-sm font-semibold text-gray-700">Statut actuel:</label>
+                <label htmlFor="status-header" className="mr-2 text-sm font-semibold text-gray-700">Statut actuel:</label>
                 <select
+                  id="status-header"
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
@@ -281,8 +282,9 @@ const NewReport: React.FC = () => {
             <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Informations générales</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-3 gap-6 print:gap-2">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Date de l'incident</label>
+                <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-1">Date de l'incident</label>
                 <input
+                  id="date"
                   type="date"
                   name="date"
                   value={formData.date}
@@ -292,8 +294,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Heure</label>
+                <label htmlFor="time" className="block text-sm font-semibold text-gray-700 mb-1">Heure</label>
                 <input
+                  id="time"
                   type="time"
                   name="time"
                   value={formData.time}
@@ -314,8 +317,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Témoin(s)</label>
+                <label htmlFor="witnessedBy" className="block text-sm font-semibold text-gray-700 mb-1">Témoin(s)</label>
                 <input
+                  id="witnessedBy"
                   type="text"
                   name="witnessedBy"
                   value={formData.witnessedBy}
@@ -324,8 +328,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Contremaître avisé</label>
+                <label htmlFor="supervisor" className="block text-sm font-semibold text-gray-700 mb-1">Contremaître avisé</label>
                 <input
+                  id="supervisor"
                   type="text"
                   name="supervisor"
                   value={formData.supervisor}
@@ -341,8 +346,9 @@ const NewReport: React.FC = () => {
             <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Détails du déversement</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-3 gap-6 print:gap-2">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Nature du contaminant</label>
+                <label htmlFor="contaminant" className="block text-sm font-semibold text-gray-700 mb-1">Nature du contaminant</label>
                 <input
+                  id="contaminant"
                   type="text"
                   name="contaminant"
                   value={formData.contaminant}
@@ -353,8 +359,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Quantité estimée</label>
+                <label htmlFor="extent" className="block text-sm font-semibold text-gray-700 mb-1">Quantité estimée</label>
                 <input
+                  id="extent"
                   type="text"
                   name="extent"
                   value={formData.extent}
@@ -365,8 +372,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Type de surface</label>
+                <label htmlFor="surfaceType" className="block text-sm font-semibold text-gray-700 mb-1">Type de surface</label>
                 <select
+                  id="surfaceType"
                   name="surfaceType"
                   value={formData.surfaceType}
                   onChange={handleChange}
@@ -384,8 +392,9 @@ const NewReport: React.FC = () => {
               </div>
               {formData.surfaceType === 'Autre' && (
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Préciser la surface</label>
+                  <label htmlFor="surfaceTypeOther" className="block text-sm font-semibold text-gray-700 mb-1">Préciser la surface</label>
                   <input
+                    id="surfaceTypeOther"
                     type="text"
                     name="surfaceTypeOther"
                     value={formData.surfaceTypeOther}
@@ -395,8 +404,9 @@ const NewReport: React.FC = () => {
                 </div>
               )}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Type d'équipement impliqué</label>
+                <label htmlFor="equipmentType" className="block text-sm font-semibold text-gray-700 mb-1">Type d'équipement impliqué</label>
                 <input
+                  id="equipmentType"
                   type="text"
                   name="equipmentType"
                   value={formData.equipmentType}
@@ -406,8 +416,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Durée du déversement</label>
+                <label htmlFor="duration" className="block text-sm font-semibold text-gray-700 mb-1">Durée du déversement</label>
                 <input
+                  id="duration"
                   type="text"
                   name="duration"
                   value={formData.duration}
@@ -418,8 +429,6 @@ const NewReport: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Section 3: Environnement sensible */}
           <div className="bg-white shadow-md rounded-lg p-6 print:p-2 border border-gray-200 border-t-4 border-t-blue-600 break-inside-avoid print:shadow-none print:border-gray-300">
             <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Environnement sensible à proximité</h2>
             <div className="space-y-4 print:space-y-2">
@@ -462,8 +471,9 @@ const NewReport: React.FC = () => {
             <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Intervention et Cause</h2>
             <div className="space-y-6 print:space-y-2">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Description de l'incident</label>
+                <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-1">Description de l'incident</label>
                 <textarea
+                  id="description"
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
@@ -472,8 +482,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Mesures prises</label>
+                <label htmlFor="actionsTaken" className="block text-sm font-semibold text-gray-700 mb-1">Mesures prises</label>
                 <textarea
+                  id="actionsTaken"
                   name="actionsTaken"
                   value={formData.actionsTaken}
                   onChange={handleChange}
@@ -486,30 +497,33 @@ const NewReport: React.FC = () => {
               <div className="flex items-center space-x-6">
                 <div className="flex items-center">
                   <input
+                    id="emergencyKitUsed"
                     type="checkbox"
                     name="emergencyKitUsed"
                     checked={formData.emergencyKitUsed}
                     onChange={handleChange}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <label className="ml-2 block text-sm text-gray-900">Trousse d'urgence utilisée</label>
+                  <label htmlFor="emergencyKitUsed" className="ml-2 block text-sm text-gray-900">Trousse d'urgence utilisée</label>
                 </div>
                 <div className="flex items-center">
                   <input
+                    id="emergencyKitRefilled"
                     type="checkbox"
                     name="emergencyKitRefilled"
                     checked={formData.emergencyKitRefilled}
                     onChange={handleChange}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <label className="ml-2 block text-sm text-gray-900">Trousse remplie après usage</label>
+                  <label htmlFor="emergencyKitRefilled" className="ml-2 block text-sm text-gray-900">Trousse remplie après usage</label>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Cause du déversement</label>
+                  <label htmlFor="cause" className="block text-sm font-semibold text-gray-700 mb-1">Cause du déversement</label>
                   <select
+                    id="cause"
                     name="cause"
                     value={formData.cause}
                     onChange={handleChange}
@@ -525,8 +539,9 @@ const NewReport: React.FC = () => {
                 </div>
                 {formData.cause === 'Autre' && (
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Préciser la cause</label>
+                    <label htmlFor="causeOther" className="block text-sm font-semibold text-gray-700 mb-1">Préciser la cause</label>
                     <input
+                      id="causeOther"
                       type="text"
                       name="causeOther"
                       value={formData.causeOther}
@@ -539,8 +554,9 @@ const NewReport: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Contaminants récupérés par</label>
+                  <label htmlFor="contaminantCollectedBy" className="block text-sm font-semibold text-gray-700 mb-1">Contaminants récupérés par</label>
                   <input
+                    id="contaminantCollectedBy"
                     type="text"
                     name="contaminantCollectedBy"
                     value={formData.contaminantCollectedBy}
@@ -549,8 +565,9 @@ const NewReport: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Lieu d'élimination des résidus</label>
+                  <label htmlFor="disposalLocation" className="block text-sm font-semibold text-gray-700 mb-1">Lieu d'élimination des résidus</label>
                   <input
+                    id="disposalLocation"
                     type="text"
                     name="disposalLocation"
                     value={formData.disposalLocation}
@@ -679,8 +696,9 @@ const NewReport: React.FC = () => {
             <h2 className="text-lg font-medium text-gray-900 mb-4 print:mb-2 border-b pb-2 print:text-base print:font-bold">Suivi et Fermeture</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-3 gap-6 print:gap-2">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Responsable du suivi</label>
+                <label htmlFor="followUpBy" className="block text-sm font-semibold text-gray-700 mb-1">Responsable du suivi</label>
                 <input
+                  id="followUpBy"
                   type="text"
                   name="followUpBy"
                   value={formData.followUpBy}
@@ -689,8 +707,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Complété par</label>
+                <label htmlFor="completedBy" className="block text-sm font-semibold text-gray-700 mb-1">Complété par</label>
                 <input
+                  id="completedBy"
                   type="text"
                   name="completedBy"
                   value={formData.completedBy}
@@ -700,8 +719,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Date de complétion</label>
+                <label htmlFor="completionDate" className="block text-sm font-semibold text-gray-700 mb-1">Date de complétion</label>
                 <input
+                  id="completionDate"
                   type="date"
                   name="completionDate"
                   value={formData.completionDate}
@@ -711,8 +731,9 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Statut</label>
+                <label htmlFor="status-footer" className="block text-sm font-semibold text-gray-700 mb-1">Statut</label>
                 <select
+                  id="status-footer"
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
