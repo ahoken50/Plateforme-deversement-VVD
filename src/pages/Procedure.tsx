@@ -14,48 +14,39 @@ const Procedure: React.FC = () => {
                 </p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-blue-100">
-                <div className="bg-blue-600 p-6 text-white flex items-center justify-between">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-blue-100 h-[800px] flex flex-col">
+                <div className="bg-blue-600 p-4 text-white flex items-center justify-between flex-shrink-0">
                     <div className="flex items-center space-x-3">
-                        <FileText className="h-8 w-8" />
-                        <h3 className="text-xl font-semibold">VALDOR_PROCEDURE_ENV_001_V4</h3>
+                        <FileText className="h-6 w-6" />
+                        <h3 className="text-lg font-semibold">VALDOR_PROCEDURE_ENV_001_V4</h3>
                     </div>
-                    <span className="bg-blue-500 px-3 py-1 rounded-full text-sm">PDF</span>
-                </div>
-
-                <div className="p-8 flex flex-col items-center space-y-6">
-                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start max-w-2xl">
-                        <AlertTriangle className="h-6 w-6 text-yellow-600 mr-3 flex-shrink-0 mt-1" />
-                        <div>
-                            <h4 className="font-semibold text-yellow-800">Points clés à retenir :</h4>
-                            <ul className="list-disc list-inside text-yellow-700 mt-2 space-y-1">
-                                <li>Assurer la sécurité des lieux et des personnes.</li>
-                                <li>Contenir le déversement si possible sans danger.</li>
-                                <li>Aviser immédiatement les responsables (voir onglet Intervenants).</li>
-                                <li>Documenter l'incident (photos, rapport).</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                    <div className="flex space-x-2">
                         <a
                             href={PROCEDURE_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
+                            className="flex items-center px-3 py-1 bg-blue-700 hover:bg-blue-800 rounded text-sm transition-colors"
                         >
-                            <ExternalLink className="h-5 w-5 mr-2" />
-                            Ouvrir le document
+                            <ExternalLink className="h-4 w-4 mr-1" />
+                            Ouvrir
                         </a>
                         <a
                             href={PROCEDURE_URL}
                             download
-                            className="flex items-center justify-center px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                            className="flex items-center px-3 py-1 bg-blue-700 hover:bg-blue-800 rounded text-sm transition-colors"
                         >
-                            <Download className="h-5 w-5 mr-2" />
-                            Télécharger le PDF
+                            <Download className="h-4 w-4 mr-1" />
+                            Télécharger
                         </a>
                     </div>
+                </div>
+
+                <div className="flex-grow bg-gray-100">
+                    <iframe
+                        src={PROCEDURE_URL}
+                        className="w-full h-full"
+                        title="Procédure d'intervention"
+                    />
                 </div>
             </div>
         </div>
