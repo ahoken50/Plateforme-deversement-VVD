@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Save, Upload, AlertTriangle, FileText, Printer } from 'lucide-react';
+import { Save, Upload, AlertTriangle, FileText, Printer, Download } from 'lucide-react';
 import { reportService } from '../services/reportService';
 import { useAuth } from '../contexts/AuthContext';
 import { Report } from '../types';
 import logo from '../assets/logo.png';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import ReportPDF from '../components/ReportPDF';
 
 const INITIAL_FORM_STATE: Report = {
   id: '',
@@ -254,13 +256,27 @@ const NewReport: React.FC = () => {
               </div>
             )}
           </div>
-          <button
-            onClick={handlePrint}
-            className="flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <Printer className="h-5 w-5 mr-2" />
-            Imprimer
-          </button>
+          <div className="flex space-x-3">
+            <PDFDownloadLink
+              document={<ReportPDF data={formData} id={id} />}
+              fileName={`rapport-${formData.envSequentialNumber || id || 'nouveau'}.pdf`}
+              className="flex items-center px-4 py-2 text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              {({ loading }) => (
+                <>
+                  <Download className="h-5 w-5 mr-2" />
+                  {loading ? 'Génération...' : 'Télécharger PDF'}
+                </>
+              )}
+            </PDFDownloadLink>
+            <button
+              onClick={handlePrint}
+              className="flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Printer className="h-5 w-5 mr-2" />
+              Imprimer
+            </button>
+          </div>
         </div>
 
         {error && (
