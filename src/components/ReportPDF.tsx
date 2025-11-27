@@ -337,9 +337,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                         <Text style={{ fontSize: 10, marginLeft: 10 }}>Pendant [{data.photosTakenDuring ? 'X' : ' '}]</Text>
                         <Text style={{ fontSize: 10, marginLeft: 10 }}>Après [{data.photosTakenAfter ? 'X' : ' '}]</Text>
                     </View>
-                    <Text style={{ fontSize: 8, color: 'red', marginBottom: 5 }}>
-                        Debug: URLs found: {photoUrls?.length || 0}, Converted: {photoBase64s?.length || 0}
-                    </Text>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
                         {/* Try Base64 first */}
                         {photoBase64s && photoBase64s.length > 0 ? (
