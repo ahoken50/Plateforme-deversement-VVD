@@ -42,16 +42,16 @@ const Header: React.FC = () => {
             <div className="px-6 py-4 md:px-10 flex items-center justify-between bg-white/60 backdrop-blur-md border-b border-white/50">
 
                 {/* Logo Section */}
-                <div className="flex items-center gap-3">
-                    <Link to="/" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 bg-gradient-to-br from-eco-lime to-eco-forest rounded-xl shadow-lg flex items-center justify-center text-white group-hover:scale-105 transition-transform">
-                            <Logo className="h-6 w-6 text-white" />
+                <div className="flex items-center gap-4">
+                    <Link to="/" className="flex items-center gap-4 group">
+                        <div className="w-16 h-16 bg-gradient-to-br from-eco-lime to-eco-forest rounded-2xl shadow-lg flex items-center justify-center text-white group-hover:scale-105 transition-transform">
+                            <Logo className="h-10 w-10 text-white" />
                         </div>
                         <div>
-                            <h1 className="font-display font-bold text-xl text-eco-forest leading-tight tracking-tight">
+                            <h1 className="font-display font-bold text-2xl text-eco-forest leading-tight tracking-tight">
                                 Plateforme Déversement
                             </h1>
-                            <p className="text-[10px] font-bold text-eco-purple uppercase tracking-widest">
+                            <p className="text-xs font-bold text-eco-purple uppercase tracking-widest">
                                 Ville de Val-d'Or
                             </p>
                         </div>
@@ -78,8 +78,12 @@ const Header: React.FC = () => {
                         <div className="text-sm font-bold text-gray-800">{userProfile?.email?.split('@')[0]}</div>
                         <div className="text-xs text-eco-purple capitalize">{userProfile?.role === 'admin' ? 'Administrateur' : 'Utilisateur'}</div>
                     </div>
-                    <div className="w-10 h-10 rounded-full bg-eco-peach border-2 border-white shadow-md overflow-hidden flex items-center justify-center">
-                        <User className="w-5 h-5 text-eco-darkPurple" />
+                    <div className="w-12 h-12 rounded-full bg-eco-peach border-2 border-white shadow-md overflow-hidden flex items-center justify-center">
+                        {userProfile?.avatarUrl ? (
+                            <img src={userProfile.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                        ) : (
+                            <User className="w-6 h-6 text-eco-darkPurple" />
+                        )}
                     </div>
                     <button
                         onClick={handleLogout}

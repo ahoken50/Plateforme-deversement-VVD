@@ -4,7 +4,7 @@
 
 @layer base {
     body {
-        @apply bg-eco-cream text-eco-text antialiased overflow-hidden;
+        @apply bg-eco-cream text-eco-text antialiased;
     }
 }
 

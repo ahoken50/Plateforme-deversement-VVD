@@ -29,6 +29,7 @@ const AdminUsers: React.FC = () => {
     const [newUserEmail, setNewUserEmail] = useState('');
     const [newUserPassword, setNewUserPassword] = useState('');
     const [newUserRole, setNewUserRole] = useState<'admin' | 'user'>('user');
+    const [newUserAvatar, setNewUserAvatar] = useState<string>('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix');
 
     useEffect(() => {
         fetchUsers();
@@ -64,6 +65,7 @@ const AdminUsers: React.FC = () => {
                 uid: user.uid,
                 email: user.email!,
                 role: newUserRole,
+                avatarUrl: newUserAvatar,
                 createdAt: new Date().toISOString()
             };
 
@@ -75,6 +77,7 @@ const AdminUsers: React.FC = () => {
             setSuccess(`Utilisateur ${newUserEmail} créé avec succès !`);
             setNewUserEmail('');
             setNewUserPassword('');
+            setNewUserAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'); // Reset to default
             fetchUsers(); // Refresh list
         } catch (err: any) {
             console.error("Error creating user:", err);
@@ -160,7 +163,28 @@ const AdminUsers: React.FC = () => {
                         </select>
                     </div>
 
-                    <div className="flex items-end">
+                    {/* Avatar Selection */}
+                    <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Avatar</label>
+                        <div className="flex flex-wrap gap-3">
+                            {['Felix', 'Aneka', 'Zoe', 'Marc', 'Rupert', 'Sasha', 'Buster', 'Coco'].map((seed) => {
+                                const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+                                return (
+                                    <button
+                                        key={seed}
+                                        type="button"
+                                        onClick={() => setNewUserAvatar(avatarUrl)}
+                                        className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${newUserAvatar === avatarUrl ? 'border-blue-600 scale-110 ring-2 ring-blue-300' : 'border-gray-200 hover:border-blue-400'
+                                            }`}
+                                    >
+                                        <img src={avatarUrl} alt={seed} className="w-full h-full object-cover" />
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="flex items-end md:col-span-2">
                         <button
                             type="submit"
                             disabled={creating}
@@ -191,7 +215,16 @@ const AdminUsers: React.FC = () => {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {users.map((user: UserProfile) => (
                                 <tr key={user.uid}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
+                                            {user.avatarUrl ? (
+                                                <img src={user.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                                    <Shield className="w-4 h-4" />
+                                                </div>
+                                            )}
+                                        </div>
                                         {user.email}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
