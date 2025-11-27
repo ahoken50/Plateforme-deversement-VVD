@@ -152,6 +152,12 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                     </View>
                     <View style={styles.row}>
                         <View style={styles.column}>
+                            <Text style={styles.label}>Personne(s) du département environnement contacté(es)</Text>
+                            <Text style={styles.value}>{data.envContactedName || '-'}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
                             <Text style={styles.label}>Date/Heure contact</Text>
                             <Text style={styles.value}>
                                 {data.envContactedDate ? formatDate(data.envContactedDate) : ''}
