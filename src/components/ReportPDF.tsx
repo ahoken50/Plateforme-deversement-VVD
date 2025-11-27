@@ -1,5 +1,6 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
+import logo from '../assets/logo.png';
 
 const styles = StyleSheet.create({
     page: {
@@ -111,10 +112,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                         <Text style={styles.headerTitle}>Rapport de Déversement</Text>
                         <Text style={styles.headerSubtitle}>Service de l'Environnement - Ville de Val-d'Or</Text>
                     </View>
-                    {/* Logo would go here if we had a local path or base64 string. 
-              For now, we'll use text or a placeholder if logo import is tricky in react-pdf without setup. 
-              Assuming we can pass the logo path or use a public URL if available.
-          */}
+                    <Image src={logo} style={styles.logo} />
                 </View>
 
                 {/* Meta Info */}
@@ -144,7 +142,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                     <View style={styles.row}>
                         <View style={styles.column}>
                             <Text style={styles.label}>Responsable</Text>
-                            <Text style={styles.value}>{data.responsible}</Text>
+                            <Text style={styles.value}>{data.supervisor || '-'}</Text>
                         </View>
                         <View style={styles.column}>
                             <Text style={styles.label}>Témoin(s)</Text>
@@ -183,7 +181,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                     <View style={styles.row}>
                         <View style={styles.column}>
                             <Text style={styles.label}>Capacité du contenant</Text>
-                            <Text style={styles.value}>{data.containerCapacity || '-'}</Text>
+                            <Text style={styles.value}>{data.containerQuantity || '-'}</Text>
                         </View>
                     </View>
                     <View style={styles.row}>
@@ -210,7 +208,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                     <View style={styles.row}>
                         <View style={styles.column}>
                             <Text style={styles.label}>Urgence Environnement prévenu (MELCCFP)</Text>
-                            <Text style={styles.value}>{data.urgencyEnvironmentNotified ? 'Oui' : 'Non'}</Text>
+                            <Text style={styles.value}>{data.envUrgenceEnvContacted ? 'Oui' : 'Non'}</Text>
                         </View>
                         <View style={styles.column}>
                             <Text style={styles.label}>Date et heure de la déclaration</Text>
