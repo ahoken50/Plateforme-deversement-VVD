@@ -20,7 +20,9 @@ const Header: React.FC = () => {
     };
 
     const isActive = (path: string) => {
-        return location.pathname === path ? 'bg-blue-700 text-white' : 'text-white/90 hover:bg-blue-600 hover:text-white';
+        return location.pathname === path
+            ? 'bg-eco-darkPurple text-white shadow-md'
+            : 'text-gray-500 hover:text-eco-darkPurple hover:bg-white/80';
     };
 
     const navItems = [
@@ -36,118 +38,92 @@ const Header: React.FC = () => {
     }
 
     return (
-        <header className="bg-blue-800 shadow-lg relative z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-20">
-                    <div className="flex items-center gap-4">
-                        <Link to="/" className="flex-shrink-0 flex items-center gap-3 group">
-                            <div className="bg-white p-1.5 rounded-lg shadow-sm group-hover:shadow-md transition-all">
-                                <Logo className="h-10 w-auto" />
-                            </div>
-                            <div className="hidden md:block">
-                                <h1 className="text-lg font-bold text-white leading-tight">
-                                    Plateforme Déversement
-                                </h1>
-                                <p className="text-xs text-blue-200 font-medium">
-                                    Ville de Val-d'Or
-                                </p>
-                            </div>
-                        </Link>
-                    </div>
+        <header className="relative z-50">
+            <div className="px-6 py-4 md:px-10 flex items-center justify-between bg-white/60 backdrop-blur-md border-b border-white/50">
 
-                    {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center space-x-1">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${isActive(item.path)}`}
-                            >
-                                <item.icon className="h-4 w-4" />
-                                {item.label}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    {/* User Menu & Mobile Toggle */}
-                    <div className="flex items-center gap-4">
-                        <div className="hidden md:flex items-center gap-3 pl-4 border-l border-blue-700">
-                            <div className="flex flex-col items-end">
-                                <span className="text-sm font-medium text-white">
-                                    {userProfile?.email?.split('@')[0]}
-                                </span>
-                                <span className="text-xs text-blue-200 capitalize">
-                                    {userProfile?.role === 'admin' ? 'Administrateur' : 'Utilisateur'}
-                                </span>
-                            </div>
-                            <button
-                                onClick={handleLogout}
-                                className="p-2 text-blue-200 hover:text-white hover:bg-blue-700 rounded-full transition-colors"
-                                title="Se déconnecter"
-                            >
-                                <LogOut className="h-5 w-5" />
-                            </button>
+                {/* Logo Section */}
+                <div className="flex items-center gap-3">
+                    <Link to="/" className="flex items-center gap-3 group">
+                        <div className="w-10 h-10 bg-gradient-to-br from-eco-lime to-eco-forest rounded-xl shadow-lg flex items-center justify-center text-white group-hover:scale-105 transition-transform">
+                            <Logo className="h-6 w-6 text-white" />
                         </div>
-
-                        {/* Mobile menu button */}
-                        <div className="md:hidden flex items-center">
-                            <button
-                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                className="inline-flex items-center justify-center p-2 rounded-md text-blue-200 hover:text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                            >
-                                {isMobileMenuOpen ? (
-                                    <X className="block h-6 w-6" />
-                                ) : (
-                                    <Menu className="block h-6 w-6" />
-                                )}
-                            </button>
+                        <div>
+                            <h1 className="font-display font-bold text-xl text-eco-forest leading-tight tracking-tight">
+                                Plateforme Déversement
+                            </h1>
+                            <p className="text-[10px] font-bold text-eco-purple uppercase tracking-widest">
+                                Ville de Val-d'Or
+                            </p>
                         </div>
-                    </div>
+                    </Link>
                 </div>
+
+                {/* Desktop Navigation */}
+                <nav className="hidden lg:flex items-center gap-1 bg-white/50 p-1 rounded-full border border-white/60 shadow-inner">
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${isActive(item.path)}`}
+                        >
+                            <item.icon className="h-4 w-4" />
+                            {item.label}
+                        </Link>
+                    ))}
+                </nav>
+
+                {/* User Profile */}
+                <div className="hidden md:flex items-center gap-4">
+                    <div className="text-right hidden xl:block">
+                        <div className="text-sm font-bold text-gray-800">{userProfile?.email?.split('@')[0]}</div>
+                        <div className="text-xs text-eco-purple capitalize">{userProfile?.role === 'admin' ? 'Administrateur' : 'Utilisateur'}</div>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-eco-peach border-2 border-white shadow-md overflow-hidden flex items-center justify-center">
+                        <User className="w-5 h-5 text-eco-darkPurple" />
+                    </div>
+                    <button
+                        onClick={handleLogout}
+                        className="text-gray-400 hover:text-eco-darkPurple transition-colors"
+                        title="Se déconnecter"
+                    >
+                        <LogOut className="w-5 h-5" />
+                    </button>
+                </div>
+
+                {/* Mobile Menu Button */}
+                <button
+                    className="lg:hidden p-2 text-gray-600"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                    {isMobileMenuOpen ? <X /> : <Menu />}
+                </button>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu Dropdown */}
             {isMobileMenuOpen && (
-                <div className="md:hidden bg-blue-900 border-t border-blue-700">
-                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center gap-3 ${isActive(item.path)}`}
-                            >
-                                <item.icon className="h-5 w-5" />
-                                {item.label}
-                            </Link>
-                        ))}
-                        <div className="border-t border-blue-800 mt-4 pt-4 pb-2">
-                            <div className="flex items-center px-3 mb-3">
-                                <div className="flex-shrink-0">
-                                    <div className="h-10 w-10 rounded-full bg-blue-700 flex items-center justify-center text-white">
-                                        <User className="h-6 w-6" />
-                                    </div>
-                                </div>
-                                <div className="ml-3">
-                                    <div className="text-base font-medium leading-none text-white">
-                                        {userProfile?.email}
-                                    </div>
-                                    <div className="text-sm font-medium leading-none text-blue-300 mt-1 capitalize">
-                                        {userProfile?.role}
-                                    </div>
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => {
-                                    handleLogout();
-                                    setIsMobileMenuOpen(false);
-                                }}
-                                className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-blue-200 hover:text-white hover:bg-blue-800 flex items-center gap-3"
-                            >
-                                <LogOut className="h-5 w-5" />
-                                Se déconnecter
-                            </button>
-                        </div>
+                <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-gray-100 p-4 lg:hidden shadow-xl flex flex-col gap-2">
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`w-full text-left px-4 py-3 rounded-xl font-semibold flex items-center gap-3 ${isActive(item.path)}`}
+                        >
+                            <item.icon className="h-5 w-5" />
+                            {item.label}
+                        </Link>
+                    ))}
+                    <div className="border-t border-gray-100 mt-2 pt-2">
+                        <button
+                            onClick={() => {
+                                handleLogout();
+                                setIsMobileMenuOpen(false);
+                            }}
+                            className="w-full text-left px-4 py-3 rounded-xl font-semibold text-gray-600 hover:bg-eco-peach/30 hover:text-eco-darkPurple flex items-center gap-3"
+                        >
+                            <LogOut className="h-5 w-5" />
+                            Se déconnecter
+                        </button>
                     </div>
                 </div>
             )}

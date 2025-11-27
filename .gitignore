@@ -121,8 +121,12 @@ dist-ssr
 # Editor directories and files
 .idea
 .vscode
+!.vscode/settings.json
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# External Projects
+ecotrack-val-d'or

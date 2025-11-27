@@ -4,7 +4,7 @@ import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/aut
 import { auth } from '../firebase';
 import { MailIcon, LockIcon, EyeIcon, EyeOffIcon } from '../components/ui/Icons';
 import { Logo } from '../components/ui/Logo';
-import Background from '../components/Background';
+import { NatureBackground } from '../components/NatureBackground';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -57,7 +57,7 @@ const Login: React.FC = () => {
 
     return (
         <div className="relative min-h-screen flex flex-col items-center justify-center p-4">
-            <Background />
+            <NatureBackground />
 
             {/* Main Card */}
             <div className="relative z-30 w-full max-w-[480px] bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden">
