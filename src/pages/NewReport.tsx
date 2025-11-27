@@ -150,6 +150,7 @@ const NewReport: React.FC = () => {
       const fetchReport = async () => {
         try {
           const report = await reportService.getReportById(id);
+          console.log('Fetched Report:', report);
           if (report) {
             setFormData(report);
           } else {
@@ -310,6 +311,12 @@ const NewReport: React.FC = () => {
             )}
           </div>
           <div className="flex space-x-3">
+            {/* Debug Info - Remove in production */}
+            <div className="hidden">
+              <p>Photos: {formData.photoUrls?.length || 0}</p>
+              <pre>{JSON.stringify(formData.photoUrls, null, 2)}</pre>
+            </div>
+
             {isPhotosReady ? (
               <PDFDownloadLink
                 document={<ReportPDF data={formData} id={id} photoBase64s={photoBase64s} photoUrls={formData.photoUrls} />}

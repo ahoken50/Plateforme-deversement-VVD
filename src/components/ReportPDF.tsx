@@ -183,6 +183,36 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                     </View>
                     <View style={styles.row}>
                         <View style={styles.column}>
+                            <Text style={styles.label}>Type de surface</Text>
+                            <Text style={styles.value}>
+                                {data.surfaceType}
+                                {data.surfaceTypeOther ? ` (${data.surfaceTypeOther})` : ''}
+                            </Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Type d'équipement impliqué</Text>
+                            <Text style={styles.value}>{data.equipmentType}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Durée du déversement</Text>
+                            <Text style={styles.value}>{data.duration}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Environnement sensible à proximité</Text>
+                            <Text style={styles.value}>
+                                {data.sensitiveEnv && data.sensitiveEnv.length > 0
+                                    ? data.sensitiveEnv.join(', ')
+                                    : 'Aucun'}
+                                {data.sensitiveEnvOther ? ` (${data.sensitiveEnvOther})` : ''}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
                             <Text style={styles.label}>Cause du déversement</Text>
                             <Text style={styles.value}>{data.cause}</Text>
                         </View>
@@ -195,6 +225,32 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                         <View style={styles.column}>
                             <Text style={styles.label}>Description</Text>
                             <Text style={styles.value}>{data.description}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Mesures prises afin de récupérer les contaminants</Text>
+                            <Text style={styles.value}>{data.actionsTaken || '-'}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Trousse d'urgence utilisée</Text>
+                            <Text style={styles.value}>{data.emergencyKitUsed ? 'Oui' : 'Non'}</Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Trousse remplie après usage</Text>
+                            <Text style={styles.value}>{data.emergencyKitRefilled ? 'Oui' : 'Non'}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Contaminants récupérés par</Text>
+                            <Text style={styles.value}>{data.contaminantCollectedBy || '-'}</Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Lieu d'élimination des résidus</Text>
+                            <Text style={styles.value}>{data.disposalLocation || '-'}</Text>
                         </View>
                     </View>
                 </View>
@@ -244,12 +300,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                 {/* Section 4: Suivi */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Suivi et Fermeture</Text>
-                    <View style={styles.row}>
-                        <View style={styles.column}>
-                            <Text style={styles.label}>Mesures prises afin de récupérer les contaminants</Text>
-                            <Text style={styles.value}>{data.actionsTaken || '-'}</Text>
-                        </View>
-                    </View>
+
                     <View style={styles.row}>
                         <View style={styles.column}>
                             <Text style={styles.label}>Responsable du suivi</Text>
@@ -260,11 +311,29 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                             <Text style={styles.value}>{data.completedBy || '-'}</Text>
                         </View>
                     </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Date de complétion</Text>
+                            <Text style={styles.value}>{data.completionDate || '-'}</Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Statut</Text>
+                            <Text style={styles.value}>{data.status || '-'}</Text>
+                        </View>
+                    </View>
                 </View>
 
-                {/* Section 5: Photos */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Photos ({photoBase64s?.length || 0})</Text>
+                    <Text style={styles.sectionTitle}>Photos et Documents</Text>
+                    <View style={styles.row}>
+                        <Text style={{ fontSize: 10, marginBottom: 5 }}>Photos prises:</Text>
+                        <Text style={{ fontSize: 10, marginLeft: 10 }}>Avant [{data.photosTakenBefore ? 'X' : ' '}]</Text>
+                        <Text style={{ fontSize: 10, marginLeft: 10 }}>Pendant [{data.photosTakenDuring ? 'X' : ' '}]</Text>
+                        <Text style={{ fontSize: 10, marginLeft: 10 }}>Après [{data.photosTakenAfter ? 'X' : ' '}]</Text>
+                    </View>
+                    <Text style={{ fontSize: 8, color: 'red', marginBottom: 5 }}>
+                        Debug: URLs found: {photoUrls?.length || 0}, Converted: {photoBase64s?.length || 0}
+                    </Text>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
                         {/* Try Base64 first */}
                         {photoBase64s && photoBase64s.length > 0 ? (
