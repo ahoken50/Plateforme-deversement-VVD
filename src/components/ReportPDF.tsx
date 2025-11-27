@@ -95,9 +95,10 @@ interface ReportPDFProps {
     data: any; // Using any for flexibility with formData structure, but ideally should match Report type
     id?: string;
     photoBase64s?: string[];
+    photoUrls?: string[];
 }
 
-const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
+const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls }) => {
     const formatDate = (date: string) => {
         if (!date) return '';
         return new Date(date).toLocaleDateString('fr-CA');
@@ -146,14 +147,10 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                         </View>
                         <View style={styles.column}>
                             <Text style={styles.label}>Témoin(s)</Text>
-                            <Text style={styles.value}>{data.witnesses || '-'}</Text>
+                            <Text style={styles.value}>{data.witnessedBy || '-'}</Text>
                         </View>
                     </View>
                     <View style={styles.row}>
-                        <View style={styles.column}>
-                            <Text style={styles.label}>Personne(s) environnement contacté(es)</Text>
-                            <Text style={styles.value}>{data.envUrgenceEnvBy || '-'}</Text>
-                        </View>
                         <View style={styles.column}>
                             <Text style={styles.label}>Date/Heure contact</Text>
                             <Text style={styles.value}>
@@ -175,7 +172,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                         </View>
                         <View style={styles.column}>
                             <Text style={styles.label}>Quantité estimée ou étendu en m2</Text>
-                            <Text style={styles.value}>{data.quantity} {data.quantityUnit}</Text>
+                            <Text style={styles.value}>{data.extent || '-'}</Text>
                         </View>
                     </View>
                     <View style={styles.row}>
@@ -217,30 +214,31 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                     </View>
                     <View style={styles.row}>
                         <View style={styles.column}>
-                            <Text style={styles.label}>Interlocuteur au MELCCFP</Text>
+                            <Text style={styles.label}>Interlocuteur au MELCCFP (Centrale d'appel)</Text>
                             <Text style={styles.value}>{data.envUrgenceEnvContactedName || '-'}</Text>
                         </View>
                         <View style={styles.column}>
-                            <Text style={styles.label}>Numéro de référence</Text>
+                            <Text style={styles.label}>Par (employé VVD)</Text>
+                            <Text style={styles.value}>{data.envUrgenceEnvBy || '-'}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Numéro de la demande (Ministère)</Text>
                             <Text style={styles.value}>{data.envMinistryReferenceNumber || '-'}</Text>
                         </View>
                     </View>
                     <View style={styles.row}>
                         <View style={styles.column}>
-                            <Text style={styles.label}>Responsable du dossier (Ministère)</Text>
+                            <Text style={styles.label}>Nom du responsable (Ministère)</Text>
                             <Text style={styles.value}>{data.envMinistryFileResponsible || '-'}</Text>
                         </View>
                         <View style={styles.column}>
-                            <Text style={styles.label}>Courriel responsable</Text>
+                            <Text style={styles.label}>Courriel du responsable</Text>
                             <Text style={styles.value}>{data.envMinistryFileResponsibleEmail || '-'}</Text>
                         </View>
                     </View>
-                    <View style={styles.row}>
-                        <View style={styles.column}>
-                            <Text style={styles.label}>Conditions météo</Text>
-                            <Text style={styles.value}>{data.weatherConditions || '-'}</Text>
-                        </View>
-                    </View>
+
                 </View>
 
                 {/* Section 4: Suivi */}
@@ -265,21 +263,34 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                 </View>
 
                 {/* Section 5: Photos */}
-                {photoBase64s && photoBase64s.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Photos</Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-                            {photoBase64s.map((base64: string, index: number) => (
-                                <View key={index} style={{ width: 150, height: 150, marginBottom: 10 }}>
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Photos</Text>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+                        {/* Try Base64 first */}
+                        {photoBase64s && photoBase64s.length > 0 ? (
+                            photoBase64s.map((base64: string, index: number) => (
+                                <View key={`b64-${index}`} style={{ width: 150, height: 150, marginBottom: 10 }}>
                                     <Image
                                         src={base64}
                                         style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
                                     />
                                 </View>
-                            ))}
-                        </View>
+                            ))
+                        ) : photoUrls && photoUrls.length > 0 ? (
+                            /* Fallback to URLs if Base64 failed */
+                            photoUrls.map((url: string, index: number) => (
+                                <View key={`url-${index}`} style={{ width: 150, height: 150, marginBottom: 10 }}>
+                                    <Image
+                                        src={url}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
+                                    />
+                                </View>
+                            ))
+                        ) : (
+                            <Text style={{ fontSize: 10, color: '#6B7280', fontStyle: 'italic' }}>Aucune photo disponible</Text>
+                        )}
                     </View>
-                )}
+                </View>
 
                 <Text style={styles.footer}>
                     Document généré automatiquement par la Plateforme de Déversement VVD - {new Date().toLocaleDateString('fr-CA')}
