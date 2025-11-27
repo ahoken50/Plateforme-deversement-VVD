@@ -93,9 +93,10 @@ const styles = StyleSheet.create({
 interface ReportPDFProps {
     data: any; // Using any for flexibility with formData structure, but ideally should match Report type
     id?: string;
+    photoBase64s?: string[];
 }
 
-const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
+const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
     const formatDate = (date: string) => {
         if (!date) return '';
         return new Date(date).toLocaleDateString('fr-CA');
@@ -157,7 +158,11 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                         </View>
                         <View style={styles.column}>
                             <Text style={styles.label}>Date/Heure contact</Text>
-                            <Text style={styles.value}>{data.envDeptContactedTime ? new Date(data.envDeptContactedTime).toLocaleString('fr-CA') : '-'}</Text>
+                            <Text style={styles.value}>
+                                {data.envContactedDate ? formatDate(data.envContactedDate) : ''}
+                                {data.envContactedTime ? ` ${data.envContactedTime}` : ''}
+                                {!data.envContactedDate && !data.envContactedTime ? '-' : ''}
+                            </Text>
                         </View>
                     </View>
                 </View>
@@ -262,14 +267,14 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                 </View>
 
                 {/* Section 5: Photos */}
-                {data.photoUrls && data.photoUrls.length > 0 && (
+                {photoBase64s && photoBase64s.length > 0 && (
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Photos</Text>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-                            {data.photoUrls.map((url: string, index: number) => (
+                            {photoBase64s.map((base64: string, index: number) => (
                                 <View key={index} style={{ width: 150, height: 150, marginBottom: 10 }}>
                                     <Image
-                                        src={{ uri: url, method: 'GET', headers: { 'Cache-Control': 'no-cache' } }}
+                                        src={base64}
                                         style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
                                     />
                                 </View>

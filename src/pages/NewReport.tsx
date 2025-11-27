@@ -19,7 +19,7 @@ const INITIAL_FORM_STATE: Report = {
   envContactedDate: '',
   envContactedTime: '',
 
-  envDeptContactedTime: '',
+
 
   contaminant: '',
   extent: '',
@@ -95,9 +95,38 @@ const NewReport: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<File[]>([]);
+  const [photoBase64s, setPhotoBase64s] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
+
+  const convertImageToBase64 = async (url: string): Promise<string> => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      console.error('Error converting image to base64:', error);
+      return '';
+    }
+  };
+
+  useEffect(() => {
+    const loadPhotos = async () => {
+      if (formData.photoUrls && formData.photoUrls.length > 0) {
+        const base64s = await Promise.all(formData.photoUrls.map(url => convertImageToBase64(url)));
+        setPhotoBase64s(base64s.filter(b => b !== ''));
+      } else {
+        setPhotoBase64s([]);
+      }
+    };
+    loadPhotos();
+  }, [formData.photoUrls]);
 
   useEffect(() => {
     if (id) {
@@ -265,7 +294,7 @@ const NewReport: React.FC = () => {
           </div>
           <div className="flex space-x-3">
             <PDFDownloadLink
-              document={<ReportPDF data={formData} id={id} />}
+              document={<ReportPDF data={formData} id={id} photoBase64s={photoBase64s} />}
               fileName={`rapport-${formData.envSequentialNumber || id || 'nouveau'}.pdf`}
               className="flex items-center px-4 py-2 text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors"
             >
@@ -374,12 +403,23 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label htmlFor="envDeptContactedTime" className="block text-sm font-semibold text-gray-700 mb-1">Date et heure que la personne a été contactée</label>
+                <label htmlFor="envContactedDate" className="block text-sm font-semibold text-gray-700 mb-1">Date du contact</label>
                 <input
-                  id="envDeptContactedTime"
-                  type="datetime-local"
-                  name="envDeptContactedTime"
-                  value={formatDateTimeForInput(formData.envDeptContactedTime)}
+                  id="envContactedDate"
+                  type="date"
+                  name="envContactedDate"
+                  value={formData.envContactedDate}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                />
+              </div>
+              <div>
+                <label htmlFor="envContactedTime" className="block text-sm font-semibold text-gray-700 mb-1">Heure du contact</label>
+                <input
+                  id="envContactedTime"
+                  type="time"
+                  name="envContactedTime"
+                  value={formData.envContactedTime}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />
@@ -898,16 +938,7 @@ const NewReport: React.FC = () => {
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Interlocuteur</label>
-                    <input
-                      type="text"
-                      name="envUrgenceEnvContactedName"
-                      value={formData.envUrgenceEnvContactedName}
-                      onChange={handleChange}
-                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
-                    />
-                  </div>
+
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Par (employé VVD)</label>
                     <input

@@ -32,9 +32,9 @@ const AdminUsers: React.FC = () => {
     const [userEmail, setUserEmail] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [userRole, setUserRole] = useState<'admin' | 'user'>('user');
-    const [userAvatar, setUserAvatar] = useState<string>('https://api.dicebear.com/7.x/icons/svg?seed=tree');
+    const [userAvatar, setUserAvatar] = useState<string>('https://api.dicebear.com/7.x/initials/svg?seed=🌲');
 
-    const natureSeeds = ['tree', 'leaf', 'water', 'sun', 'flower', 'mountain', 'cloud', 'snow'];
+    const natureSeeds = ['🌲', '🌳', '🌴', '🍁', '🦊', '🐻', '🦉', '🦅', '🦌', '🐸', '♻️', '🌍', '💧', '☀️'];
 
     useEffect(() => {
         fetchUsers();
@@ -60,7 +60,7 @@ const AdminUsers: React.FC = () => {
         setUserEmail('');
         setUserPassword('');
         setUserRole('user');
-        setUserAvatar('https://api.dicebear.com/7.x/icons/svg?seed=tree');
+        setUserAvatar('https://api.dicebear.com/7.x/initials/svg?seed=🌲');
         setError('');
         setSuccess('');
     };
@@ -70,7 +70,7 @@ const AdminUsers: React.FC = () => {
         setEditingUserId(user.uid);
         setUserEmail(user.email);
         setUserRole(user.role);
-        setUserAvatar(user.avatarUrl || 'https://api.dicebear.com/7.x/icons/svg?seed=tree');
+        setUserAvatar(user.avatarUrl || 'https://api.dicebear.com/7.x/initials/svg?seed=🌲');
         setUserPassword(''); // Password not editable directly here for security/complexity reasons in this scope
         setError('');
         setSuccess('');
@@ -217,7 +217,7 @@ const AdminUsers: React.FC = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Avatar (Thème Nature)</label>
                         <div className="flex flex-wrap gap-3">
                             {natureSeeds.map((seed) => {
-                                const avatarUrl = `https://api.dicebear.com/7.x/icons/svg?seed=${seed}`;
+                                const avatarUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${seed}`;
                                 return (
                                     <button
                                         key={seed}
