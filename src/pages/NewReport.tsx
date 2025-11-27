@@ -102,7 +102,14 @@ const NewReport: React.FC = () => {
 
   const convertImageToBase64 = async (url: string): Promise<string> => {
     try {
-      const response = await fetch(url);
+      // Try to fetch with CORS mode enabled to handle Firebase Storage URLs
+      const response = await fetch(url, {
+        mode: 'cors',
+        credentials: 'omit', // Important for some Firebase configurations
+        headers: {
+          'Origin': window.location.origin
+        }
+      });
       const blob = await response.blob();
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -112,7 +119,20 @@ const NewReport: React.FC = () => {
       });
     } catch (error) {
       console.error('Error converting image to base64:', error);
-      return '';
+      // Fallback: try without specific headers if the first attempt fails
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      } catch (retryError) {
+        console.error('Retry failed:', retryError);
+        return '';
+      }
     }
   };
 
@@ -450,7 +470,7 @@ const NewReport: React.FC = () => {
                   id="extent"
                   type="text"
                   name="extent"
-                  value={formData.extent}
+                  value={formData.surfaceType}
                   onChange={handleChange}
                   required
                   placeholder="Ex: 5 litres, 10 m2..."
@@ -458,14 +478,14 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label htmlFor="containerCapacity" className="block text-sm font-semibold text-gray-700 mb-1">Capacité du contenant ou réservoir</label>
+                <label htmlFor="containerQuantity" className="block text-sm font-semibold text-gray-700 mb-1">Capacité du contenant ou réservoir</label>
                 <input
-                  id="containerCapacity"
+                  id="containerQuantity"
                   type="text"
-                  name="containerCapacity"
-                  value={formData.containerCapacity || ''}
+                  name="containerQuantity"
+                  value={formData.containerQuantity}
                   onChange={handleChange}
-                  placeholder="Ex: 200 litres, 1000 gallons..."
+                  placeholder="Ex: 200L, 1000L..."
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />
               </div>
@@ -949,26 +969,7 @@ const NewReport: React.FC = () => {
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Numéro de suivi ministère</label>
-                    <input
-                      type="text"
-                      name="envMinistryFollowUp"
-                      value={formData.envMinistryFollowUp}
-                      onChange={handleChange}
-                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Courriel de confirmation</label>
-                    <input
-                      type="email"
-                      name="envMinistryEmail"
-                      value={formData.envMinistryEmail}
-                      onChange={handleChange}
-                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
-                    />
-                  </div>
+
                 </div>
               </div>
 
