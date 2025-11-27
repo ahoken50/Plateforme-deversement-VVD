@@ -124,7 +124,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                 </View>
 
                 {/* Section 1: Informations générales */}
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                     <Text style={styles.sectionTitle}>Informations générales</Text>
                     <View style={styles.row}>
                         <View style={styles.column}>
@@ -169,7 +169,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                 </View>
 
                 {/* Section 2: Détails du déversement */}
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                     <Text style={styles.sectionTitle}>Détails du déversement</Text>
                     <View style={styles.row}>
                         <View style={styles.column}>
@@ -262,7 +262,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                 </View>
 
                 {/* Section 3: Environnement */}
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                     <Text style={styles.sectionTitle}>Département Environnement</Text>
                     <View style={styles.row}>
                         <View style={styles.column}>
@@ -304,7 +304,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                 </View>
 
                 {/* Section 4: Suivi */}
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                     <Text style={styles.sectionTitle}>Suivi et Fermeture</Text>
 
                     <View style={styles.row}>
@@ -329,7 +329,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                     </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                     <Text style={styles.sectionTitle}>Photos et Documents</Text>
                     <View style={styles.row}>
                         <Text style={{ fontSize: 10, marginBottom: 5 }}>Photos prises:</Text>
