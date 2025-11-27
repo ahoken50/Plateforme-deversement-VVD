@@ -267,13 +267,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                         <Text style={styles.sectionTitle}>Photos</Text>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
                             {data.photoUrls.map((url: string, index: number) => (
-                                <View key={index} style={{ width: '30%', height: 150, marginBottom: 10 }}>
-                                    {/* Note: React-PDF Image component requires a valid URL or base64. 
-                                        Firebase Storage URLs should work if CORS is configured, otherwise proxies might be needed.
-                                        For now, we assume standard URL access. */}
-                                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                                <View key={index} style={{ width: 150, height: 150, marginBottom: 10 }}>
                                     <Image
-                                        src={url}
+                                        src={{ uri: url, method: 'GET', headers: { 'Cache-Control': 'no-cache' }, body: '' }}
                                         style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
                                     />
                                 </View>

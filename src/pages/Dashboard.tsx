@@ -179,7 +179,7 @@ const Dashboard: React.FC = () => {
                                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded-lg">
                                                     <div>
                                                         <span className="font-medium text-gray-500 block text-xs uppercase">Responsable</span>
-                                                        {report.responsible || '-'}
+                                                        {report.supervisor || '-'}
                                                     </div>
                                                     <div>
                                                         <span className="font-medium text-gray-500 block text-xs uppercase">Suivi par</span>
