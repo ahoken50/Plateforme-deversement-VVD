@@ -19,7 +19,6 @@ const INITIAL_FORM_STATE: Report = {
   envContactedDate: '',
   envContactedTime: '',
 
-  envDeptContactedName: '',
   envDeptContactedTime: '',
 
   contaminant: '',
@@ -364,12 +363,12 @@ const NewReport: React.FC = () => {
                 />
               </div>
               <div>
-                <label htmlFor="envDeptContactedName" className="block text-sm font-semibold text-gray-700 mb-1">Personne(s) du département environnement contacté(es)</label>
+                <label htmlFor="envUrgenceEnvBy" className="block text-sm font-semibold text-gray-700 mb-1">Personne(s) du département environnement contacté(es)</label>
                 <input
-                  id="envDeptContactedName"
+                  id="envUrgenceEnvBy"
                   type="text"
-                  name="envDeptContactedName"
-                  value={formData.envDeptContactedName || ''}
+                  name="envUrgenceEnvBy"
+                  value={formData.envUrgenceEnvBy || ''}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />

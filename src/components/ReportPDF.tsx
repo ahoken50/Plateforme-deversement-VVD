@@ -153,7 +153,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                     <View style={styles.row}>
                         <View style={styles.column}>
                             <Text style={styles.label}>Personne(s) environnement contacté(es)</Text>
-                            <Text style={styles.value}>{data.envDeptContactedName || '-'}</Text>
+                            <Text style={styles.value}>{data.envUrgenceEnvBy || '-'}</Text>
                         </View>
                         <View style={styles.column}>
                             <Text style={styles.label}>Date/Heure contact</Text>
@@ -269,7 +269,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                             {data.photoUrls.map((url: string, index: number) => (
                                 <View key={index} style={{ width: 150, height: 150, marginBottom: 10 }}>
                                     <Image
-                                        src={{ uri: url, method: 'GET', headers: { 'Cache-Control': 'no-cache' }, body: '' }}
+                                        src={{ uri: url, method: 'GET', headers: { 'Cache-Control': 'no-cache' } }}
                                         style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
                                     />
                                 </View>

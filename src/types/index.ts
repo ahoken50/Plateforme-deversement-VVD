@@ -9,7 +9,6 @@ export interface Report {
     envContactedName: string;
     envContactedDate: string;
     envContactedTime: string;
-    envDeptContactedName?: string; // New: Personne du département environnement contactée
     envDeptContactedTime?: string; // New: Heure contactée
 
     // Spill Description
