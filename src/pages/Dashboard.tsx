@@ -174,8 +174,27 @@ const Dashboard: React.FC = () => {
                                                     <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
                                                     <span className="truncate">{report.location}</span>
                                                 </div>
+
+                                                {/* Added Fields */}
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded-lg">
+                                                    <div>
+                                                        <span className="font-medium text-gray-500 block text-xs uppercase">Responsable</span>
+                                                        {report.responsible || '-'}
+                                                    </div>
+                                                    <div>
+                                                        <span className="font-medium text-gray-500 block text-xs uppercase">Suivi par</span>
+                                                        {report.followUpBy || '-'}
+                                                    </div>
+                                                    <div>
+                                                        <span className="font-medium text-gray-500 block text-xs uppercase">Ministère prévenu</span>
+                                                        <span className={report.envUrgenceEnvContacted ? 'text-red-600 font-medium' : 'text-gray-600'}>
+                                                            {report.envUrgenceEnvContacted ? 'OUI' : 'Non'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
                                                 {report.description && (
-                                                    <p className="text-sm text-gray-600 line-clamp-2 mt-2">{report.description}</p>
+                                                    <p className="text-sm text-gray-600 line-clamp-2 mt-2 italic">{report.description}</p>
                                                 )}
                                             </div>
                                             <div className="flex items-center justify-end">

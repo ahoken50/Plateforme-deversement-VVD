@@ -26,10 +26,15 @@ const AdminUsers: React.FC = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    const [newUserEmail, setNewUserEmail] = useState('');
-    const [newUserPassword, setNewUserPassword] = useState('');
-    const [newUserRole, setNewUserRole] = useState<'admin' | 'user'>('user');
-    const [newUserAvatar, setNewUserAvatar] = useState<string>('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix');
+    // Form State
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingUserId, setEditingUserId] = useState<string | null>(null);
+    const [userEmail, setUserEmail] = useState('');
+    const [userPassword, setUserPassword] = useState('');
+    const [userRole, setUserRole] = useState<'admin' | 'user'>('user');
+    const [userAvatar, setUserAvatar] = useState<string>('https://api.dicebear.com/7.x/icons/svg?seed=tree');
+
+    const natureSeeds = ['tree', 'leaf', 'water', 'sun', 'flower', 'mountain', 'cloud', 'snow'];
 
     useEffect(() => {
         fetchUsers();
@@ -49,42 +54,76 @@ const AdminUsers: React.FC = () => {
         }
     };
 
-    const handleCreateUser = async (e: React.FormEvent) => {
+    const resetForm = () => {
+        setIsEditing(false);
+        setEditingUserId(null);
+        setUserEmail('');
+        setUserPassword('');
+        setUserRole('user');
+        setUserAvatar('https://api.dicebear.com/7.x/icons/svg?seed=tree');
+        setError('');
+        setSuccess('');
+    };
+
+    const handleEditClick = (user: UserProfile) => {
+        setIsEditing(true);
+        setEditingUserId(user.uid);
+        setUserEmail(user.email);
+        setUserRole(user.role);
+        setUserAvatar(user.avatarUrl || 'https://api.dicebear.com/7.x/icons/svg?seed=tree');
+        setUserPassword(''); // Password not editable directly here for security/complexity reasons in this scope
+        setError('');
+        setSuccess('');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setSuccess('');
         setCreating(true);
 
         try {
-            // 1. Create user in Firebase Auth (using secondary app)
-            const userCredential = await createUserWithEmailAndPassword(secondaryAuth, newUserEmail, newUserPassword);
-            const user = userCredential.user;
+            if (isEditing && editingUserId) {
+                // UPDATE EXISTING USER
+                const userRef = doc(db, 'users', editingUserId);
+                await setDoc(userRef, {
+                    role: userRole,
+                    avatarUrl: userAvatar
+                }, { merge: true });
 
-            // 2. Create user profile in Firestore
-            const userProfile: UserProfile = {
-                uid: user.uid,
-                email: user.email!,
-                role: newUserRole,
-                avatarUrl: newUserAvatar,
-                createdAt: new Date().toISOString()
-            };
+                setSuccess(`Utilisateur ${userEmail} mis à jour avec succès !`);
+                resetForm();
+            } else {
+                // CREATE NEW USER
+                // 1. Create user in Firebase Auth (using secondary app)
+                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, userEmail, userPassword);
+                const user = userCredential.user;
 
-            await setDoc(doc(db, 'users', user.uid), userProfile);
+                // 2. Create user profile in Firestore
+                const userProfile: UserProfile = {
+                    uid: user.uid,
+                    email: user.email!,
+                    role: userRole,
+                    avatarUrl: userAvatar,
+                    createdAt: new Date().toISOString()
+                };
 
-            // 3. Sign out from secondary app to avoid any state confusion
-            await signOut(secondaryAuth);
+                await setDoc(doc(db, 'users', user.uid), userProfile);
 
-            setSuccess(`Utilisateur ${newUserEmail} créé avec succès !`);
-            setNewUserEmail('');
-            setNewUserPassword('');
-            setNewUserAvatar('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'); // Reset to default
-            fetchUsers(); // Refresh list
+                // 3. Sign out from secondary app
+                await signOut(secondaryAuth);
+
+                setSuccess(`Utilisateur ${userEmail} créé avec succès !`);
+                resetForm();
+            }
+            fetchUsers();
         } catch (err: any) {
-            console.error("Error creating user:", err);
+            console.error("Error saving user:", err);
             if (err.code === 'auth/email-already-in-use') {
                 setError("Cette adresse courriel est déjà utilisée.");
             } else {
-                setError("Erreur lors de la création de l'utilisateur: " + err.message);
+                setError("Erreur lors de la sauvegarde: " + err.message);
             }
         } finally {
             setCreating(false);
@@ -98,11 +137,18 @@ const AdminUsers: React.FC = () => {
                 Gestion des Utilisateurs
             </h2>
 
-            {/* Create User Form */}
+            {/* User Form */}
             <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-4 flex items-center">
-                    <UserPlus className="h-5 w-5 mr-2" />
-                    Ajouter un utilisateur
+                <h3 className="text-lg font-semibold mb-4 flex items-center justify-between">
+                    <div className="flex items-center">
+                        <UserPlus className="h-5 w-5 mr-2" />
+                        {isEditing ? 'Modifier l\'utilisateur' : 'Ajouter un utilisateur'}
+                    </div>
+                    {isEditing && (
+                        <button onClick={resetForm} className="text-sm text-gray-500 hover:text-gray-700 underline">
+                            Annuler l'édition
+                        </button>
+                    )}
                 </h3>
 
                 {error && (
@@ -118,44 +164,47 @@ const AdminUsers: React.FC = () => {
                     </div>
                 )}
 
-                <form onSubmit={handleCreateUser} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Courriel</label>
                         <div className="relative">
                             <input
                                 type="email"
                                 required
-                                value={newUserEmail}
-                                onChange={(e) => setNewUserEmail(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                disabled={isEditing}
+                                value={userEmail}
+                                onChange={(e) => setUserEmail(e.target.value)}
+                                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${isEditing ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                 placeholder="email@example.com"
                             />
                             <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                         </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
-                        <div className="relative">
-                            <input
-                                type="password"
-                                required
-                                minLength={6}
-                                value={newUserPassword}
-                                onChange={(e) => setNewUserPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                placeholder="Minimum 6 caractères"
-                                autoComplete="new-password"
-                            />
-                            <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                    {!isEditing && (
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                            <div className="relative">
+                                <input
+                                    type="password"
+                                    required
+                                    minLength={6}
+                                    value={userPassword}
+                                    onChange={(e) => setUserPassword(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Minimum 6 caractères"
+                                    autoComplete="new-password"
+                                />
+                                <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
                         <select
-                            value={newUserRole}
-                            onChange={(e) => setNewUserRole(e.target.value as 'admin' | 'user')}
+                            value={userRole}
+                            onChange={(e) => setUserRole(e.target.value as 'admin' | 'user')}
                             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="user">Utilisateur (Normal)</option>
@@ -165,19 +214,19 @@ const AdminUsers: React.FC = () => {
 
                     {/* Avatar Selection */}
                     <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Avatar</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Avatar (Thème Nature)</label>
                         <div className="flex flex-wrap gap-3">
-                            {['Felix', 'Aneka', 'Zoe', 'Marc', 'Rupert', 'Sasha', 'Buster', 'Coco'].map((seed) => {
-                                const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+                            {natureSeeds.map((seed) => {
+                                const avatarUrl = `https://api.dicebear.com/7.x/icons/svg?seed=${seed}`;
                                 return (
                                     <button
                                         key={seed}
                                         type="button"
-                                        onClick={() => setNewUserAvatar(avatarUrl)}
-                                        className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${newUserAvatar === avatarUrl ? 'border-blue-600 scale-110 ring-2 ring-blue-300' : 'border-gray-200 hover:border-blue-400'
+                                        onClick={() => setUserAvatar(avatarUrl)}
+                                        className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all bg-eco-cream ${userAvatar === avatarUrl ? 'border-blue-600 scale-110 ring-2 ring-blue-300' : 'border-gray-200 hover:border-blue-400'
                                             }`}
                                     >
-                                        <img src={avatarUrl} alt={seed} className="w-full h-full object-cover" />
+                                        <img src={avatarUrl} alt={seed} className="w-full h-full object-cover p-1" />
                                     </button>
                                 );
                             })}
@@ -190,7 +239,7 @@ const AdminUsers: React.FC = () => {
                             disabled={creating}
                             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400"
                         >
-                            {creating ? 'Création...' : 'Créer l\'utilisateur'}
+                            {creating ? 'Traitement...' : (isEditing ? 'Mettre à jour' : 'Créer l\'utilisateur')}
                         </button>
                     </div>
                 </form>
@@ -210,13 +259,14 @@ const AdminUsers: React.FC = () => {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Courriel</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rôle</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date de création</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                             {users.map((user: UserProfile) => (
-                                <tr key={user.uid}>
+                                <tr key={user.uid} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
+                                        <div className="w-8 h-8 rounded-full overflow-hidden bg-eco-cream border border-gray-200 p-0.5">
                                             {user.avatarUrl ? (
                                                 <img src={user.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                                             ) : (
@@ -235,6 +285,14 @@ const AdminUsers: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {new Date(user.createdAt).toLocaleDateString()}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button
+                                            onClick={() => handleEditClick(user)}
+                                            className="text-blue-600 hover:text-blue-900"
+                                        >
+                                            Modifier
+                                        </button>
                                     </td>
                                 </tr>
                             ))}

@@ -44,8 +44,8 @@ const Header: React.FC = () => {
                 {/* Logo Section */}
                 <div className="flex items-center gap-4">
                     <Link to="/" className="flex items-center gap-4 group">
-                        <div className="w-16 h-16 bg-gradient-to-br from-eco-lime to-eco-forest rounded-2xl shadow-lg flex items-center justify-center text-white group-hover:scale-105 transition-transform">
-                            <Logo className="h-10 w-10 text-white" />
+                        <div className="w-24 h-24 bg-gradient-to-br from-eco-lime to-eco-forest rounded-2xl shadow-lg flex items-center justify-center text-white group-hover:scale-105 transition-transform">
+                            <Logo className="h-16 w-16 text-white" />
                         </div>
                         <div>
                             <h1 className="font-display font-bold text-2xl text-eco-forest leading-tight tracking-tight">

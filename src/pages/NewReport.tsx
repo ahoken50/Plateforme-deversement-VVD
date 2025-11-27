@@ -14,6 +14,7 @@ const INITIAL_FORM_STATE: Report = {
   time: new Date().toTimeString().split(' ')[0].slice(0, 5),
   location: '',
   witnessedBy: '',
+  responsible: '',
   supervisor: '',
   envContactedName: '',
   envContactedDate: '',
@@ -347,6 +348,17 @@ const NewReport: React.FC = () => {
                   type="text"
                   name="witnessedBy"
                   value={formData.witnessedBy}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                />
+              </div>
+              <div>
+                <label htmlFor="responsible" className="block text-sm font-semibold text-gray-700 mb-1">Responsable de l'incident</label>
+                <input
+                  id="responsible"
+                  type="text"
+                  name="responsible"
+                  value={formData.responsible || ''}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                 />

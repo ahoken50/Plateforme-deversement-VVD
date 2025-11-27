@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
     page: {
@@ -260,6 +260,27 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id }) => {
                         </View>
                     </View>
                 </View>
+
+                {/* Section 5: Photos */}
+                {data.photoUrls && data.photoUrls.length > 0 && (
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Photos</Text>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+                            {data.photoUrls.map((url: string, index: number) => (
+                                <View key={index} style={{ width: '30%', height: 150, marginBottom: 10 }}>
+                                    {/* Note: React-PDF Image component requires a valid URL or base64. 
+                                        Firebase Storage URLs should work if CORS is configured, otherwise proxies might be needed.
+                                        For now, we assume standard URL access. */}
+                                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                                    <Image
+                                        src={url}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
+                                    />
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                )}
 
                 <Text style={styles.footer}>
                     Document généré automatiquement par la Plateforme de Déversement VVD - {new Date().toLocaleDateString('fr-CA')}
