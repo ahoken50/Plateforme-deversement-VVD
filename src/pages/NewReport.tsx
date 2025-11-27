@@ -101,40 +101,34 @@ const NewReport: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
 
-  const convertImageToBase64 = async (url: string): Promise<string> => {
-    try {
-      // Try to fetch with CORS mode enabled to handle Firebase Storage URLs
-      const response = await fetch(url, {
-        mode: 'cors',
-        credentials: 'omit', // Important for some Firebase configurations
-        headers: {
-          'Origin': window.location.origin
+  const convertImageToBase64 = (url: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.src = url;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          try {
+            const dataURL = canvas.toDataURL('image/jpeg');
+            resolve(dataURL);
+          } catch (e) {
+            console.error('Canvas toDataURL failed', e);
+            resolve('');
+          }
+        } else {
+          resolve('');
         }
-      });
-      const blob = await response.blob();
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    } catch (error) {
-      console.error('Error converting image to base64:', error);
-      // Fallback: try without specific headers if the first attempt fails
-      try {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-      } catch (retryError) {
-        console.error('Retry failed:', retryError);
-        return '';
-      }
-    }
+      };
+      img.onerror = (error) => {
+        console.error('Image load failed', error);
+        resolve('');
+      };
+    });
   };
 
   useEffect(() => {

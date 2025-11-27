@@ -264,7 +264,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
 
                 {/* Section 5: Photos */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Photos</Text>
+                    <Text style={styles.sectionTitle}>Photos ({photoBase64s?.length || 0})</Text>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
                         {/* Try Base64 first */}
                         {photoBase64s && photoBase64s.length > 0 ? (
