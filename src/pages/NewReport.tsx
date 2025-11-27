@@ -96,6 +96,7 @@ const NewReport: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<File[]>([]);
   const [photoBase64s, setPhotoBase64s] = useState<string[]>([]);
+  const [isPhotosReady, setIsPhotosReady] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
@@ -138,12 +139,14 @@ const NewReport: React.FC = () => {
 
   useEffect(() => {
     const loadPhotos = async () => {
+      setIsPhotosReady(false);
       if (formData.photoUrls && formData.photoUrls.length > 0) {
         const base64s = await Promise.all(formData.photoUrls.map(url => convertImageToBase64(url)));
         setPhotoBase64s(base64s.filter(b => b !== ''));
       } else {
         setPhotoBase64s([]);
       }
+      setIsPhotosReady(true);
     };
     loadPhotos();
   }, [formData.photoUrls]);
@@ -313,18 +316,28 @@ const NewReport: React.FC = () => {
             )}
           </div>
           <div className="flex space-x-3">
-            <PDFDownloadLink
-              document={<ReportPDF data={formData} id={id} photoBase64s={photoBase64s} />}
-              fileName={`rapport-${formData.envSequentialNumber || id || 'nouveau'}.pdf`}
-              className="flex items-center px-4 py-2 text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              {({ loading }) => (
-                <>
-                  <Download className="h-5 w-5 mr-2" />
-                  {loading ? 'Génération...' : 'Télécharger PDF'}
-                </>
-              )}
-            </PDFDownloadLink>
+            {isPhotosReady ? (
+              <PDFDownloadLink
+                document={<ReportPDF data={formData} id={id} photoBase64s={photoBase64s} />}
+                fileName={`rapport-${formData.envSequentialNumber || id || 'nouveau'}.pdf`}
+                className="flex items-center px-4 py-2 text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {({ loading }) => (
+                  <>
+                    <Download className="h-5 w-5 mr-2" />
+                    {loading ? 'Génération...' : 'Télécharger PDF'}
+                  </>
+                )}
+              </PDFDownloadLink>
+            ) : (
+              <button
+                disabled
+                className="flex items-center px-4 py-2 text-white bg-blue-400 border border-transparent rounded-lg cursor-wait"
+              >
+                <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full"></div>
+                Chargement photos...
+              </button>
+            )}
             <button
               onClick={handlePrint}
               className="flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
