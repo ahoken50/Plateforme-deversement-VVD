@@ -113,7 +113,7 @@ const Intervenants: React.FC = () => {
 
       {/* Add Form */}
       {showAddForm && (
-        <div className="bg-white p-6 rounded-lg shadow-md border border-blue-100">
+        <div className="bg-white p-6 rounded-3xl shadow-lg border border-blue-100">
           <h3 className="text-lg font-semibold mb-4">Nouvel Intervenant</h3>
           <form onSubmit={handleAddIntervenant} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
@@ -164,7 +164,7 @@ const Intervenants: React.FC = () => {
         </div>
       )}
 
-      <div className="bg-white shadow overflow-hidden rounded-lg">
+      <div className="bg-white shadow-lg overflow-hidden rounded-3xl">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>

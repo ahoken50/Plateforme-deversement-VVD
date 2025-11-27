@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../firebase';
 import { MailIcon, LockIcon, EyeIcon, EyeOffIcon } from '../components/ui/Icons';
 import { Logo } from '../components/ui/Logo';
@@ -11,6 +11,7 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,12 +23,33 @@ const Login: React.FC = () => {
 
         try {
             setError('');
+            setSuccess('');
             setLoading(true);
             await signInWithEmailAndPassword(auth, email, password);
             navigate(from, { replace: true });
         } catch (err) {
             console.error(err);
             setError('Échec de la connexion. Vérifiez vos identifiants.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleResetPassword = async () => {
+        if (!email) {
+            setError('Veuillez entrer votre adresse courriel pour réinitialiser le mot de passe.');
+            return;
+        }
+
+        try {
+            setError('');
+            setSuccess('');
+            setLoading(true);
+            await sendPasswordResetEmail(auth, email);
+            setSuccess('Un courriel de réinitialisation a été envoyé à ' + email);
+        } catch (err) {
+            console.error(err);
+            setError('Erreur lors de l\'envoi du courriel de réinitialisation.');
         } finally {
             setLoading(false);
         }
@@ -56,6 +78,12 @@ const Login: React.FC = () => {
                     {error && (
                         <div className="w-full bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 text-sm">
                             {error}
+                        </div>
+                    )}
+
+                    {success && (
+                        <div className="w-full bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 text-sm">
+                            {success}
                         </div>
                     )}
 
@@ -133,9 +161,13 @@ const Login: React.FC = () => {
 
                         {/* Footer Links in Card */}
                         <div className="flex justify-between items-center text-sm mt-4 font-semibold px-1">
-                            <a href="#" className="text-red-700 hover:text-red-900 underline decoration-red-700/30 underline-offset-2">
+                            <button
+                                type="button"
+                                onClick={handleResetPassword}
+                                className="text-red-700 hover:text-red-900 underline decoration-red-700/30 underline-offset-2 bg-transparent border-none cursor-pointer p-0"
+                            >
                                 Mot de passe oublié?
-                            </a>
+                            </button>
                             <a href="#" className="text-red-700 hover:text-red-900 underline decoration-red-700/30 underline-offset-2">
                                 Besoin d'aide?
                             </a>

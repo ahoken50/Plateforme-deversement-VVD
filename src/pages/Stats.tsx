@@ -92,8 +92,8 @@ const Stats: React.FC = () => {
 
             {/* Key Metrics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
-                    <div className="p-4 bg-blue-50 rounded-xl mr-5">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 flex items-center">
+                    <div className="p-4 bg-blue-50 rounded-2xl mr-5">
                         <Activity className="h-8 w-8 text-blue-600" />
                     </div>
                     <div>
@@ -101,8 +101,8 @@ const Stats: React.FC = () => {
                         <p className="text-3xl font-bold text-gray-900">{totalReports}</p>
                     </div>
                 </div>
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
-                    <div className="p-4 bg-yellow-50 rounded-xl mr-5">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 flex items-center">
+                    <div className="p-4 bg-yellow-50 rounded-2xl mr-5">
                         <Droplet className="h-8 w-8 text-yellow-600" />
                     </div>
                     <div>
@@ -110,8 +110,8 @@ const Stats: React.FC = () => {
                         <p className="text-3xl font-bold text-gray-900">{openReports}</p>
                     </div>
                 </div>
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
-                    <div className="p-4 bg-green-50 rounded-xl mr-5">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 flex items-center">
+                    <div className="p-4 bg-green-50 rounded-2xl mr-5">
                         <PieChart className="h-8 w-8 text-green-600" />
                     </div>
                     <div>
@@ -123,7 +123,7 @@ const Stats: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Monthly Trend */}
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 lg:col-span-2">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 lg:col-span-2">
                     <div className="flex items-center mb-6">
                         <Activity className="h-5 w-5 text-gray-400 mr-2" />
                         <h3 className="text-lg font-bold text-gray-900">Tendance Mensuelle</h3>
@@ -154,7 +154,7 @@ const Stats: React.FC = () => {
                 </div>
 
                 {/* Causes Chart */}
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
                     <div className="flex items-center mb-6">
                         <BarChart className="h-5 w-5 text-gray-400 mr-2" />
                         <h3 className="text-lg font-bold text-gray-900">Causes Principales</h3>
@@ -170,7 +170,7 @@ const Stats: React.FC = () => {
                 </div>
 
                 {/* Locations Chart */}
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
                     <div className="flex items-center mb-6">
                         <MapPin className="h-5 w-5 text-gray-400 mr-2" />
                         <h3 className="text-lg font-bold text-gray-900">Lieux Fréquents</h3>
@@ -183,7 +183,7 @@ const Stats: React.FC = () => {
                 </div>
 
                 {/* Contaminants Chart */}
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
                     <div className="flex items-center mb-6">
                         <AlertTriangle className="h-5 w-5 text-gray-400 mr-2" />
                         <h3 className="text-lg font-bold text-gray-900">Contaminants</h3>

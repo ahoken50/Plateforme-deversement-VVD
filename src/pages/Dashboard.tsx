@@ -76,8 +76,8 @@ const Dashboard: React.FC = () => {
 
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
-                    <div className="p-3 bg-blue-50 rounded-lg">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 flex items-center space-x-4">
+                    <div className="p-3 bg-blue-50 rounded-2xl">
                         <BarChart3 className="h-8 w-8 text-blue-600" />
                     </div>
                     <div>
@@ -86,8 +86,8 @@ const Dashboard: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
-                    <div className="p-3 bg-yellow-50 rounded-lg">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 flex items-center space-x-4">
+                    <div className="p-3 bg-yellow-50 rounded-2xl">
                         <Clock className="h-8 w-8 text-yellow-600" />
                     </div>
                     <div>
@@ -96,8 +96,8 @@ const Dashboard: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
-                    <div className="p-3 bg-red-50 rounded-lg">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 flex items-center space-x-4">
+                    <div className="p-3 bg-red-50 rounded-2xl">
                         <AlertTriangle className="h-8 w-8 text-red-600" />
                     </div>
                     <div>
@@ -106,8 +106,8 @@ const Dashboard: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
-                    <div className="p-3 bg-orange-50 rounded-lg">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 flex items-center space-x-4">
+                    <div className="p-3 bg-orange-50 rounded-2xl">
                         <AlertTriangle className="h-8 w-8 text-orange-600" />
                     </div>
                     <div>
@@ -116,8 +116,8 @@ const Dashboard: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
-                    <div className="p-3 bg-purple-50 rounded-lg">
+                <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 flex items-center space-x-4">
+                    <div className="p-3 bg-purple-50 rounded-2xl">
                         <Calendar className="h-8 w-8 text-purple-600" />
                     </div>
                     <div>
@@ -146,7 +146,7 @@ const Dashboard: React.FC = () => {
                     <p className="mt-4 text-gray-500">Chargement des rapports...</p>
                 </div>
             ) : (
-                <div className="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
+                <div className="bg-white shadow-lg border border-gray-200 rounded-3xl overflow-hidden">
                     {filteredReports.length > 0 ? (
                         <ul className="divide-y divide-gray-100">
                             {filteredReports.map((report) => (

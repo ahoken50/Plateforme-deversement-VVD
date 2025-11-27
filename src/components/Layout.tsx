@@ -1,117 +1,28 @@
 import React from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Users, History, BookOpen, PlusCircle, LogOut, BarChart2 } from 'lucide-react';
-import logo from '../assets/logo.png';
+import { Outlet } from 'react-router-dom';
+import Background from './Background';
 
 const Layout: React.FC = () => {
-    const location = useLocation();
-    const { logout } = useAuth();
-
-    const handleLogout = async () => {
-        try {
-            await logout();
-        } catch (error) {
-            console.error("Failed to log out", error);
-        }
-    };
-
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-            {/* Header */}
-            <header className="bg-white shadow-sm border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between h-16">
-                        <div className="flex-shrink-0 flex items-center">
-                            <img className="h-14 w-auto object-contain" src={logo} alt="Ville de Val-d'Or" />
-                            <span className="ml-3 text-xl font-bold text-gray-800 hidden lg:block self-center">
-                                Gestion des Déversements
-                            </span>
-                        </div>
-                        <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                            <Link
-                                to="/"
-                                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/'
-                                    ? 'border-blue-500 text-gray-900'
-                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                                    }`}
-                            >
-                                <History className="h-4 w-4 mr-2" />
-                                Historique
-                            </Link>
-                            <Link
-                                to="/report/new"
-                                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname.startsWith('/report/new')
-                                    ? 'border-blue-500 text-gray-900'
-                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                                    }`}
-                            >
-                                <PlusCircle className="h-4 w-4 mr-2" />
-                                Nouveau
-                            </Link>
-                            <Link
-                                to="/intervenants"
-                                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/intervenants'
-                                    ? 'border-blue-500 text-gray-900'
-                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                                    }`}
-                            >
-                                <Users className="h-4 w-4 mr-2" />
-                                Intervenants
-                            </Link>
-                            <Link
-                                to="/procedure"
-                                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/procedure'
-                                    ? 'border-blue-500 text-gray-900'
-                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                                    }`}
-                            >
-                                <BookOpen className="h-4 w-4 mr-2" />
-                                Procédure
-                            </Link>
-                            <Link
-                                to="/stats"
-                                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname === '/stats'
-                                    ? 'border-blue-500 text-gray-900'
-                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                                    }`}
-                            >
-                                <BarChart2 className="h-4 w-4 mr-2" />
-                                Statistiques
-                            </Link>
-                            <Link
-                                to="/admin/users"
-                                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${location.pathname.startsWith('/admin')
-                                    ? 'border-blue-500 text-gray-900'
-                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                                    }`}
-                            >
-                                <Users className="h-4 w-4 mr-2" />
-                                Admin
-                            </Link>
-                            <button
-                                onClick={handleLogout}
-                                className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                            >
-                                <LogOut className="h-4 w-4 mr-2" />
-                                Déconnexion
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </header>
+        <div className="relative min-h-screen flex flex-col font-sans text-gray-900">
+            <Background />
 
-            {/* Main Content */}
-            <main className="flex-grow container mx-auto px-4 py-8">
-                <Outlet />
+            <main className="relative z-10 flex-grow p-4 md:p-6 lg:p-8">
+                <div className="max-w-7xl mx-auto w-full">
+                    <Outlet />
+                </div>
             </main>
 
-            {/* Footer */}
-            <footer className="bg-white border-t border-gray-200 mt-auto">
-                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <p className="text-center text-sm text-gray-500">
-                        &copy; {new Date().getFullYear()} Ville de Val-d'Or - Environnement
+            <footer className="relative z-10 w-full max-w-7xl mx-auto py-6 px-4">
+                <div className="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-white/90">
+                    <p className="mb-2 md:mb-0 drop-shadow-md">
+                        © 2024 Ville de Val-d'Or. Tous droits réservés.
                     </p>
+                    <div className="flex gap-4 md:gap-6 drop-shadow-md">
+                        <a href="#" className="hover:text-white hover:underline">Contact information</a>
+                        <a href="#" className="hover:text-white hover:underline">Termes et conditions</a>
+                        <a href="#" className="hover:text-white hover:underline">Politique de confidentialité</a>
+                    </div>
                 </div>
             </footer>
         </div>
