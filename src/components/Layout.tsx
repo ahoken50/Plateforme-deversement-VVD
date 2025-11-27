@@ -1,11 +1,13 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Background from './Background';
+import Header from './Header';
 
 const Layout: React.FC = () => {
     return (
         <div className="relative min-h-screen flex flex-col font-sans text-gray-900">
             <Background />
+            <Header />
 
             <main className="relative z-10 flex-grow p-4 md:p-6 lg:p-8">
                 <div className="max-w-7xl mx-auto w-full">
