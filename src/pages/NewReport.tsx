@@ -5,8 +5,7 @@ import { reportService } from '../services/reportService';
 import { useAuth } from '../contexts/AuthContext';
 import { Report } from '../types';
 import logo from '../assets/logo.png';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import ReportPDF from '../components/ReportPDF';
+const DownloadReportButton = React.lazy(() => import('../components/DownloadReportButton'));
 
 const INITIAL_FORM_STATE: Report = {
   id: '',
@@ -311,18 +310,23 @@ const NewReport: React.FC = () => {
           </div>
           <div className="flex space-x-3">
             {isPhotosReady ? (
-              <PDFDownloadLink
-                document={<ReportPDF data={formData} id={id} photoBase64s={photoBase64s} photoUrls={formData.photoUrls} />}
-                fileName={`rapport-${formData.envSequentialNumber || id || 'nouveau'}.pdf`}
-                className="flex items-center px-4 py-2 text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                {({ loading }) => (
-                  <>
-                    <Download className="h-5 w-5 mr-2" />
-                    {loading ? 'Génération...' : 'Télécharger PDF'}
-                  </>
-                )}
-              </PDFDownloadLink>
+              <React.Suspense fallback={
+                <button
+                  disabled
+                  className="flex items-center px-4 py-2 text-white bg-blue-400 border border-transparent rounded-lg cursor-wait"
+                >
+                  <Download className="h-5 w-5 mr-2" />
+                  Chargement PDF...
+                </button>
+              }>
+                <DownloadReportButton
+                  data={formData}
+                  id={id}
+                  photoBase64s={photoBase64s}
+                  photoUrls={formData.photoUrls}
+                  className="flex items-center px-4 py-2 text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors"
+                />
+              </React.Suspense>
             ) : (
               <button
                 disabled
