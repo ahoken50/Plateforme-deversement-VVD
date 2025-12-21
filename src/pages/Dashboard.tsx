@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Search, FileText, Calendar, MapPin, AlertCircle, BarChart3, Clock, AlertTriangle } from 'lucide-react';
+import { debounce } from 'lodash';
 import { reportService } from '../services/reportService';
 import { Report } from '../types';
 
@@ -8,6 +9,7 @@ const Dashboard: React.FC = () => {
     const [reports, setReports] = useState<Report[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchReports = async () => {
@@ -24,24 +26,47 @@ const Dashboard: React.FC = () => {
         fetchReports();
     }, []);
 
-    const filteredReports = reports.filter(report =>
-        report.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        report.contaminant.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        report.date.includes(searchTerm)
+    const handleSearchChange = useMemo(
+        () => debounce((term: string) => {
+            setDebouncedSearchTerm(term);
+        }, 300),
+        []
     );
 
-    // Statistics
-    const totalReports = reports.length;
-    const activeReports = reports.filter(r => r.status === 'Nouvelle demande' || r.status === 'En cours').length;
-    const urgentReports = reports.filter(r => r.status === 'Intervention requise').length;
-    const waitingForMinistryCount = reports.filter(r => r.status === 'En attente de retour du ministère').length;
+    const onSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const term = e.target.value;
+        setSearchTerm(term);
+        handleSearchChange(term);
+    };
 
-    const currentMonthReportsCount = reports.filter(r => {
-        if (!r.createdAt) return false;
-        const reportDate = r.createdAt.toDate();
-        const now = new Date();
-        return reportDate.getMonth() === now.getMonth() && reportDate.getFullYear() === now.getFullYear();
-    }).length;
+    const filteredReports = useMemo(() => reports.filter(report =>
+        report.location.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        report.contaminant.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        report.date.includes(debouncedSearchTerm)
+    ), [reports, debouncedSearchTerm]);
+
+    // Statistics
+    const stats = useMemo(() => {
+        const totalReports = reports.length;
+        const activeReports = reports.filter(r => r.status === 'Nouvelle demande' || r.status === 'En cours').length;
+        const urgentReports = reports.filter(r => r.status === 'Intervention requise').length;
+        const waitingForMinistryCount = reports.filter(r => r.status === 'En attente de retour du ministère').length;
+
+        const currentMonthReportsCount = reports.filter(r => {
+            if (!r.createdAt) return false;
+            const reportDate = r.createdAt.toDate();
+            const now = new Date();
+            return reportDate.getMonth() === now.getMonth() && reportDate.getFullYear() === now.getFullYear();
+        }).length;
+
+        return {
+            totalReports,
+            activeReports,
+            urgentReports,
+            waitingForMinistryCount,
+            currentMonthReportsCount
+        };
+    }, [reports]);
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -82,7 +107,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-500">Total Rapports</p>
-                        <p className="text-2xl font-bold text-gray-900">{totalReports}</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.totalReports}</p>
                     </div>
                 </div>
 
@@ -92,7 +117,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-500">En cours / Nouveaux</p>
-                        <p className="text-2xl font-bold text-gray-900">{activeReports}</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.activeReports}</p>
                     </div>
                 </div>
 
@@ -102,7 +127,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-500">Intervention Requise</p>
-                        <p className="text-2xl font-bold text-gray-900">{urgentReports}</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.urgentReports}</p>
                     </div>
                 </div>
 
@@ -112,7 +137,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-500">En attente (Ministère)</p>
-                        <p className="text-2xl font-bold text-gray-900">{waitingForMinistryCount}</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.waitingForMinistryCount}</p>
                     </div>
                 </div>
 
@@ -122,7 +147,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-500">Rapports ce mois</p>
-                        <p className="text-2xl font-bold text-gray-900">{currentMonthReportsCount}</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.currentMonthReportsCount}</p>
                     </div>
                 </div>
             </div>
@@ -134,7 +159,7 @@ const Dashboard: React.FC = () => {
                     placeholder="Rechercher par lieu, contaminant ou date..."
                     className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm transition-all"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={onSearchInput}
                 />
                 <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
             </div>
