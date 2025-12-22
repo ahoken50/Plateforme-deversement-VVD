@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Search, FileText, Calendar, MapPin, AlertCircle, BarChart3, Clock, AlertTriangle } from 'lucide-react';
 import { reportService } from '../services/reportService';
@@ -24,24 +24,39 @@ const Dashboard: React.FC = () => {
         fetchReports();
     }, []);
 
-    const filteredReports = reports.filter(report =>
+    // Optimization: Memoize filtered reports to avoid recalculating on every render if dependencies haven't changed
+    const filteredReports = useMemo(() => reports.filter(report =>
         report.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
         report.contaminant.toLowerCase().includes(searchTerm.toLowerCase()) ||
         report.date.includes(searchTerm)
-    );
+    ), [reports, searchTerm]);
 
-    // Statistics
-    const totalReports = reports.length;
-    const activeReports = reports.filter(r => r.status === 'Nouvelle demande' || r.status === 'En cours').length;
-    const urgentReports = reports.filter(r => r.status === 'Intervention requise').length;
-    const waitingForMinistryCount = reports.filter(r => r.status === 'En attente de retour du ministère').length;
-
-    const currentMonthReportsCount = reports.filter(r => {
-        if (!r.createdAt) return false;
-        const reportDate = r.createdAt.toDate();
+    // Optimization: Memoize statistics to avoid recalculating when searchTerm changes
+    const stats = useMemo(() => {
         const now = new Date();
-        return reportDate.getMonth() === now.getMonth() && reportDate.getFullYear() === now.getFullYear();
-    }).length;
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+
+        return {
+            total: reports.length,
+            active: reports.filter(r => r.status === 'Nouvelle demande' || r.status === 'En cours').length,
+            urgent: reports.filter(r => r.status === 'Intervention requise').length,
+            waiting: reports.filter(r => r.status === 'En attente de retour du ministère').length,
+            currentMonth: reports.filter(r => {
+                if (!r.createdAt) return false;
+                const reportDate = r.createdAt.toDate();
+                return reportDate.getMonth() === currentMonth && reportDate.getFullYear() === currentYear;
+            }).length
+        };
+    }, [reports]);
+
+    const {
+        total: totalReports,
+        active: activeReports,
+        urgent: urgentReports,
+        waiting: waitingForMinistryCount,
+        currentMonth: currentMonthReportsCount
+    } = stats;
 
     const getStatusColor = (status: string) => {
         switch (status) {
