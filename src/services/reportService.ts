@@ -7,6 +7,7 @@ import {
     getDocs,
     query,
     orderBy,
+    limit,
     Timestamp
 } from 'firebase/firestore';
 import {
@@ -24,7 +25,8 @@ export const reportService = {
     createReport: async (reportData: Omit<Report, 'id' | 'createdAt' | 'updatedAt'>) => {
         try {
             // Generate Sequential Number
-            const q = query(collection(db, REPORTS_COLLECTION), orderBy('createdAt', 'desc')); // Get all to find last ID (optimization possible later)
+            // Optimized to only fetch the last created report instead of all reports
+            const q = query(collection(db, REPORTS_COLLECTION), orderBy('createdAt', 'desc'), limit(1));
             const querySnapshot = await getDocs(q);
 
             let nextSeqNum = 'ENV-' + new Date().getFullYear() + '-001';
