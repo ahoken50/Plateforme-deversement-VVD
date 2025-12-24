@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Search, FileText, Calendar, MapPin, AlertCircle, BarChart3, Clock, AlertTriangle } from 'lucide-react';
 import { reportService } from '../services/reportService';
@@ -24,24 +24,33 @@ const Dashboard: React.FC = () => {
         fetchReports();
     }, []);
 
-    const filteredReports = reports.filter(report =>
-        report.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        report.contaminant.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        report.date.includes(searchTerm)
-    );
+    const filteredReports = useMemo(() => {
+        const lowerSearchTerm = searchTerm.toLowerCase();
+        return reports.filter(report =>
+            report.location.toLowerCase().includes(lowerSearchTerm) ||
+            report.contaminant.toLowerCase().includes(lowerSearchTerm) ||
+            report.date.includes(searchTerm)
+        );
+    }, [reports, searchTerm]);
 
     // Statistics
-    const totalReports = reports.length;
-    const activeReports = reports.filter(r => r.status === 'Nouvelle demande' || r.status === 'En cours').length;
-    const urgentReports = reports.filter(r => r.status === 'Intervention requise').length;
-    const waitingForMinistryCount = reports.filter(r => r.status === 'En attente de retour du ministère').length;
+    const stats = useMemo(() => {
+        const totalReports = reports.length;
+        const activeReports = reports.filter(r => r.status === 'Nouvelle demande' || r.status === 'En cours').length;
+        const urgentReports = reports.filter(r => r.status === 'Intervention requise').length;
+        const waitingForMinistryCount = reports.filter(r => r.status === 'En attente de retour du ministère').length;
 
-    const currentMonthReportsCount = reports.filter(r => {
-        if (!r.createdAt) return false;
-        const reportDate = r.createdAt.toDate();
         const now = new Date();
-        return reportDate.getMonth() === now.getMonth() && reportDate.getFullYear() === now.getFullYear();
-    }).length;
+        const currentMonthReportsCount = reports.filter(r => {
+            if (!r.createdAt) return false;
+            const reportDate = r.createdAt.toDate();
+            return reportDate.getMonth() === now.getMonth() && reportDate.getFullYear() === now.getFullYear();
+        }).length;
+
+        return { totalReports, activeReports, urgentReports, waitingForMinistryCount, currentMonthReportsCount };
+    }, [reports]);
+
+    const { totalReports, activeReports, urgentReports, waitingForMinistryCount, currentMonthReportsCount } = stats;
 
     const getStatusColor = (status: string) => {
         switch (status) {
