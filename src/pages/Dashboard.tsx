@@ -8,6 +8,7 @@ const Dashboard: React.FC = () => {
     const [reports, setReports] = useState<Report[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [visibleCount, setVisibleCount] = useState(20);
 
     useEffect(() => {
         const fetchReports = async () => {
@@ -33,6 +34,39 @@ const Dashboard: React.FC = () => {
             report.date.includes(searchTerm)
         );
     }, [reports, searchTerm]);
+
+    const visibleReports = useMemo(() => {
+        return filteredReports.slice(0, visibleCount);
+    }, [filteredReports, visibleCount]);
+
+    // OPTIMIZATION: Infinite scroll using IntersectionObserver
+    // Loads more reports when scrolling to the bottom to avoid rendering huge lists at once
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && visibleCount < filteredReports.length) {
+                    setVisibleCount((prev) => prev + 20);
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        const sentinel = document.getElementById('scroll-sentinel');
+        if (sentinel) {
+            observer.observe(sentinel);
+        }
+
+        return () => {
+            if (sentinel) {
+                observer.unobserve(sentinel);
+            }
+        };
+    }, [filteredReports.length, visibleCount]);
+
+    // Reset visible count when search term changes
+    useEffect(() => {
+        setVisibleCount(20);
+    }, [searchTerm]);
 
     // Statistics
     // OPTIMIZATION: Memoize statistics calculations to avoid re-calculation when only searchTerm changes
@@ -164,65 +198,72 @@ const Dashboard: React.FC = () => {
             ) : (
                 <div className="bg-white shadow-lg border border-gray-200 rounded-3xl overflow-hidden">
                     {filteredReports.length > 0 ? (
-                        <ul className="divide-y divide-gray-100">
-                            {filteredReports.map((report) => (
-                                <li key={report.id} className="hover:bg-gray-50 transition-colors group">
-                                    <Link to={`/report/${report.id}`} className="block p-6">
-                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                            <div className="flex-1">
-                                                <div className="flex items-center justify-between md:justify-start gap-3 mb-2">
-                                                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(report.status)}`}>
-                                                        {report.status}
-                                                    </span>
-                                                    <div className="flex items-center text-sm text-gray-500">
-                                                        <Calendar className="h-4 w-4 mr-1" />
-                                                        {report.date} {report.time}
-                                                    </div>
-                                                </div>
-                                                <h3 className="text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
-                                                    {report.envSequentialNumber && (
-                                                        <span className="font-mono text-sm text-gray-500 mr-2">[{report.envSequentialNumber}]</span>
-                                                    )}
-                                                    {report.contaminant}
-                                                    {report.containerQuantity && <span className="text-gray-500 font-normal"> - {report.containerQuantity}</span>}
-                                                </h3>
-                                                <div className="flex items-center text-gray-500 text-sm mb-2">
-                                                    <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
-                                                    <span className="truncate">{report.location}</span>
-                                                </div>
-
-                                                {/* Added Fields */}
-                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded-lg">
-                                                    <div>
-                                                        <span className="font-medium text-gray-500 block text-xs uppercase">Responsable</span>
-                                                        {report.supervisor || '-'}
-                                                    </div>
-                                                    <div>
-                                                        <span className="font-medium text-gray-500 block text-xs uppercase">Suivi par</span>
-                                                        {report.followUpBy || '-'}
-                                                    </div>
-                                                    <div>
-                                                        <span className="font-medium text-gray-500 block text-xs uppercase">Ministère prévenu</span>
-                                                        <span className={report.envUrgenceEnvContacted ? 'text-red-600 font-medium' : 'text-gray-600'}>
-                                                            {report.envUrgenceEnvContacted ? 'OUI' : 'Non'}
+                        <>
+                            <ul className="divide-y divide-gray-100">
+                                {visibleReports.map((report) => (
+                                    <li key={report.id} className="hover:bg-gray-50 transition-colors group">
+                                        <Link to={`/report/${report.id}`} className="block p-6">
+                                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                <div className="flex-1">
+                                                    <div className="flex items-center justify-between md:justify-start gap-3 mb-2">
+                                                        <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(report.status)}`}>
+                                                            {report.status}
                                                         </span>
+                                                        <div className="flex items-center text-sm text-gray-500">
+                                                            <Calendar className="h-4 w-4 mr-1" />
+                                                            {report.date} {report.time}
+                                                        </div>
+                                                    </div>
+                                                    <h3 className="text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                                                        {report.envSequentialNumber && (
+                                                            <span className="font-mono text-sm text-gray-500 mr-2">[{report.envSequentialNumber}]</span>
+                                                        )}
+                                                        {report.contaminant}
+                                                        {report.containerQuantity && <span className="text-gray-500 font-normal"> - {report.containerQuantity}</span>}
+                                                    </h3>
+                                                    <div className="flex items-center text-gray-500 text-sm mb-2">
+                                                        <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
+                                                        <span className="truncate">{report.location}</span>
+                                                    </div>
+
+                                                    {/* Added Fields */}
+                                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded-lg">
+                                                        <div>
+                                                            <span className="font-medium text-gray-500 block text-xs uppercase">Responsable</span>
+                                                            {report.supervisor || '-'}
+                                                        </div>
+                                                        <div>
+                                                            <span className="font-medium text-gray-500 block text-xs uppercase">Suivi par</span>
+                                                            {report.followUpBy || '-'}
+                                                        </div>
+                                                        <div>
+                                                            <span className="font-medium text-gray-500 block text-xs uppercase">Ministère prévenu</span>
+                                                            <span className={report.envUrgenceEnvContacted ? 'text-red-600 font-medium' : 'text-gray-600'}>
+                                                                {report.envUrgenceEnvContacted ? 'OUI' : 'Non'}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    {report.description && (
+                                                        <p className="text-sm text-gray-600 line-clamp-2 mt-2 italic">{report.description}</p>
+                                                    )}
+                                                </div>
+                                                <div className="flex items-center justify-end">
+                                                    <div className="p-2 bg-gray-100 rounded-full group-hover:bg-blue-100 transition-colors">
+                                                        <FileText className="h-5 w-5 text-gray-500 group-hover:text-blue-600" />
                                                     </div>
                                                 </div>
-
-                                                {report.description && (
-                                                    <p className="text-sm text-gray-600 line-clamp-2 mt-2 italic">{report.description}</p>
-                                                )}
                                             </div>
-                                            <div className="flex items-center justify-end">
-                                                <div className="p-2 bg-gray-100 rounded-full group-hover:bg-blue-100 transition-colors">
-                                                    <FileText className="h-5 w-5 text-gray-500 group-hover:text-blue-600" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                            {visibleCount < filteredReports.length && (
+                                <div id="scroll-sentinel" className="h-8 w-full flex items-center justify-center p-4">
+                                    <div className="h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                                </div>
+                            )}
+                        </>
                     ) : (
                         <div className="text-center py-16 text-gray-500">
                             <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
