@@ -77,11 +77,14 @@ const Dashboard: React.FC = () => {
         const urgentReports = reports.filter(r => r.status === 'Intervention requise').length;
         const waitingForMinistryCount = reports.filter(r => r.status === 'En attente de retour du ministère').length;
 
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+
         const currentMonthReportsCount = reports.filter(r => {
             if (!r.createdAt) return false;
             const reportDate = r.createdAt.toDate();
-            const now = new Date();
-            return reportDate.getMonth() === now.getMonth() && reportDate.getFullYear() === now.getFullYear();
+            return reportDate.getMonth() === currentMonth && reportDate.getFullYear() === currentYear;
         }).length;
 
         return {
