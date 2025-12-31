@@ -70,29 +70,44 @@ const Dashboard: React.FC = () => {
 
     // Statistics
     // OPTIMIZATION: Memoize statistics calculations to avoid re-calculation when only searchTerm changes
-    // This prevents 5 separate O(n) array iterations on every search keystroke
+    // This prevents multiple O(n) array iterations on every search keystroke
     const stats = useMemo(() => {
-        const totalReports = reports.length;
-        const activeReports = reports.filter(r => r.status === 'Nouvelle demande' || r.status === 'En cours').length;
-        const urgentReports = reports.filter(r => r.status === 'Intervention requise').length;
-        const waitingForMinistryCount = reports.filter(r => r.status === 'En attente de retour du ministère').length;
-
         const now = new Date();
-        const currentMonth = now.getMonth();
-        const currentYear = now.getFullYear();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
-        const currentMonthReportsCount = reports.filter(r => {
-            if (!r.createdAt) return false;
-            const reportDate = r.createdAt.toDate();
-            return reportDate.getMonth() === currentMonth && reportDate.getFullYear() === currentYear;
-        }).length;
+        // Firestore Timestamp is in seconds
+        const startSeconds = Math.floor(startOfMonth.getTime() / 1000);
+        const endSeconds = Math.floor(endOfMonth.getTime() / 1000);
+
+        const initialStats = {
+            activeReports: 0,
+            urgentReports: 0,
+            waitingForMinistryCount: 0,
+            currentMonthReportsCount: 0
+        };
+
+        const computedStats = reports.reduce((acc, r) => {
+            if (r.status === 'Nouvelle demande' || r.status === 'En cours') {
+                acc.activeReports++;
+            }
+            if (r.status === 'Intervention requise') {
+                acc.urgentReports++;
+            }
+            if (r.status === 'En attente de retour du ministère') {
+                acc.waitingForMinistryCount++;
+            }
+            // Check if createdAt exists and is within the current month using timestamp seconds
+            // This avoids creating a new Date object for every report (O(n) allocation)
+            if (r.createdAt && r.createdAt.seconds >= startSeconds && r.createdAt.seconds <= endSeconds) {
+                acc.currentMonthReportsCount++;
+            }
+            return acc;
+        }, initialStats);
 
         return {
-            totalReports,
-            activeReports,
-            urgentReports,
-            waitingForMinistryCount,
-            currentMonthReportsCount
+            totalReports: reports.length,
+            ...computedStats
         };
     }, [reports]);
 
