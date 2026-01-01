@@ -28,9 +28,10 @@ const Dashboard: React.FC = () => {
     // OPTIMIZATION: Memoize filtered reports to prevent re-filtering on every render
     // This improves performance when typing in the search box by avoiding O(n) operations
     const filteredReports = useMemo(() => {
+        const lowerSearchTerm = searchTerm.toLowerCase();
         return reports.filter(report =>
-            report.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            report.contaminant.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            report.location.toLowerCase().includes(lowerSearchTerm) ||
+            report.contaminant.toLowerCase().includes(lowerSearchTerm) ||
             report.date.includes(searchTerm)
         );
     }, [reports, searchTerm]);
@@ -72,28 +73,36 @@ const Dashboard: React.FC = () => {
     // OPTIMIZATION: Memoize statistics calculations to avoid re-calculation when only searchTerm changes
     // This prevents 5 separate O(n) array iterations on every search keystroke
     const stats = useMemo(() => {
-        const totalReports = reports.length;
-        const activeReports = reports.filter(r => r.status === 'Nouvelle demande' || r.status === 'En cours').length;
-        const urgentReports = reports.filter(r => r.status === 'Intervention requise').length;
-        const waitingForMinistryCount = reports.filter(r => r.status === 'En attente de retour du ministère').length;
-
         const now = new Date();
         const currentMonth = now.getMonth();
         const currentYear = now.getFullYear();
 
-        const currentMonthReportsCount = reports.filter(r => {
-            if (!r.createdAt) return false;
-            const reportDate = r.createdAt.toDate();
-            return reportDate.getMonth() === currentMonth && reportDate.getFullYear() === currentYear;
-        }).length;
+        return reports.reduce((acc, r) => {
+            // Count by status
+            if (r.status === 'Nouvelle demande' || r.status === 'En cours') {
+                acc.activeReports++;
+            } else if (r.status === 'Intervention requise') {
+                acc.urgentReports++;
+            } else if (r.status === 'En attente de retour du ministère') {
+                acc.waitingForMinistryCount++;
+            }
 
-        return {
-            totalReports,
-            activeReports,
-            urgentReports,
-            waitingForMinistryCount,
-            currentMonthReportsCount
-        };
+            // Count for current month
+            if (r.createdAt) {
+                const reportDate = r.createdAt.toDate();
+                if (reportDate.getMonth() === currentMonth && reportDate.getFullYear() === currentYear) {
+                    acc.currentMonthReportsCount++;
+                }
+            }
+
+            return acc;
+        }, {
+            totalReports: reports.length,
+            activeReports: 0,
+            urgentReports: 0,
+            waitingForMinistryCount: 0,
+            currentMonthReportsCount: 0
+        });
     }, [reports]);
 
     const getStatusColor = (status: string) => {
