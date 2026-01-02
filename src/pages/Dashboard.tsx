@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { Plus, Search, FileText, Calendar, MapPin, AlertCircle, BarChart3, Clock, AlertTriangle } from 'lucide-react';
 import { reportService } from '../services/reportService';
 import { Report } from '../types';
+import { useDebounce } from '../hooks/useDebounce';
 
 const Dashboard: React.FC = () => {
     const [reports, setReports] = useState<Report[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearchTerm = useDebounce(searchTerm, 300);
     const [visibleCount, setVisibleCount] = useState(20);
 
     useEffect(() => {
@@ -27,13 +29,14 @@ const Dashboard: React.FC = () => {
 
     // OPTIMIZATION: Memoize filtered reports to prevent re-filtering on every render
     // This improves performance when typing in the search box by avoiding O(n) operations
+    // Using debouncedSearchTerm to prevent filtering on every keystroke
     const filteredReports = useMemo(() => {
         return reports.filter(report =>
-            report.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            report.contaminant.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            report.date.includes(searchTerm)
+            report.location.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+            report.contaminant.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+            report.date.includes(debouncedSearchTerm)
         );
-    }, [reports, searchTerm]);
+    }, [reports, debouncedSearchTerm]);
 
     const visibleReports = useMemo(() => {
         return filteredReports.slice(0, visibleCount);
@@ -66,7 +69,7 @@ const Dashboard: React.FC = () => {
     // Reset visible count when search term changes
     useEffect(() => {
         setVisibleCount(20);
-    }, [searchTerm]);
+    }, [debouncedSearchTerm]);
 
     // Statistics
     // OPTIMIZATION: Memoize statistics calculations to avoid re-calculation when only searchTerm changes
