@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 import { Plus, Search, FileText, Calendar, MapPin, AlertCircle, BarChart3, Clock, AlertTriangle } from 'lucide-react';
 import { reportService } from '../services/reportService';
 import { Report } from '../types';
+import { useDebounce } from '../hooks/useDebounce';
 
 const Dashboard: React.FC = () => {
     const [reports, setReports] = useState<Report[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [visibleCount, setVisibleCount] = useState(20);
+
+    // OPTIMIZATION: Debounce search term to avoid filtering on every keystroke
+    const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
     useEffect(() => {
         const fetchReports = async () => {
@@ -28,13 +32,13 @@ const Dashboard: React.FC = () => {
     // OPTIMIZATION: Memoize filtered reports to prevent re-filtering on every render
     // This improves performance when typing in the search box by avoiding O(n) operations
     const filteredReports = useMemo(() => {
-        const lowerSearchTerm = searchTerm.toLowerCase();
+        const lowerSearchTerm = debouncedSearchTerm.toLowerCase();
         return reports.filter(report =>
             report.location.toLowerCase().includes(lowerSearchTerm) ||
             report.contaminant.toLowerCase().includes(lowerSearchTerm) ||
-            report.date.includes(searchTerm)
+            report.date.includes(debouncedSearchTerm)
         );
-    }, [reports, searchTerm]);
+    }, [reports, debouncedSearchTerm]);
 
     const visibleReports = useMemo(() => {
         return filteredReports.slice(0, visibleCount);
@@ -67,7 +71,7 @@ const Dashboard: React.FC = () => {
     // Reset visible count when search term changes
     useEffect(() => {
         setVisibleCount(20);
-    }, [searchTerm]);
+    }, [debouncedSearchTerm]);
 
     // Statistics
     // OPTIMIZATION: Memoize statistics calculations to avoid re-calculation when only searchTerm changes
