@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { reportService } from '../services/reportService';
 import { Report } from '../types';
 import { BarChart, PieChart, Activity, Droplet, MapPin, AlertTriangle } from 'lucide-react';
@@ -21,49 +21,90 @@ const Stats: React.FC = () => {
         fetchReports();
     }, []);
 
+    const {
+        totalReports,
+        openReports,
+        closedReports,
+        causeCounts,
+        topLocations,
+        topContaminants,
+        reportsByMonth
+    } = useMemo(() => {
+        if (reports.length === 0) {
+            return {
+                totalReports: 0,
+                openReports: 0,
+                closedReports: 0,
+                causeCounts: {},
+                topLocations: [],
+                topContaminants: [],
+                reportsByMonth: Array(12).fill(0)
+            };
+        }
+
+        const currentYear = new Date().getFullYear();
+
+        // Single pass reduction for O(N) complexity instead of O(6N)
+        const stats = reports.reduce((acc, report) => {
+            // Status counts
+            if (['Nouvelle demande', 'Pris en charge', 'En attente de retour du ministère', 'Intervention requise', 'En cours'].includes(report.status)) {
+                acc.openReports++;
+            } else if (['Traité', 'Complété', 'Annulé'].includes(report.status)) {
+                acc.closedReports++;
+            }
+
+            // Cause counts
+            const causeKey = report.cause || 'Non spécifié';
+            acc.causeCounts[causeKey] = (acc.causeCounts[causeKey] || 0) + 1;
+
+            // Location counts
+            const locationKey = report.location || 'Non spécifié';
+            acc.locationCounts[locationKey] = (acc.locationCounts[locationKey] || 0) + 1;
+
+            // Contaminant counts
+            const contaminantKey = report.contaminant || 'Non spécifié';
+            acc.contaminantCounts[contaminantKey] = (acc.contaminantCounts[contaminantKey] || 0) + 1;
+
+            // Monthly counts
+            const date = new Date(report.date);
+            if (date.getFullYear() === currentYear) {
+                acc.reportsByMonth[date.getMonth()]++;
+            }
+
+            return acc;
+        }, {
+            openReports: 0,
+            closedReports: 0,
+            causeCounts: {} as Record<string, number>,
+            locationCounts: {} as Record<string, number>,
+            contaminantCounts: {} as Record<string, number>,
+            reportsByMonth: Array(12).fill(0)
+        });
+
+        // Sort and slice for top lists (O(K log K) where K is unique items, usually small)
+        const topLocations = Object.entries(stats.locationCounts)
+            .sort(([, a], [, b]) => b - a)
+            .slice(0, 5);
+
+        const topContaminants = Object.entries(stats.contaminantCounts)
+            .sort(([, a], [, b]) => b - a)
+            .slice(0, 5);
+
+        return {
+            totalReports: reports.length,
+            openReports: stats.openReports,
+            closedReports: stats.closedReports,
+            causeCounts: stats.causeCounts,
+            topLocations,
+            topContaminants,
+            reportsByMonth: stats.reportsByMonth
+        };
+    }, [reports]);
+
     if (loading) return <div className="text-center py-10">Chargement des statistiques...</div>;
 
-    // Calculate Stats
-    const totalReports = reports.length;
-    const openReports = reports.filter((r: Report) => ['Nouvelle demande', 'Pris en charge', 'En attente de retour du ministère', 'Intervention requise', 'En cours'].includes(r.status)).length;
-    const closedReports = reports.filter((r: Report) => ['Traité', 'Complété', 'Annulé'].includes(r.status)).length;
-
-    // Helper to count occurrences
-    const countOccurrences = (items: string[]) => {
-        const counts: Record<string, number> = {};
-        items.forEach(item => {
-            const key = item || 'Non spécifié';
-            counts[key] = (counts[key] || 0) + 1;
-        });
-        return counts;
-    };
-
-    // Reports by Cause
-    const causeCounts = countOccurrences(reports.map(r => r.cause));
-
-    // Reports by Location (Top 5)
-    const locationCounts = countOccurrences(reports.map(r => r.location));
-    const topLocations = Object.entries(locationCounts)
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 5);
-
-    // Reports by Contaminant (Top 5)
-    const contaminantCounts = countOccurrences(reports.map(r => r.contaminant));
-    const topContaminants = Object.entries(contaminantCounts)
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 5);
-
-    // Reports by Month (Current Year)
-    const currentYear = new Date().getFullYear();
-    const reportsByMonth = Array(12).fill(0);
-    reports.forEach((r: Report) => {
-        const date = new Date(r.date);
-        if (date.getFullYear() === currentYear) {
-            reportsByMonth[date.getMonth()]++;
-        }
-    });
-
     const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+    const currentYear = new Date().getFullYear();
 
     // Simple Bar Component
     const SimpleBar = ({ label, count, total, color = "bg-blue-600" }: { label: string, count: number, total: number, color?: string }) => (
