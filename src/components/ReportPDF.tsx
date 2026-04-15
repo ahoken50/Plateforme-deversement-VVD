@@ -95,10 +95,9 @@ interface ReportPDFProps {
     data: any; // Using any for flexibility with formData structure, but ideally should match Report type
     id?: string;
     photoBase64s?: string[];
-    photoUrls?: string[];
 }
 
-const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls }) => {
+const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
     const formatDate = (date: any) => {
         if (!date) return '';
         if (typeof date === 'object' && date.toDate) return date.toDate().toLocaleDateString('fr-CA');

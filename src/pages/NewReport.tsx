@@ -343,7 +343,7 @@ const NewReport: React.FC = () => {
           <div className="flex space-x-3">
             {isPhotosReady ? (
               <PDFDownloadLink
-                document={<ReportPDF data={debouncedFormData} id={id} photoBase64s={photoBase64s} photoUrls={formData.photoUrls} />}
+                document={<ReportPDF data={debouncedFormData} id={id} photoBase64s={photoBase64s} />}
                 fileName={`rapport-${formData.envSequentialNumber || id || 'nouveau'}.pdf`}
                 className="flex items-center px-4 py-2 text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors"
               >
