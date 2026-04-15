@@ -156,7 +156,27 @@ const NewReport: React.FC = () => {
         try {
           const report = await reportService.getReportById(id);
           if (report) {
-            setFormData(report);
+            // Sanitize report data to prevent React crashes from invalid types (e.g. Timestamps to input values)
+            const sanitized = { ...INITIAL_FORM_STATE, ...report } as any;
+            for (const key in sanitized) {
+              if (sanitized[key] && typeof sanitized[key] === 'object' && typeof sanitized[key].toDate === 'function') {
+                if (key === 'time' || key === 'envContactedTime') {
+                     sanitized[key] = sanitized[key].toDate().toTimeString().split(' ')[0].slice(0, 5);
+                } else if (key === 'date' || key === 'envContactedDate' || key === 'completionDate') {
+                     sanitized[key] = sanitized[key].toDate().toISOString().split('T')[0];
+                } else {
+                     sanitized[key] = sanitized[key].toDate().toISOString().substring(0, 16);
+                }
+              } else if (sanitized[key] === null) {
+                sanitized[key] = '';
+              }
+            }
+            // Ensure arrays are arrays
+            if (!Array.isArray(sanitized.sensitiveEnv)) sanitized.sensitiveEnv = typeof sanitized.sensitiveEnv === 'string' ? [sanitized.sensitiveEnv] : [];
+            if (!Array.isArray(sanitized.photoUrls)) sanitized.photoUrls = [];
+            if (!Array.isArray(sanitized.documents)) sanitized.documents = [];
+
+            setFormData(sanitized as Report);
           } else {
             setError('Rapport non trouvé');
           }
@@ -589,7 +609,7 @@ const NewReport: React.FC = () => {
                   <option value="Autre">Autre</option>
                 </select>
               </div>
-              {formData.sensitiveEnv?.includes('Autre') && (
+              {Array.isArray(formData.sensitiveEnv) && formData.sensitiveEnv.includes('Autre') && (
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">Préciser autre</label>
                   <input

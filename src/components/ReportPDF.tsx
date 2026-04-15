@@ -345,22 +345,12 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                         <Text style={{ fontSize: 10, marginLeft: 10 }}>Après [{data.photosTakenAfter ? 'X' : ' '}]</Text>
                     </View>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-                        {/* Try Base64 first */}
+                        {/* Only use Base64 to prevent react-pdf CORS crashes */}
                         {photoBase64s && Array.isArray(photoBase64s) && photoBase64s.length > 0 ? (
                             photoBase64s.map((base64: string, index: number) => (
                                 <View key={`b64-${index}`} style={{ width: 150, height: 150, marginBottom: 10 }}>
                                     <Image
                                         src={base64}
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
-                                    />
-                                </View>
-                            ))
-                        ) : photoUrls && Array.isArray(photoUrls) && photoUrls.length > 0 ? (
-                            /* Fallback to URLs if Base64 failed */
-                            photoUrls.map((url: string, index: number) => (
-                                <View key={`url-${index}`} style={{ width: 150, height: 150, marginBottom: 10 }}>
-                                    <Image
-                                        src={url}
                                         style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }}
                                     />
                                 </View>
