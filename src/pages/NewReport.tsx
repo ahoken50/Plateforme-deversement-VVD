@@ -981,6 +981,16 @@ const NewReport: React.FC = () => {
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
                   </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Informations de suivi du ministère (Notes/Dossier)</label>
+                    <textarea
+                      name="envMinistryFollowUp"
+                      value={formData.envMinistryFollowUp || ''}
+                      onChange={handleChange}
+                      rows={3}
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
 
                 </div>
               </div>
