@@ -256,8 +256,14 @@ const NewReport: React.FC = () => {
   };
 
   // Helper to ensure datetime-local inputs receive the correct format (YYYY-MM-DDTHH:mm)
-  const formatDateTimeForInput = (dateString: string | undefined | null) => {
+  const formatDateTimeForInput = (dateString: any) => {
     if (!dateString) return '';
+    // Handle Firebase Timestamp
+    if (typeof dateString === 'object' && dateString.toDate) {
+      dateString = dateString.toDate().toISOString();
+    }
+    if (typeof dateString !== 'string') return '';
+    
     // If it's already in the correct format (has 'T' and length is sufficient), return it
     if (dateString.includes('T') && dateString.length >= 16) {
       return dateString.substring(0, 16);

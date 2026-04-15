@@ -99,9 +99,16 @@ interface ReportPDFProps {
 }
 
 const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls }) => {
-    const formatDate = (date: string) => {
+    const formatDate = (date: any) => {
         if (!date) return '';
+        if (typeof date === 'object' && date.toDate) return date.toDate().toLocaleDateString('fr-CA');
         return new Date(date).toLocaleDateString('fr-CA');
+    };
+
+    const formatDateTime = (date: any) => {
+        if (!date) return '-';
+        if (typeof date === 'object' && date.toDate) return date.toDate().toLocaleString('fr-CA');
+        return new Date(date).toLocaleString('fr-CA');
     };
 
     return (
@@ -210,9 +217,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                         <View style={styles.column}>
                             <Text style={styles.label}>Environnement sensible à proximité</Text>
                             <Text style={styles.value}>
-                                {data.sensitiveEnv && data.sensitiveEnv.length > 0
+                                {Array.isArray(data.sensitiveEnv) && data.sensitiveEnv.length > 0
                                     ? data.sensitiveEnv.join(', ')
-                                    : 'Aucun'}
+                                    : (typeof data.sensitiveEnv === 'string' ? data.sensitiveEnv : 'Aucun')}
                                 {data.sensitiveEnvOther ? ` (${data.sensitiveEnvOther})` : ''}
                             </Text>
                         </View>
@@ -271,7 +278,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                         </View>
                         <View style={styles.column}>
                             <Text style={styles.label}>Date et heure de la déclaration</Text>
-                            <Text style={styles.value}>{data.envUrgenceEnvDate ? new Date(data.envUrgenceEnvDate).toLocaleString('fr-CA') : '-'}</Text>
+                            <Text style={styles.value}>{formatDateTime(data.envUrgenceEnvDate)}</Text>
                         </View>
                     </View>
                     <View style={styles.row}>
