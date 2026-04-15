@@ -346,7 +346,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                     </View>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
                         {/* Try Base64 first */}
-                        {photoBase64s && photoBase64s.length > 0 ? (
+                        {photoBase64s && Array.isArray(photoBase64s) && photoBase64s.length > 0 ? (
                             photoBase64s.map((base64: string, index: number) => (
                                 <View key={`b64-${index}`} style={{ width: 150, height: 150, marginBottom: 10 }}>
                                     <Image
@@ -355,7 +355,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s, photoUrls
                                     />
                                 </View>
                             ))
-                        ) : photoUrls && photoUrls.length > 0 ? (
+                        ) : photoUrls && Array.isArray(photoUrls) && photoUrls.length > 0 ? (
                             /* Fallback to URLs if Base64 failed */
                             photoUrls.map((url: string, index: number) => (
                                 <View key={`url-${index}`} style={{ width: 150, height: 150, marginBottom: 10 }}>

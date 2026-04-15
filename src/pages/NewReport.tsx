@@ -139,8 +139,8 @@ const NewReport: React.FC = () => {
   useEffect(() => {
     const loadPhotos = async () => {
       setIsPhotosReady(false);
-      if (formData.photoUrls && formData.photoUrls.length > 0) {
-        const base64s = await Promise.all(formData.photoUrls.map(url => convertImageToBase64(url)));
+      if (formData.photoUrls && Array.isArray(formData.photoUrls) && formData.photoUrls.length > 0) {
+        const base64s = await Promise.all(formData.photoUrls.map((url: string) => convertImageToBase64(url)));
         setPhotoBase64s(base64s.filter(b => b !== ''));
       } else {
         setPhotoBase64s([]);
@@ -793,9 +793,9 @@ const NewReport: React.FC = () => {
                     className="hidden"
                   />
                 </div>
-                {formData.photoUrls && formData.photoUrls.length > 0 && (
+                {formData.photoUrls && Array.isArray(formData.photoUrls) && formData.photoUrls.length > 0 && (
                   <div className="mt-4 grid grid-cols-3 gap-2">
-                    {formData.photoUrls.map((url, index) => (
+                    {formData.photoUrls.map((url: string, index: number) => (
                       <a key={index} href={url} target="_blank" rel="noopener noreferrer" className="block">
                         <img src={url} alt={`Photo ${index + 1}`} className="h-20 w-20 object-cover rounded" />
                       </a>
@@ -827,9 +827,9 @@ const NewReport: React.FC = () => {
                     className="hidden"
                   />
                 </div>
-                {formData.documents && formData.documents.length > 0 && (
+                {formData.documents && Array.isArray(formData.documents) && formData.documents.length > 0 && (
                   <div className="mt-4 space-y-2">
-                    {formData.documents.map((doc, index) => (
+                    {formData.documents.map((doc: any, index: number) => (
                       <a key={index} href={doc.url} target="_blank" rel="noopener noreferrer" className="flex items-center text-sm text-blue-600 hover:text-blue-800">
                         <FileText className="h-4 w-4 mr-2" />
                         {doc.name}
