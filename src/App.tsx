@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
 import Loading from './components/Loading';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Lazy load pages
 const Login = lazy(() => import('./pages/Login'));
@@ -43,7 +44,9 @@ function App() {
                                 path="/report/:id"
                                 element={
                                     <PrivateRoute>
-                                        <NewReport />
+                                        <ErrorBoundary>
+                                            <NewReport />
+                                        </ErrorBoundary>
                                     </PrivateRoute>
                                 }
                             />
