@@ -1002,7 +1002,7 @@ const NewReport: React.FC = () => {
                     <input
                       type="text"
                       name="envUrgenceEnvBy"
-                      value={formData.envUrgenceEnvBy}
+                      value={formData.envUrgenceEnvBy || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
@@ -1050,7 +1050,7 @@ const NewReport: React.FC = () => {
                     <input
                       type="text"
                       name="envEcccContactedName"
-                      value={formData.envEcccContactedName}
+                      value={formData.envEcccContactedName || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
@@ -1060,7 +1060,7 @@ const NewReport: React.FC = () => {
                     <input
                       type="text"
                       name="envEcccBy"
-                      value={formData.envEcccBy}
+                      value={formData.envEcccBy || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
@@ -1070,7 +1070,7 @@ const NewReport: React.FC = () => {
                     <input
                       type="text"
                       name="envEcccFollowUp"
-                      value={formData.envEcccFollowUp}
+                      value={formData.envEcccFollowUp || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
@@ -1080,7 +1080,7 @@ const NewReport: React.FC = () => {
                     <input
                       type="email"
                       name="envEcccEmail"
-                      value={formData.envEcccEmail}
+                      value={formData.envEcccEmail || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
@@ -1117,7 +1117,7 @@ const NewReport: React.FC = () => {
                     <input
                       type="text"
                       name="envRbqContactedName"
-                      value={formData.envRbqContactedName}
+                      value={formData.envRbqContactedName || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
@@ -1127,7 +1127,7 @@ const NewReport: React.FC = () => {
                     <input
                       type="text"
                       name="envRbqBy"
-                      value={formData.envRbqBy}
+                      value={formData.envRbqBy || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
@@ -1137,7 +1137,7 @@ const NewReport: React.FC = () => {
                     <input
                       type="text"
                       name="envRbqFollowUp"
-                      value={formData.envRbqFollowUp}
+                      value={formData.envRbqFollowUp || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
@@ -1147,7 +1147,7 @@ const NewReport: React.FC = () => {
                     <input
                       type="email"
                       name="envRbqEmail"
-                      value={formData.envRbqEmail}
+                      value={formData.envRbqEmail || ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
