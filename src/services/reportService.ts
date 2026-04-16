@@ -62,9 +62,11 @@ export const reportService = {
         try {
             const q = query(collection(db, REPORTS_COLLECTION), orderBy('createdAt', 'desc'));
             const querySnapshot = await getDocs(q);
+            // Spread doc.data() first, then id LAST to ensure the Firestore doc ID
+            // is never overwritten by an 'id' field stored inside the document
             return querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
+                ...doc.data(),
+                id: doc.id
             })) as Report[];
         } catch (error) {
             console.error('Error fetching reports:', error);
@@ -78,7 +80,7 @@ export const reportService = {
             const docRef = doc(db, REPORTS_COLLECTION, id);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-                return { id: docSnap.id, ...docSnap.data() } as Report;
+                return { ...docSnap.data(), id: docSnap.id } as Report;
             } else {
                 return null;
             }

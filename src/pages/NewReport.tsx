@@ -157,21 +157,49 @@ const NewReport: React.FC = () => {
           const report = await reportService.getReportById(id);
           if (report) {
             // Sanitize report data to prevent React crashes from invalid types (e.g. Timestamps to input values)
-            const sanitized = { ...INITIAL_FORM_STATE, ...report } as any;
+            // Always put id LAST so Firestore doc ID is never overwritten by a stored 'id' field
+            const sanitized = { ...INITIAL_FORM_STATE, ...report, id: report.id } as any;
+
+            // Fields that must stay boolean (null/undefined → false)
+            const booleanFields = [
+              'emergencyKitUsed', 'emergencyKitRefilled',
+              'photosTakenBefore', 'photosTakenDuring', 'photosTakenAfter',
+              'envUrgenceEnvContacted', 'envEcccContacted', 'envRbqContacted'
+            ];
+
+            // Datetime-local fields that need special formatting
+            const datetimeLocalFields = [
+              'envUrgenceEnvDate', 'envEcccDate', 'envRbqDate'
+            ];
+
             for (const key in sanitized) {
-              if (sanitized[key] && typeof sanitized[key] === 'object' && typeof sanitized[key].toDate === 'function') {
+              if (booleanFields.includes(key)) {
+                // Ensure booleans are always true/false, never null/undefined/''
+                sanitized[key] = sanitized[key] === true;
+              } else if (sanitized[key] && typeof sanitized[key] === 'object' && typeof sanitized[key].toDate === 'function') {
+                // Convert Firebase Timestamps based on field type
                 if (key === 'time' || key === 'envContactedTime') {
                      sanitized[key] = sanitized[key].toDate().toTimeString().split(' ')[0].slice(0, 5);
                 } else if (key === 'date' || key === 'envContactedDate' || key === 'completionDate') {
                      sanitized[key] = sanitized[key].toDate().toISOString().split('T')[0];
+                } else if (datetimeLocalFields.includes(key)) {
+                     sanitized[key] = sanitized[key].toDate().toISOString().substring(0, 16);
                 } else {
                      sanitized[key] = sanitized[key].toDate().toISOString().substring(0, 16);
                 }
-              } else if (sanitized[key] === null) {
-                sanitized[key] = '';
+              } else if (sanitized[key] === null || sanitized[key] === undefined) {
+                // Convert null/undefined based on the INITIAL_FORM_STATE default type
+                const initialValue = (INITIAL_FORM_STATE as any)[key];
+                if (typeof initialValue === 'boolean') {
+                  sanitized[key] = false;
+                } else if (Array.isArray(initialValue)) {
+                  sanitized[key] = [];
+                } else {
+                  sanitized[key] = '';
+                }
               }
             }
-            // Ensure arrays are arrays
+            // Ensure arrays are arrays (belt-and-suspenders)
             if (!Array.isArray(sanitized.sensitiveEnv)) sanitized.sensitiveEnv = typeof sanitized.sensitiveEnv === 'string' ? [sanitized.sensitiveEnv] : [];
             if (!Array.isArray(sanitized.photoUrls)) sanitized.photoUrls = [];
             if (!Array.isArray(sanitized.documents)) sanitized.documents = [];
