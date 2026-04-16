@@ -279,13 +279,19 @@ const NewReport: React.FC = () => {
       }
 
       // Prepare final data
-      const finalData = {
+      const finalData: Report = {
         ...formData,
         photoUrls: [...(formData.photoUrls || []), ...uploadedPhotoUrls],
         documents: [...(formData.documents || []), ...uploadedDocuments],
         completedBy: currentUser?.email || formData.completedBy,
-        completionDate: new Date().toISOString().split('T')[0]
+        completionDate: formData.completionDate || new Date().toISOString().split('T')[0]
       };
+
+      // If we are editing an existing report and it's missing a sequential number, generate one now
+      // This restores missing IDs on legacy reports as requested by the user
+      if (isEditing && !finalData.envSequentialNumber) {
+        finalData.envSequentialNumber = await reportService.getNextSequentialNumber();
+      }
 
       // Update the report (whether it was just created or existing)
       await reportService.updateReport(currentId!, finalData);

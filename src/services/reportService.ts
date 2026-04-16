@@ -21,11 +21,10 @@ import { Report } from '../types';
 const REPORTS_COLLECTION = 'reports';
 
 export const reportService = {
-    // Create a new report
-    createReport: async (reportData: Omit<Report, 'id' | 'createdAt' | 'updatedAt'>) => {
+    // Generate the next sequential number (e.g., ENV-2026-001)
+    getNextSequentialNumber: async () => {
         try {
-            // Generate Sequential Number
-            const q = query(collection(db, REPORTS_COLLECTION), orderBy('createdAt', 'desc'), limit(1));
+            const q = query(collection(db, REPORTS_COLLECTION), orderBy('envSequentialNumber', 'desc'), limit(1));
             const querySnapshot = await getDocs(q);
 
             let nextSeqNum = 'ENV-' + new Date().getFullYear() + '-001';
@@ -35,20 +34,38 @@ export const reportService = {
                 if (lastReport.envSequentialNumber) {
                     const parts = lastReport.envSequentialNumber.split('-');
                     if (parts.length === 3) {
+                        const year = parseInt(parts[1]);
                         const lastNum = parseInt(parts[2]);
-                        if (!isNaN(lastNum)) {
-                            nextSeqNum = 'ENV-' + new Date().getFullYear() + '-' + String(lastNum + 1).padStart(3, '0');
+                        const currentYear = new Date().getFullYear();
+                        
+                        if (year === currentYear && !isNaN(lastNum)) {
+                            nextSeqNum = 'ENV-' + currentYear + '-' + String(lastNum + 1).padStart(3, '0');
+                        } else if (year < currentYear) {
+                            // If it's a new year, start fresh at 001
+                            nextSeqNum = 'ENV-' + currentYear + '-001';
                         }
                     }
                 }
             }
+            return nextSeqNum;
+        } catch (error) {
+            console.error('Error generating sequential number:', error);
+            return 'ENV-' + new Date().getFullYear() + '-ERR';
+        }
+    },
+
+    // Create a new report
+    createReport: async (reportData: Omit<Report, 'id' | 'createdAt' | 'updatedAt'>) => {
+        try {
+            // Only generate if not already provided
+            const seqNum = reportData.envSequentialNumber || await reportService.getNextSequentialNumber();
 
             const docRef = await addDoc(collection(db, REPORTS_COLLECTION), {
                 ...reportData,
-                envSequentialNumber: nextSeqNum,
+                envSequentialNumber: seqNum,
                 createdAt: Timestamp.now(),
                 updatedAt: Timestamp.now(),
-                status: 'Nouvelle demande'
+                status: reportData.status || 'Nouvelle demande'
             });
             return docRef.id;
         } catch (error) {
