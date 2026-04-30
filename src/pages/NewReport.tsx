@@ -313,7 +313,7 @@ const NewReport: React.FC = () => {
   const formatDateTimeForInput = (dateString: any) => {
     if (!dateString) return '';
     // Handle Firebase Timestamp
-    if (typeof dateString === 'object' && dateString.toDate) {
+    if (typeof dateString === 'object' && typeof dateString.toDate === 'function') {
       dateString = dateString.toDate().toISOString();
     }
     if (typeof dateString !== 'string') return '';

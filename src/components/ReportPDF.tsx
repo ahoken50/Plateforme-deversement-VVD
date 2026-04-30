@@ -100,13 +100,13 @@ interface ReportPDFProps {
 const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
     const formatDate = (date: any) => {
         if (!date) return '';
-        if (typeof date === 'object' && date.toDate) return date.toDate().toLocaleDateString('fr-CA');
+        if (typeof date === 'object' && typeof date.toDate === 'function') return date.toDate().toLocaleDateString('fr-CA');
         return new Date(date).toLocaleDateString('fr-CA');
     };
 
     const formatDateTime = (date: any) => {
         if (!date) return '-';
-        if (typeof date === 'object' && date.toDate) return date.toDate().toLocaleString('fr-CA');
+        if (typeof date === 'object' && typeof date.toDate === 'function') return date.toDate().toLocaleString('fr-CA');
         return new Date(date).toLocaleString('fr-CA');
     };
 

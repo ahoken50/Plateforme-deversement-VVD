@@ -90,9 +90,21 @@ const Dashboard: React.FC = () => {
 
             // Count for current month
             if (r.createdAt) {
-                const reportDate = r.createdAt.toDate();
-                if (reportDate.getMonth() === currentMonth && reportDate.getFullYear() === currentYear) {
-                    acc.currentMonthReportsCount++;
+                let reportDate: Date | null = null;
+                if (typeof r.createdAt.toDate === 'function') {
+                    reportDate = r.createdAt.toDate();
+                } else if (r.createdAt instanceof Date) {
+                    reportDate = r.createdAt;
+                } else if (typeof r.createdAt === 'string' || typeof r.createdAt === 'number') {
+                    reportDate = new Date(r.createdAt);
+                } else if (r.createdAt && typeof r.createdAt.seconds === 'number') {
+                    reportDate = new Date(r.createdAt.seconds * 1000);
+                }
+
+                if (reportDate && !isNaN(reportDate.getTime())) {
+                    if (reportDate.getMonth() === currentMonth && reportDate.getFullYear() === currentYear) {
+                        acc.currentMonthReportsCount++;
+                    }
                 }
             }
 
