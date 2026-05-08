@@ -542,7 +542,7 @@ const NewReport: React.FC = () => {
                   id="extent"
                   type="text"
                   name="extent"
-                  value={formData.surfaceType}
+                  value={formData.extent}
                   onChange={handleChange}
                   required
                   placeholder="Ex: 5 litres, 10 m2..."
