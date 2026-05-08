@@ -75,6 +75,14 @@ export interface Report {
     envRbqFollowUp?: string;
     envRbqEmail?: string;
 
+    // Trace Québec & Statistiques de coûts
+    traceQuebecProjectNumber?: string;
+    traceQuebecDone?: boolean;
+    traceQuebecSlips?: string;
+    costTraceQuebecTracability?: number;
+    costTraceQuebecRoyalties?: number;
+    costGflDisposal?: number;
+
     documents?: {
         name: string;
         url: string;

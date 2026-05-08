@@ -307,6 +307,42 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                         </View>
                     </View>
 
+                    {/* Trace Québec */}
+                    <Text style={{ ...styles.label, marginTop: 10, marginBottom: 4, borderBottomWidth: 1, borderBottomColor: '#E5E7EB' }}>Trace Québec</Text>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Fait</Text>
+                            <Text style={styles.value}>{data.traceQuebecDone ? 'Oui' : 'Non'}</Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Numéro de projet</Text>
+                            <Text style={styles.value}>{data.traceQuebecProjectNumber || '-'}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Numéros de bordereau</Text>
+                            <Text style={styles.value}>{data.traceQuebecSlips || '-'}</Text>
+                        </View>
+                    </View>
+
+                    {/* Coûts facturées pour la disposition */}
+                    <Text style={{ ...styles.label, marginTop: 10, marginBottom: 4, borderBottomWidth: 1, borderBottomColor: '#E5E7EB' }}>Statistiques - Coûts facturés pour la disposition</Text>
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Frais de traçabilité</Text>
+                            <Text style={styles.value}>{data.costTraceQuebecTracability ? `${data.costTraceQuebecTracability} $` : '-'}</Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Frais de redevances</Text>
+                            <Text style={styles.value}>{data.costTraceQuebecRoyalties ? `${data.costTraceQuebecRoyalties} $` : '-'}</Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text style={styles.label}>Frais de disposition GFL</Text>
+                            <Text style={styles.value}>{data.costGflDisposal ? `${data.costGflDisposal} $` : '-'}</Text>
+                        </View>
+                    </View>
+
                 </View>
 
                 {/* Section 4: Suivi */}

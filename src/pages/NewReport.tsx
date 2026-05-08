@@ -77,6 +77,13 @@ const INITIAL_FORM_STATE: Report = {
   envRbqFollowUp: '',
   envRbqEmail: '',
 
+  traceQuebecProjectNumber: '',
+  traceQuebecDone: false,
+  traceQuebecSlips: '',
+  costTraceQuebecTracability: 0,
+  costTraceQuebecRoyalties: 0,
+  costGflDisposal: 0,
+
   envSequentialNumber: '',
 
   documents: [],
@@ -225,7 +232,8 @@ const NewReport: React.FC = () => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : 
+              type === 'number' ? (value === '' ? '' : Number(value)) : value
     }));
   };
 
@@ -1182,6 +1190,88 @@ const NewReport: React.FC = () => {
                       type="email"
                       name="envRbqEmail"
                       value={formData.envRbqEmail || ''}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Trace Québec */}
+              <div className="mb-6 border-t border-blue-200 pt-4">
+                <h3 className="text-md font-semibold text-blue-800 mb-3">Trace Québec</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="traceQuebecDone"
+                      checked={formData.traceQuebecDone}
+                      onChange={handleChange}
+                      className="h-4 w-4 text-blue-600 rounded border-gray-300"
+                    />
+                    <label className="ml-2 text-sm text-gray-700 font-semibold">Fait</label>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Numéro de projet</label>
+                    <input
+                      type="text"
+                      name="traceQuebecProjectNumber"
+                      value={formData.traceQuebecProjectNumber || ''}
+                      onChange={handleChange}
+                      placeholder="Ex: 0297945"
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Numéros de bordereau (Liste)</label>
+                    <textarea
+                      name="traceQuebecSlips"
+                      value={formData.traceQuebecSlips || ''}
+                      onChange={handleChange}
+                      rows={3}
+                      placeholder="Ex: 0297945-00001&#10;0297945-00002"
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Coûts facturées pour la disposition */}
+              <div className="mb-6 border-t border-blue-200 pt-4">
+                <h3 className="text-md font-semibold text-blue-800 mb-3">Statistiques - Coûts facturés pour la disposition</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Traces Québec : Frais de traçabilité ($)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      name="costTraceQuebecTracability"
+                      value={formData.costTraceQuebecTracability !== undefined && formData.costTraceQuebecTracability !== 0 ? formData.costTraceQuebecTracability : ''}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Traces Québec : Frais de redevances ($)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      name="costTraceQuebecRoyalties"
+                      value={formData.costTraceQuebecRoyalties !== undefined && formData.costTraceQuebecRoyalties !== 0 ? formData.costTraceQuebecRoyalties : ''}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Frais de disposition chez GFL ($)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      name="costGflDisposal"
+                      value={formData.costGflDisposal !== undefined && formData.costGflDisposal !== 0 ? formData.costGflDisposal : ''}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
