@@ -118,6 +118,15 @@ const Dashboard: React.FC = () => {
         });
     }, [reports]);
 
+    const handleStatusChange = async (reportId: string, newStatus: Report['status']) => {
+        try {
+            await reportService.updateReport(reportId, { status: newStatus });
+            setReports(prev => prev.map(r => r.id === reportId ? { ...r, status: newStatus } : r));
+        } catch (error) {
+            console.error('Failed to update status:', error);
+        }
+    };
+
     return (
         <div className="space-y-8">
             {/* Header */}
@@ -212,7 +221,7 @@ const Dashboard: React.FC = () => {
                         <>
                             <ul className="divide-y divide-gray-100">
                                 {visibleReports.map((report) => (
-                                    <ReportListItem key={report.id} report={report} />
+                                    <ReportListItem key={report.id} report={report} onStatusChange={handleStatusChange} />
                                 ))}
                             </ul>
                             {visibleCount < filteredReports.length && (

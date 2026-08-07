@@ -105,6 +105,7 @@ const NewReport: React.FC = () => {
   const [selectedDocuments, setSelectedDocuments] = useState<File[]>([]);
   const [photoBase64s, setPhotoBase64s] = useState<string[]>([]);
   const [isPhotosReady, setIsPhotosReady] = useState(false);
+  const [statusSavedNotice, setStatusSavedNotice] = useState(false);
 
   // Debounce formData to prevent PDF generation on every keystroke
   // This significantly improves performance during typing
@@ -230,11 +231,22 @@ const NewReport: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
+    const newValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : 
+                     type === 'number' ? (value === '' ? '' : Number(value)) : value;
+    
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : 
-              type === 'number' ? (value === '' ? '' : Number(value)) : value
+      [name]: newValue
     }));
+
+    if (name === 'status' && id) {
+      reportService.updateReport(id, { status: newValue as Report['status'] })
+        .then(() => {
+          setStatusSavedNotice(true);
+          setTimeout(() => setStatusSavedNotice(false), 3000);
+        })
+        .catch((err) => console.error('Error auto-saving status:', err));
+    }
   };
 
   const handleMultiSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -361,24 +373,32 @@ const NewReport: React.FC = () => {
               {isEditing ? 'Modifier le rapport' : 'Nouveau rapport de déversement'}
             </h1>
             {isEditing && (
-              <div className="mt-2 flex items-center">
-                <label htmlFor="status-header" className="mr-2 text-sm font-semibold text-gray-700">Statut actuel:</label>
-                <select
-                  id="status-header"
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  className="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white py-1 px-3 text-sm font-medium"
-                >
-                  <option value="Nouvelle demande">Nouvelle demande</option>
-                  <option value="En cours">En cours</option>
-                  <option value="Pris en charge">Pris en charge</option>
-                  <option value="Traité">Traité</option>
-                  <option value="En attente de retour du ministère">En attente de retour du ministère</option>
-                  <option value="Intervention requise">Intervention requise</option>
-                  <option value="Complété">Complété</option>
-                  <option value="Annulé">Annulé</option>
-                </select>
+              <div className="mt-2 flex items-center space-x-3">
+                <div className="flex items-center">
+                  <label htmlFor="status-header" className="mr-2 text-sm font-semibold text-gray-700">Statut actuel:</label>
+                  <select
+                    id="status-header"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                    className="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white py-1 px-3 text-sm font-medium"
+                  >
+                    <option value="Nouvelle demande">Nouvelle demande</option>
+                    <option value="En cours">En cours</option>
+                    <option value="Pris en charge">Pris en charge</option>
+                    <option value="Traité">Traité</option>
+                    <option value="Terminé">Terminé</option>
+                    <option value="En attente de retour du ministère">En attente de retour du ministère</option>
+                    <option value="Intervention requise">Intervention requise</option>
+                    <option value="Complété">Complété</option>
+                    <option value="Annulé">Annulé</option>
+                  </select>
+                </div>
+                {statusSavedNotice && (
+                  <span className="text-xs text-green-700 bg-green-100 font-semibold px-2.5 py-1 rounded-full animate-fade-in flex items-center">
+                    ✓ Statut enregistré
+                  </span>
+                )}
               </div>
             )}
           </div>
@@ -954,6 +974,7 @@ const NewReport: React.FC = () => {
                   <option value="En cours">En cours</option>
                   <option value="Pris en charge">Pris en charge</option>
                   <option value="Traité">Traité</option>
+                  <option value="Terminé">Terminé</option>
                   <option value="En attente de retour du ministère">En attente de retour du ministère</option>
                   <option value="Intervention requise">Intervention requise</option>
                   <option value="Complété">Complété</option>
@@ -1276,6 +1297,16 @@ const NewReport: React.FC = () => {
                       className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 hover:bg-white transition-colors"
                     />
                   </div>
+                </div>
+                <div className="mt-4 p-3 bg-blue-100/60 rounded-xl flex items-center justify-between">
+                  <span className="text-sm font-semibold text-blue-900">Total des coûts calculés pour ce déversement :</span>
+                  <span className="text-lg font-bold text-blue-900">
+                    {(
+                      (Number(formData.costTraceQuebecTracability) || 0) +
+                      (Number(formData.costTraceQuebecRoyalties) || 0) +
+                      (Number(formData.costGflDisposal) || 0)
+                    ).toLocaleString('fr-CA', { style: 'currency', currency: 'CAD' })}
+                  </span>
                 </div>
               </div>
 

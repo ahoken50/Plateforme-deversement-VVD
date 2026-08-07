@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { reportService } from '../services/reportService';
 import { Report } from '../types';
-import { BarChart, PieChart, Activity, Droplet, MapPin, AlertTriangle } from 'lucide-react';
+import { BarChart, PieChart, Activity, Droplet, MapPin, AlertTriangle, DollarSign } from 'lucide-react';
 
 const Stats: React.FC = () => {
     const [reports, setReports] = useState<Report[]>([]);
@@ -26,7 +26,13 @@ const Stats: React.FC = () => {
     // Calculate Stats
     const totalReports = reports.length;
     const openReports = reports.filter((r: Report) => ['Nouvelle demande', 'Pris en charge', 'En attente de retour du ministère', 'Intervention requise', 'En cours'].includes(r.status)).length;
-    const closedReports = reports.filter((r: Report) => ['Traité', 'Complété', 'Annulé'].includes(r.status)).length;
+    const closedReports = reports.filter((r: Report) => ['Traité', 'Terminé', 'Complété', 'Annulé'].includes(r.status)).length;
+
+    // Cost Stats
+    const totalCostTracability = reports.reduce((sum, r) => sum + (Number(r.costTraceQuebecTracability) || 0), 0);
+    const totalCostRoyalties = reports.reduce((sum, r) => sum + (Number(r.costTraceQuebecRoyalties) || 0), 0);
+    const totalCostGfl = reports.reduce((sum, r) => sum + (Number(r.costGflDisposal) || 0), 0);
+    const grandTotalCosts = totalCostTracability + totalCostRoyalties + totalCostGfl;
 
     // Helper to count occurrences
     const countOccurrences = (items: string[]) => {
@@ -117,6 +123,57 @@ const Stats: React.FC = () => {
                     <div>
                         <p className="text-sm text-gray-500 font-medium uppercase tracking-wide">Dossiers Fermés</p>
                         <p className="text-3xl font-bold text-gray-900">{closedReports}</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Financial & Cost Statistics */}
+            <div className="bg-gradient-to-r from-blue-900 to-indigo-900 p-8 rounded-3xl text-white shadow-xl">
+                <div className="flex items-center space-x-3 mb-6">
+                    <div className="p-3 bg-white/10 rounded-2xl">
+                        <DollarSign className="h-8 w-8 text-blue-300" />
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-bold">Statistiques Financières - Coûts de Disposition</h3>
+                        <p className="text-blue-200 text-sm">Cumul des frais de traçabilité, redevances et disposition GFL</p>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div className="bg-white/10 backdrop-blur border border-white/10 p-5 rounded-2xl">
+                        <p className="text-xs text-blue-200 uppercase font-semibold">Total Général des Coûts</p>
+                        <p className="text-3xl font-extrabold text-white mt-2">
+                            {grandTotalCosts.toLocaleString('fr-CA', { style: 'currency', currency: 'CAD' })}
+                        </p>
+                    </div>
+                    <div className="bg-white/10 backdrop-blur border border-white/10 p-5 rounded-2xl">
+                        <p className="text-xs text-blue-200 uppercase font-semibold">Traçabilité (Trace QC)</p>
+                        <p className="text-2xl font-bold text-blue-100 mt-2">
+                            {totalCostTracability.toLocaleString('fr-CA', { style: 'currency', currency: 'CAD' })}
+                        </p>
+                    </div>
+                    <div className="bg-white/10 backdrop-blur border border-white/10 p-5 rounded-2xl">
+                        <p className="text-xs text-blue-200 uppercase font-semibold">Redevances (Trace QC)</p>
+                        <p className="text-2xl font-bold text-blue-100 mt-2">
+                            {totalCostRoyalties.toLocaleString('fr-CA', { style: 'currency', currency: 'CAD' })}
+                        </p>
+                    </div>
+                    <div className="bg-white/10 backdrop-blur border border-white/10 p-5 rounded-2xl">
+                        <p className="text-xs text-blue-200 uppercase font-semibold">Disposition (GFL)</p>
+                        <p className="text-2xl font-bold text-blue-100 mt-2">
+                            {totalCostGfl.toLocaleString('fr-CA', { style: 'currency', currency: 'CAD' })}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="mt-6 pt-6 border-t border-white/10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between text-sm text-blue-200 gap-2">
+                        <span>Répartition des coûts :</span>
+                        <div className="flex flex-wrap gap-4 font-medium text-white">
+                            <span className="flex items-center"><span className="w-3 h-3 rounded-full bg-blue-400 mr-2"></span>Traçabilité: {((totalCostTracability / (grandTotalCosts || 1)) * 100).toFixed(1)}%</span>
+                            <span className="flex items-center"><span className="w-3 h-3 rounded-full bg-purple-400 mr-2"></span>Redevances: {((totalCostRoyalties / (grandTotalCosts || 1)) * 100).toFixed(1)}%</span>
+                            <span className="flex items-center"><span className="w-3 h-3 rounded-full bg-emerald-400 mr-2"></span>GFL: {((totalCostGfl / (grandTotalCosts || 1)) * 100).toFixed(1)}%</span>
+                        </div>
                     </div>
                 </div>
             </div>

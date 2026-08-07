@@ -342,6 +342,18 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ data, id, photoBase64s }) => {
                             <Text style={styles.value}>{data.costGflDisposal ? `${data.costGflDisposal} $` : '-'}</Text>
                         </View>
                     </View>
+                    <View style={{ ...styles.row, marginTop: 4, paddingTop: 4, borderTopWidth: 1, borderTopColor: '#E5E7EB' }}>
+                        <View style={styles.column}>
+                            <Text style={{ ...styles.label, color: '#1E40AF' }}>Total des coûts de disposition calculé</Text>
+                            <Text style={{ ...styles.value, fontWeight: 'bold', color: '#1E40AF' }}>
+                                {(
+                                    (Number(data.costTraceQuebecTracability) || 0) +
+                                    (Number(data.costTraceQuebecRoyalties) || 0) +
+                                    (Number(data.costGflDisposal) || 0)
+                                ).toFixed(2)} $
+                            </Text>
+                        </View>
+                    </View>
 
                 </View>
 

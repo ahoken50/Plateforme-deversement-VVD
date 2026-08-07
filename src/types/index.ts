@@ -90,7 +90,7 @@ export interface Report {
         date: string;
     }[];
 
-    status: 'Nouvelle demande' | 'En cours' | 'Pris en charge' | 'Traité' | 'En attente de retour du ministère' | 'Intervention requise' | 'Complété' | 'Annulé';
+    status: 'Nouvelle demande' | 'En cours' | 'Pris en charge' | 'Traité' | 'Terminé' | 'En attente de retour du ministère' | 'Intervention requise' | 'Complété' | 'Annulé';
     createdAt?: any; // Firestore Timestamp
     updatedAt?: any;
 }
